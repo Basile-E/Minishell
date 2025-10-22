@@ -1,0 +1,6 @@
+bug chelou quand on reviens dans l'historique dans une str qui n'est pas terminer par un sep ou plusieurs sep 
+
+next :
+    parsing des token
+        check error de base ()
+        check de la syntaxe (pas de flag au debut, pas deux chevrons diff  )
