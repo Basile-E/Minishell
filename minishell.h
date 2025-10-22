@@ -16,6 +16,13 @@
 /*  Define      */
 /////////////////
 
+
+// Types of files, sert au tokenizer pour arg.type
+#   define  FONCTION 1
+#   define  OPERATOR 2
+#   define  FILE 3
+#   define  ERROR 0
+
 // buffer de 300 pour le tokenizer
 #   define  BUFF_SIZE 300
 
@@ -54,6 +61,7 @@ typedef struct  s_args
 {
     char    *arg;
     int     clean;
+    int     type;
     struct s_args  *next;
 }               t_args;
 

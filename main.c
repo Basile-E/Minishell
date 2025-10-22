@@ -29,7 +29,8 @@ t_args *create_and_add_token(t_args **head, t_args **current, char *content)
 
 int is_operator(char c)
 {
-    if (c == '|' || c == '>'  || c == '<')
+    if (c == '|' || c == '>'  || c == '<' || 
+        c == '"' || c == '\'')
         return (1);
     else 
         return (0);
@@ -37,8 +38,8 @@ int is_operator(char c)
 
 int is_sep(char c)
 {
-    if (c == ' ' || c == '\n' || c == '\t' ||
-        c == '|' || c == '>'  || c == '<'  || c == '\0') //pas sur que \0 soit un sep
+    if (c == ' ' || c == '\n' || c == '\t' || c == '"' ||
+        c == '\''|| c == '|'  || c == '>'  || c == '<' || c == '\0') //pas sur que \0 soit un sep
         return (1);
     else 
         return (0);
@@ -67,7 +68,17 @@ int is_sep(char c)
 
 */
 // faire une fonction create token qui prend en arg le noeud a remplir et la string (plus d'autre param si on veut en ajouter apres)
-            
+
+int tab_len(char **tab)
+{
+    int i;
+    i = 0;
+
+    while(tab[i] != NULL)
+        i++;
+    retun (i);
+}
+
 int	print_token(t_args *head)
 {
 	t_args	*temp;
@@ -126,6 +137,7 @@ int tokenizer(t_minishell *minishell, t_args **args)
                 operator[0] = arguments[i];
                 operator[1] = '\0';
                 current = create_and_add_token(args, &current, operator);
+                current->type = OPERATOR;
             }   
         }
         else
@@ -157,7 +169,7 @@ int set_struct(t_minishell *minishell)
 
 
 
-int main()
+int main(int ac, char **av, char **ev)
 {
     char *prompt;
     t_minishell *minishell;
@@ -166,6 +178,17 @@ int main()
     args = NULL;
     set_struct(minishell);
     prompt = BOLD CYAN "RicoShell" RESET PINK " ➜ " RESET;
+
+    /*
+        DEBUG 
+    */
+
+
+    
+    /*
+        DEBUG 
+    */
+
 
     while (42)
     {
