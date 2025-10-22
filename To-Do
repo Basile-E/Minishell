@@ -1,0 +1,5 @@
+Faire une fonction qui crée les token (maloc et atrib de la string et du type)
+
+bug chelou quand on reviens dans l'historique dans une str qui n'est pas terminer par un sep ou plusieurs sep 
+
+quand je veux print la listterminated par un sep elle afiche null mais pas qu
