@@ -1,18 +1,24 @@
-NAME		:= minishell
+NAME = minishell
 
-LIBFT		:= libft.a
-LIBFT_PATH	:= 
+SRC_PATH = src/
+#OBJ_PATH = build/
+LIBFT_PATH = libft/
+LIBFT_AR = $(LIBFT_PATH)libft.a
 
-CC			:= CC
+SRC = \
+	  main.c
 
-CFLAGS		:= -Wall -Wextra -Werror
+#SRCS = $(addprefix $(SRC_PATH), $(SRC))
+OBJ = $(addprefix $(OBJ_PATH), $(SRC:.c=.o))
+DPD = $(addprefix $(OBJ_PATH), $(SRC:.c=.d))
 
-SRCS		:= 
+CC = cc
+CFLAGS = -Wall -Wextra -Werror -MMD -g #-fsanitize=address,leak,undefined
+INCS = includes/minishell.h
+INC = -Iincludes -I$(LIBFT_PATH)/includes
 
-OBJS		:= $ (SRCS:.c=.o)
-
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@ -Iinclude -I$(READLINE_PATH)/include
+PURPLE = \033[0;35m
+NC = \033[0m
 
 all: $(LIBFT_AR) $(NAME)
 
