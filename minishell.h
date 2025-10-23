@@ -54,6 +54,7 @@ typedef struct  s_minishell
 {
     char    *input;
     int     status;
+    char    **env;
 }               t_minishell;
 
 // la linked list des token (args -> token)
