@@ -1,1 +1,1 @@
-main.o: main.c minishell.h libft/libft.h
+main.o: src/main.c src/../includes/minishell.h includes/../libft/libft.h
