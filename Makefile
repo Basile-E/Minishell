@@ -1,16 +1,39 @@
 NAME = minishell
 
 SRC_PATH = src/
-#OBJ_PATH = build/
+TOKEN_PATH = token/
+PARSING_PATH = parsing/
+EXPAND_PATH = expand/
+UTILS_PATH = utils/
+
+OBJ_PATH = build/
 LIBFT_PATH = libft/
 LIBFT_AR = $(LIBFT_PATH)libft.a
 
 SRC = \
-	  main.c
+	  	main.c
+TOKEN = \
+		char_check.c \
+		token_mgmt.c \
+		tokenizer.c
+PARSING = \
+		parsinette.c 
+EXPAND = \
+		expand.c 
+UTILS = \
+		len.c \
+		print.c \
+		struct.c 
+
+ALL_SRC = $(addprefix $(SRC_PATH), $(SRC)) \
+		  $(addprefix $(TOKEN_PATH), $(TOKEN)) \
+		  $(addprefix $(PARSING_PATH), $(PARSING)) \
+		  $(addprefix $(EXPAND_PATH), $(EXPAND)) \
+		  $(addprefix $(UTILS_PATH), $(UTILS))
 
 #SRCS = $(addprefix $(SRC_PATH), $(SRC))
-OBJ = $(addprefix $(OBJ_PATH), $(SRC:.c=.o))
-DPD = $(addprefix $(OBJ_PATH), $(SRC:.c=.d))
+OBJ = $(addprefix $(OBJ_PATH), $(ALL_SRC:.c=.o))
+DPD = $(addprefix $(OBJ_PATH), $(ALL_SRC:.c=.d))
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -MMD -g #-fsanitize=address,leak,undefined
@@ -29,7 +52,7 @@ $(NAME): $(OBJ) $(INCS)
 
 -include $(DPD)
 
-$(OBJ_PATH)%.o: $(SRC_PATH)%.c
+$(OBJ_PATH)%.o: %.c
 	@mkdir -p $(@D)
 	@$(CC) $(CFLAGS) $(INC) -c $< -o $@
 
@@ -41,15 +64,12 @@ $(LIBFT_AR):
 clean:
 	@echo "\n$(PURPLE)  Cleaning object files... $(NC)"
 	@rm -rf $(OBJ_PATH)
-	@rm -rf $(OBJ) $(OBJ_BON)
-	@rm -rf $(DPD) $(OBJ_DPD)
 	@make -s clean -C $(LIBFT_PATH)
 	@echo "\n$(PURPLE)  Done ✓$(NC)"
 
 fclean: clean
 	@echo "\n$(PURPLE)  Cleaning Minishell...$(NC)"
 	@$(RM) $(NAME)
-	@$(RM) $(NAME_BON)
 	@make -s fclean -C $(LIBFT_PATH)
 	@echo "\n$(PURPLE)  Done ✓$(NC)"
 
@@ -60,7 +80,7 @@ CHAT = { ignore_readline_leaks Memcheck:Leak ... obj:*/libreadline.so.* } { igno
 ignore:
 	@for i in $(CHAT); do \
    		echo $$i >> ignore.supp; \
-    done
+	done
 
 val:
 	@make -s dev

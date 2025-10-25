@@ -73,7 +73,30 @@ typedef struct  s_args
 /////////////////
 
 
+// Expand
+char *do_expand(t_minishell *minishell, char *str);
+int check_for_expand(char *str);
+char	*find_path(char *cmd, char **envp);
 
 
+// Parsing
+int parsinette(t_minishell *minishell, t_args **args);
+
+// SRC
+
+
+// Token
+int is_space(char c);
+int is_sep(char c);
+int is_operator(char c);
+t_args *create_and_add_token(t_args **head, t_args **current, char *content);
+void clear_buff(char *buffer);
+int tokenizer(t_minishell *minishell, t_args **args);
+
+// Utils
+int tab_len(char **tab);
+int	print_token(t_args *head);
+void print_env(char **env);
+int set_struct_minishell(t_minishell *minishell, char **env);
 
 #endif

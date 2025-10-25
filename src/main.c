@@ -1,60 +1,10 @@
 #include "../includes/minishell.h"
 
-void print_env(char **env)
-{
-    int i;
-    i = 0;
-
-    while (env[i])
-    {
-        printf("%s\n", env[i]);
-        i++;
-    }
-}
 
 
-t_args *create_and_add_token(t_args **head, t_args **current, char *content)
-{
-    t_args *new_node = malloc(sizeof(t_args));
-    if (!new_node)
-        return (NULL);
-    
-    new_node->arg = ft_strdup(content);
-    new_node->next = NULL;
-    
-    // Si c'est le premier nœud
-    if (!*head)
-    {
-        *head = new_node;
-        *current = new_node;
-    }
-    else
-    {
-        // Ajouter à la fin de la liste
-        (*current)->next = new_node;
-        *current = new_node;
-    }
-    
-    return (new_node);
-}
 
-int is_operator(char c)
-{
-    if (c == '|' || c == '>'  || c == '<' || 
-        c == '"' || c == '\'')
-        return (1);
-    else 
-        return (0);
-}
 
-int is_sep(char c)
-{
-    if (c == ' ' || c == '\n' || c == '\t' || c == '"' ||
-        c == '\''|| c == '|'  || c == '>'  || c == '<' || c == '\0') //pas sur que \0 soit un sep
-        return (1);
-    else 
-        return (0);
-}
+
 
 
 /* 
@@ -81,194 +31,24 @@ int is_sep(char c)
 // faire une fonction create token qui prend en arg le noeud a remplir et la string (plus d'autre param si on veut en ajouter apres)
 
 
-int tab_len(char **tab)
-{
-    int i;
-    i = 0;
-
-    while(tab[i] != NULL)
-        i++;
-    return (i);
-}
 /*
     j'ai piquer ma fonction find path de pipex 
     il faut la custom un peut pour qu'elle cherche n'importe quelle env value
 */
 
-char	*find_path(char *cmd, char **envp)
-{
-	char	**paths;
-	char	*path;
-	int		i;
-	char	*part_path;
-
-	i = 0;
-	while (ft_strnstr(envp[i], "PATH", 4) == 0)
-		i++;
-	paths = ft_split(envp[i] + 5, ':');
-	i = 0;
-	while (paths[i])
-	{
-		part_path = ft_strjoin(paths[i], "/");
-		path = ft_strjoin(part_path, cmd);
-		free(part_path);
-		if (access(path, F_OK) == 0)
-			return (path);
-		free(path);
-		i++;
-	}
-	i = -1;
-	while (paths[++i])
-		free(paths[i]);
-	free(paths);
-	return (0);
-}
-
-int check_for_expand(char *str)
-{
-    int i;
-
-    i = 0;
-    while(str[i])
-    {
-        if (str[i] == '$')
-            return(i + 1);
-        i++;
-    }
-    return(0);
-}
-
-char *do_expand(t_minishell *minishell, char *str)
-{
-    char *token;
-    char *env_value;
-    int i;
-    int y;
-    
-
-    token = ft_strdup(str + check_for_expand(str));
-    if (!token)
-        return (NULL);
-    i = 0;
-    while(minishell->env[i])
-    {
-        if (ft_strncmp(token, minishell->env[i], ft_strlen(token)) == 0 
-            && minishell->env[i][ft_strlen(token)] == '=')
-        {
-            y = ft_strlen(token) + 1;
-            env_value = ft_strdup(minishell->env[i] + y);
-            free(token);
-            return (env_value);
-        }
-        i++;
-    }
-    free(token);
-    return(str);
-}
-
-int	print_token(t_args *head)
-{
-	t_args	*temp;
-
-	temp = head;
-	if (temp == NULL)
-		return (ft_printf("liste Vide\n"));
-	while (temp)
-	{   
-		ft_printf("%s - ", temp->arg);
-        temp = temp->next;
-	}
-	return (ft_printf("\n"));
-}
-
-void clear_buff(char *buffer)
-{
-    int i;
-    i = ft_strlen(buffer);
-
-    while (i >= 0)
-    {
-        buffer[i] = '\0';
-        i--;
-    }
-}
 
 
 
-int parsinette(t_minishell *minishell, t_args **args)
-{
-    t_args *current;
 
-    write(1, "hi from parsinette !\n", 21);
-    current = *args;
-    while (current)
-    {
-        current->arg = do_expand(minishell, current->arg);
-        
-        
-        
-        current = current->next;
-    }
-    return (0);
-    
-}
 
-int tokenizer(t_minishell *minishell, t_args **args)
-{
-    int i; // sert a se deplacer dans argument
-    char *arguments;
-    char buff[BUFF_SIZE];
-    int buff_pos; // sert a write et a se deplacer dans le buffer 
-    t_args *current;
-    char operator[2];
-    
-    i = 0;
-    buff_pos = 0;
-    arguments = minishell->input;
-    current = *args;
-    if (!arguments || arguments[0] == '\0')
-        return (0);
-    while (arguments[i])
-    {
-        if (is_sep(arguments[i]))
-        {
-            if (buff_pos > 0)
-            {
-                buff[buff_pos] = '\0'; // nul terminate, permet de "reset" le buf by seting the buf_pos to 0
-                current = create_and_add_token(args, &current, buff);
-                buff_pos = 0;
-            }
-            operator[0] = arguments[i];
-            operator[1] = '\0';
-            current = create_and_add_token(args, &current, operator);
-            current->type = OPERATOR;
-        }
-        else
-        {
-            if (buff_pos < BUFF_SIZE - 1)
-            {
-                buff[buff_pos] = arguments[i];
-                buff_pos++;
-            }
-        }
-        i++;
-    }
-    if (buff_pos > 0)
-    {
-        buff[buff_pos] = '\0';
-        current = create_and_add_token(args, &current, buff);
-    }
-    print_token(*args);
-    return (1);
-}
 
-int set_struct(t_minishell *minishell, char **env)
-{
-    minishell->input = NULL;
-    minishell->status = DONT_KILL;
-    minishell->env = env;
-    return (1);
-}
+
+
+
+
+
+
+
 
 int main(int ac, char **av, char **ev)
 {
@@ -283,7 +63,7 @@ int main(int ac, char **av, char **ev)
     args = NULL;
     prompt = BOLD CYAN "RicoShell" RESET PINK " ➜ " RESET;
     
-    set_struct(minishell, ev);
+    set_struct_minishell(minishell, ev);
     while (42)
     {
         if (minishell->status == KILL_SIM)
