@@ -11,7 +11,7 @@ LIBFT_PATH = libft/
 LIBFT_AR = $(LIBFT_PATH)libft.a
 
 SRC = \
-	  	main.c
+		main.c
 TOKEN = \
 		char_check.c \
 		token_mgmt.c \

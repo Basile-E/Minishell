@@ -61,3 +61,63 @@ int tokenizer(t_minishell *minishell, t_args **args)
     print_token(*args);
     return (1);
 }
+
+/*
+	create a buff with buff size == 300
+	look for quote in the arguments 
+		return 1 if in double quote, 2 if signle quote, 0 if no quote and -1 if quote error
+	fill the buff until a sep is found
+		sep edge case :
+			if (space)
+				if (in_quote)
+					add the space to buff
+				else
+					ignore it
+			if (|)
+				
+*/
+
+void set_int(int *a, int *b, int *c, int *d)
+{
+	if (a != NULL)
+		*a = 0;
+	if (b != NULL)
+		*b = 0;
+	if (c != NULL)
+		*c = 0;
+	if (d != NULL)
+		*d = 0;
+}
+
+int find_quote(char *str)
+{
+	int i;
+	int in_double;
+	int in_simple;
+	int in_quote;
+	set_int(&i, &in_double, &in_simple, &in_quote);
+	
+	while (i < 0)
+	{
+		if (str[i] == '"' && in_quote == 0)
+		{
+			in_quote = 1;
+			in_double = 1;
+		}
+		else if (str[i] == '"' && in_quote == 1)
+		{
+			
+		}
+		if (str[i] == '\'' && in_quote == 0)
+		{
+			in_quote = 1;
+			in_simple = 1;
+		}
+		i++;
+	}
+}
+
+int tokenizerV2(t_minishell *minishell, t_args **args)
+{
+	
+}

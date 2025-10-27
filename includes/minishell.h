@@ -66,6 +66,12 @@ typedef struct  s_args
     struct s_args  *next;
 }               t_args;
 
+typedef struct s_cmd
+{
+	char **cmd;//  cmd[0] = echo ; cmd[1] = "bonjour" 
+	struct s_cmd *next;
+}				t_cmd;
+
 
 
 ///////////////////
