@@ -13,6 +13,27 @@ void clear_buff(char *buffer)
     }
 }
 
+int check_unclosed(char *str)
+{
+	int i;
+	t_quote	status;
+
+	i = 0;
+	status = NONE;
+	while(str[i])
+	{
+		if (status == NONE && str[i] == '\'')
+			status = SINGLE;
+		else if (status == NONE && str[i] == '"')
+			status = DOUBLE;
+		else if ((status == SINGLE && str[i] == '\'') ||
+				 (status == DOUBLE && str[i] == '"'))
+			status = NONE;
+		i++;
+	}
+	return((int)status);
+}
+
 int tokenizer(t_minishell *minishell, t_args **args)
 {
     int i; // sert a se deplacer dans argument
@@ -21,36 +42,58 @@ int tokenizer(t_minishell *minishell, t_args **args)
     int buff_pos; // sert a write et a se deplacer dans le buffer 
     t_args *current;
     char operator[2];
-    
+    t_quote status;
+
+
     i = 0;
     buff_pos = 0;
     arguments = minishell->input;
     current = *args;
-    if (!arguments || arguments[0] == '\0')
+	status = NONE;
+	if (!arguments || arguments[0] == '\0' || check_unclosed(arguments))
         return (0);
     while (arguments[i])
     {
-        if (is_sep(arguments[i]))
+		
+		if (status == NONE)
         {
-            if (buff_pos > 0)
-            {
-                buff[buff_pos] = '\0'; // nul terminate, permet de "reset" le buf by seting the buf_pos to 0
-                current = create_and_add_token(args, &current, buff);
-                buff_pos = 0;
-            }
-            operator[0] = arguments[i];
-            operator[1] = '\0';
-            current = create_and_add_token(args, &current, operator);
-            current->type = OPERATOR;
-        }
-        else
-        {
-            if (buff_pos < BUFF_SIZE - 1)
+			if (arguments[i] == '\'')
+				status = SINGLE;
+			else if (arguments[i] == '"')
+				status = DOUBLE;
+			if (is_sep(arguments[i]))
+        	{
+            	if (buff_pos > 0)
+            	{
+                	buff[buff_pos] = '\0'; // nul terminate, permet de "reset" le buf by seting the buf_pos to 0
+                	current = create_and_add_token(args, &current, buff);
+                	buff_pos = 0;
+            	}
+            	operator[0] = arguments[i];
+            	operator[1] = '\0';
+            	current = create_and_add_token(args, &current, operator);
+            	current->type = OPERATOR;
+        	}
+        	else
+        	{
+            	if (buff_pos < BUFF_SIZE - 1)
+            	{
+                	buff[buff_pos] = arguments[i];
+                	buff_pos++;
+           		}
+        	}
+		}
+		else
+		{
+			if ((arguments[i] == '"' && status == DOUBLE) ||
+				(arguments[i] == '\'' && status == SINGLE))
+				status = NONE;
+			if (buff_pos < BUFF_SIZE - 1)
             {
                 buff[buff_pos] = arguments[i];
                 buff_pos++;
-            }
-        }
+           	}
+		}
         i++;
     }
     if (buff_pos > 0)
@@ -60,64 +103,4 @@ int tokenizer(t_minishell *minishell, t_args **args)
     }
     print_token(*args);
     return (1);
-}
-
-/*
-	create a buff with buff size == 300
-	look for quote in the arguments 
-		return 1 if in double quote, 2 if signle quote, 0 if no quote and -1 if quote error
-	fill the buff until a sep is found
-		sep edge case :
-			if (space)
-				if (in_quote)
-					add the space to buff
-				else
-					ignore it
-			if (|)
-				
-*/
-
-void set_int(int *a, int *b, int *c, int *d)
-{
-	if (a != NULL)
-		*a = 0;
-	if (b != NULL)
-		*b = 0;
-	if (c != NULL)
-		*c = 0;
-	if (d != NULL)
-		*d = 0;
-}
-
-int find_quote(char *str)
-{
-	int i;
-	int in_double;
-	int in_simple;
-	int in_quote;
-	set_int(&i, &in_double, &in_simple, &in_quote);
-	
-	while (i < 0)
-	{
-		if (str[i] == '"' && in_quote == 0)
-		{
-			in_quote = 1;
-			in_double = 1;
-		}
-		else if (str[i] == '"' && in_quote == 1)
-		{
-			
-		}
-		if (str[i] == '\'' && in_quote == 0)
-		{
-			in_quote = 1;
-			in_simple = 1;
-		}
-		i++;
-	}
-}
-
-int tokenizerV2(t_minishell *minishell, t_args **args)
-{
-	
 }

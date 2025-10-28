@@ -73,6 +73,14 @@ typedef struct s_cmd
 }				t_cmd;
 
 
+typedef enum e_quote
+{
+	NONE,
+	SINGLE,
+	DOUBLE
+}			t_quote;
+
+
 
 ///////////////////
 /*  Fonctions   */
