@@ -34,6 +34,10 @@ int check_unclosed(char *str)
 	return((int)status);
 }
 
+
+// c'est ok manque juste les doubles opperateur 
+// je peux en faire un check dans le parsing
+
 int tokenizer(t_minishell *minishell, t_args **args)
 {
     int i; // sert a se deplacer dans argument
@@ -54,7 +58,6 @@ int tokenizer(t_minishell *minishell, t_args **args)
         return (0);
     while (arguments[i])
     {
-		
 		if (status == NONE)
         {
 			if (arguments[i] == '\'')

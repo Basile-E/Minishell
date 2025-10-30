@@ -43,25 +43,50 @@ int check_for_expand(char *str)
     return(0);
 }
 
+
+char *get_expand_token(char *str)
+{
+	int i;
+	char *res;
+
+	i = 0;
+	res = ;
+	while (str[i])
+	{
+		if (str[i] == '$')
+		{
+			i++;
+			while(!is_sep(str[i]))
+			{
+				res[i] = str[i];
+				i++;
+			}
+		}
+		i++;
+	}
+	return (res);
+}
+
 char *do_expand(t_minishell *minishell, char *str)
 {
-    char *token;
-    char *env_value;
-    int i;
-    int y;
-    
+	char *token;
+	char *env_value;
+	int i;
+	int y;
+	int expand_pos;
 
-    token = ft_strdup(str + check_for_expand(str));
-    if (!token)
-        return (NULL);
-    i = 0;
-    while(minishell->env[i])
-    {
-        if (ft_strncmp(token, minishell->env[i], ft_strlen(token)) == 0 
-            && minishell->env[i][ft_strlen(token)] == '=')
-        {
-            y = ft_strlen(token) + 1;
-            env_value = ft_strdup(minishell->env[i] + y);
+	if ((expand_pos = check_for_expand(str)) > 0)
+		token = get_expand_token(str + expand_pos);
+	else
+		return(str);
+	i = 0;
+	while(minishell->env[i])
+	{
+		if (ft_strncmp(token, minishell->env[i], ft_strlen(token)) == 0 
+			&& minishell->env[i][ft_strlen(token)] == '=')
+		{
+			y = ft_strlen(token) + 1;
+			env_value = ft_strdup(minishell->env[i] + y);
             free(token);
             return (env_value);
         }
