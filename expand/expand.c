@@ -44,17 +44,34 @@ int check_for_expand(char *str)
 }
 
 
+int	get_word_len(char *str)
+{
+	int len;
+
+	len = 0;
+	while(is_char(str[len]))
+		len++;
+	return(len);
+}
 char *get_expand_token(char *str)
 {
 	int i;
 	char *res;
 
 	i = 0;
-	res = ;
+
+
+
+
+
+
 	while (str[i])
 	{
 		if (str[i] == '$')
 		{
+			res = malloc(sizeof(char) * get_word_len(str + i));
+			if (!res)
+				return(NULL);
 			i++;
 			while(!is_sep(str[i]))
 			{

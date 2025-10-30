@@ -1,0 +1,11 @@
+bash-5.1$ echo $USER
+baecoliv
+bash-5.1$ echo $"USER"
+USER
+bash-5.1$ echo $
+$
+bash-5.1$ echo $'USER'
+USER
+bash-5.1$ 
+
+wtf

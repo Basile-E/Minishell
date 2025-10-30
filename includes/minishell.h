@@ -112,5 +112,8 @@ int tab_len(char **tab);
 int	print_token(t_args *head);
 void print_env(char **env);
 int set_struct_minishell(t_minishell *minishell, char **env);
-
+int	is_char(char suspect);
+int is_number(char mightbeanint);
+int is_uppercase(char suspect);
+int is_lowercase(char suspect);
 #endif
