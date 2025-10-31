@@ -1,0 +1,8 @@
+mauvaise gestion des quotes
+
+
+quqnd $test
+    print testt  REGLER
+
+quand $'test'
+    boucle infinie

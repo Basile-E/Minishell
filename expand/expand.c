@@ -43,59 +43,44 @@ int check_for_expand(char *str)
     return(0);
 }
 
-
 int	get_word_len(char *str)
 {
 	int len;
 
 	len = 0;
-	while(is_char(str[len]))
+	while(str[len] && is_char(str[len]))
 		len++;
 	return(len);
 }
-char *get_expand_token(char *str)
+
+char *get_expand_token(char *str, int beg_token)
 {
-	int i;
+	int j;
 	char *res;
+	int len;
 
-	i = 0;
-
-
-
-
-
-
-	while (str[i])
+	beg_token++;
+	len = get_word_len(str + beg_token);
+	res = malloc(sizeof(char) * (len + 1));
+	if (!res)
+		return(NULL);
+	j = 0;
+	while(j < len && is_char(str[beg_token])) //!is_sep(str[beg_token])
 	{
-		if (str[i] == '$')
-		{
-			res = malloc(sizeof(char) * get_word_len(str + i));
-			if (!res)
-				return(NULL);
-			i++;
-			while(!is_sep(str[i]))
-			{
-				res[i] = str[i];
-				i++;
-			}
-		}
-		i++;
+		res[j] = str[beg_token];
+		beg_token++;
+		j++;
 	}
+	res[j] = '\0';
 	return (res);
 }
 
-char *do_expand(t_minishell *minishell, char *str)
+char *do_expand(t_minishell *minishell, char *token)
 {
-	char *token;
 	char *env_value;
 	int i;
 	int y;
-	int expand_pos;
 
-	if ((expand_pos = check_for_expand(str)) > 0)
-		token = get_expand_token(str + expand_pos);
-	else
-		return(str);
 	i = 0;
 	while(minishell->env[i])
 	{
@@ -104,11 +89,64 @@ char *do_expand(t_minishell *minishell, char *str)
 		{
 			y = ft_strlen(token) + 1;
 			env_value = ft_strdup(minishell->env[i] + y);
-            free(token);
+            free(token); // pas sur, token atais initialiser ici mais le code a changer depuis;
             return (env_value);
         }
         i++;
     }
-    free(token);
-    return(str);
+    return(token);
 }
+
+char *do_expandV2(t_minishell *minishell, char *str)
+{
+	char *ret;
+	char ret_buf[BUFF_SIZE];
+	int buf_pos = 0;
+	int str_pos = 0;
+	char *token;
+	char *exp_ret;
+	int i;
+	int exp_len;
+	t_quote status;
+
+	(void) status;
+	while(str[str_pos])
+	{
+		if(str[str_pos] == '$')
+		{
+			token = get_expand_token(str, str_pos);
+			exp_ret = do_expand(minishell, token);
+			exp_len = ft_strlen(exp_ret);
+			i = 0;
+			while(i < exp_len)
+			{
+				ret_buf[buf_pos] = exp_ret[i];
+				buf_pos++;
+				i++;
+			}
+			str_pos += ft_strlen(token) + 1;
+		}
+		else
+		{
+			ret_buf[buf_pos] = str[str_pos];
+			buf_pos++;
+			str_pos++;
+		}
+	}
+	ret = malloc(sizeof(char) * buf_pos + 1);
+	if (!ret)
+		return NULL;
+	ft_memmove(ret, ret_buf, buf_pos);
+	ret[buf_pos] = '\0';
+	return (ret);
+}
+
+
+
+/*
+
+	str = Bonjour$USER$test1$'test2'"$test3"
+
+
+
+*/

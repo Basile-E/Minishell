@@ -9,3 +9,28 @@ USER
 bash-5.1$ 
 
 wtf
+
+
+➜  Mini_temp git:(Basile) ✗ echo $USERtest
+
+➜  Mini_temp git:(Basile) ✗ echo $USER'test'
+basiletest
+➜  Mini_temp git:(Basile) ✗ echo $USER"test"
+basiletest
+➜  Mini_temp git:(Basile) ✗ echo "$USERtest"
+
+➜  Mini_temp git:(Basile) ✗ echo '$USERtest'
+$USERtest
+➜  Mini_temp git:(Basile) ✗ 
+
+un echo de de env var qui n'existe pas ne renvoie rien
+
+
+RicoShell ➜ echo ($USER)
+Debug :
+String sent by readline : echo ($USER)
+echo -   - ($USER) - 
+
+echo -   - (basile) - 
+RicoShell ➜ 
+devrait renvoyer une erreur de syntaxe

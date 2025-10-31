@@ -91,7 +91,7 @@ typedef enum e_quote
 char *do_expand(t_minishell *minishell, char *str);
 int check_for_expand(char *str);
 char	*find_path(char *cmd, char **envp);
-
+char *do_expandV2(t_minishell *minishell, char *str);
 
 // Parsing
 int parsinette(t_minishell *minishell, t_args **args);

@@ -45,8 +45,8 @@ int is_number(char mightbeanint)
 // j'avais pas de bon nom, mais elle check si c'est dif de abc... ou 123... 
 int	is_char(char suspect)
 {
-	if (!is_lowercase(suspect) || !is_uppercase(suspect) ||
-		!is_number(suspect))
+	if (is_lowercase(suspect) || is_uppercase(suspect) ||
+		is_number(suspect) || suspect == '_')
 		return(1);
 	return(0);
 }
