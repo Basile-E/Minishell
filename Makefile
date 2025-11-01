@@ -18,14 +18,14 @@ TOKEN = \
 		tokenizer.c \
 		tokenizerv2.c
 PARSING = \
-		parsinette.c \
-		syntax_check.c
+		parsinette.c 
 EXPAND = \
 		expand.c 
 UTILS = \
 		len.c \
 		print.c \
-		struct.c 
+		struct.c \
+		syntax_check.c
 
 ALL_SRC = $(addprefix $(SRC_PATH), $(SRC)) \
 		  $(addprefix $(TOKEN_PATH), $(TOKEN)) \
