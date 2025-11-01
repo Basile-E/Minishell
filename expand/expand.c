@@ -136,7 +136,7 @@ char *do_expandV2(t_minishell *minishell, char *str)
 				buf_pos++;
 				i++;
 			}
-			str_pos += ft_strlen(token) + 1;
+			str_pos += ft_strlen(token);
 		}
 		else
 		{
@@ -153,7 +153,151 @@ char *do_expandV2(t_minishell *minishell, char *str)
 	return (ret);
 }
 
+// Fonction pour nettoyer les quotes d'une string
+char *remove_quotes(char *str)
+{
+    char *result;
+    int i = 0; 
+	int j = 0;
+    int len = ft_strlen(str);
+    t_quote status = NONE;
+    
+    result = malloc(len + 1);
+    if (!result)
+        return (NULL);
+    
+    while (str[i])
+    {
+        if (str[i] == '\'' || str[i] == '"')
+            set_quote_status(str[i], &status);
+        else
+        {
+            result[j] = str[i];
+            j++;
+        }
+        i++;
+    }
+    result[j] = '\0';
+    return (result);
+}
 
+// Fonction pour obtenir une variable d'environnement
+char *get_env_value(t_minishell *minishell, char *var_name)
+{
+    int i = 0;
+    int len = ft_strlen(var_name);
+    
+    // Variables spéciales - REPLACE ft_strcmp with ft_strncmp
+    if (ft_strncmp(var_name, "?", 1) == 0 && ft_strlen(var_name) == 1)
+        return (ft_itoa(minishell->status));
+    if (ft_strncmp(var_name, "$", 1) == 0 && ft_strlen(var_name) == 1)
+        return (ft_itoa(getpid()));
+    
+    // Variables d'environnement normales
+    while (minishell->env[i])
+    {
+        if (ft_strncmp(var_name, minishell->env[i], len) == 0 
+            && minishell->env[i][len] == '=')
+        {
+            return (ft_strdup(minishell->env[i] + len + 1));
+        }
+        i++;
+    }
+    
+    // Variable non trouvée = chaîne vide
+    return (ft_strdup(""));
+}
+
+// Fonction pour extraire le nom de variable après $
+char *extract_var_name(char *str, int start, int *end)
+{
+    int i = start;
+    
+    // Cas spéciaux : $? et $$
+    if (str[i] == '?' || str[i] == '$')
+    {
+        *end = i + 1;
+        return (ft_substr(str, i, 1));
+    }
+    
+    // Variables normales : lettres, chiffres et _
+    while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
+        i++;
+    
+    *end = i;
+    if (i == start)
+        return (ft_strdup(""));
+    
+    return (ft_substr(str, start, i - start));
+}
+
+// Fonction d'expansion simplifiée et corrigée
+char *do_expand_simple(t_minishell *minishell, char *str)
+{
+    char *result;
+    char *temp;
+    int i = 0;
+    t_quote status = NONE;
+    
+    result = ft_strdup(""); // Start with empty string
+    if (!result)
+        return (NULL);
+    
+    while (str[i])
+    {
+        if (str[i] == '\'' && status == NONE)
+        {
+            status = SINGLE;
+            i++; // Skip the opening quote
+        }
+        else if (str[i] == '\'' && status == SINGLE)
+        {
+            status = NONE;
+            i++; // Skip the closing quote
+        }
+        else if (str[i] == '"' && status == NONE)
+        {
+            status = DOUBLE;
+            i++; // Skip the opening quote
+        }
+        else if (str[i] == '"' && status == DOUBLE)
+        {
+            status = NONE;
+            i++; // Skip the closing quote
+        }
+        else if (str[i] == '$' && status != SINGLE)
+        {
+            int end;
+            char *var_name = extract_var_name(str, i + 1, &end);
+            char *var_value = get_env_value(minishell, var_name);
+            
+            // Concaténer la valeur
+            temp = ft_strjoin(result, var_value);
+            free(result);
+            result = temp;
+            i = end;
+            
+            free(var_name);
+            free(var_value);
+        }
+        else
+        {
+            // Copy regular character (including content inside single quotes)
+            char char_str[2] = {str[i], '\0'};
+            temp = ft_strjoin(result, char_str);
+            if (!temp)
+            {
+                free(result);
+                return (NULL);
+            }
+            free(result);
+            result = temp;
+            i++;
+        }
+    }
+    
+    return (result);
+}
 
 /*
 

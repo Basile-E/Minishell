@@ -15,7 +15,8 @@ SRC = \
 TOKEN = \
 		char_check.c \
 		token_mgmt.c \
-		tokenizer.c
+		tokenizer.c \
+		tokenizerv2.c
 PARSING = \
 		parsinette.c 
 EXPAND = \

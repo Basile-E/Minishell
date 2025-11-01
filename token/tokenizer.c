@@ -104,6 +104,6 @@ int tokenizer(t_minishell *minishell, t_args **args)
         buff[buff_pos] = '\0';
         current = create_and_add_token(args, &current, buff);
     }
-    print_token(*args);
+    //print_token(*args);
     return (1);
 }

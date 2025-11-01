@@ -1,0 +1,12 @@
+SRC/
+    minishell.c
+EXEC/
+PARSING/
+    parsing.c = uniquement la version refactor de parsinette
+    TOKEN/
+    EXPAND/
+    UTILS/
+INCLUDES/
+    minishell.h
+    parsing.h
+    exec.h

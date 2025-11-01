@@ -80,6 +80,24 @@ typedef enum e_quote
 	DOUBLE
 }			t_quote;
 
+typedef enum e_token_type 
+{
+    WORD,
+    PIPE,           // |
+    REDIRECT_IN,    // <
+    REDIRECT_OUT,   // >
+    REDIRECT_APPEND,// >>
+    REDIRECT_HEREDOC,// <<
+    EOF_TOKEN
+} t_token_type;
+
+typedef struct s_token 
+{
+    t_token_type type;
+    char *value;
+    struct s_token *next;
+} t_token;
+
 
 
 ///////////////////
@@ -94,7 +112,7 @@ char	*find_path(char *cmd, char **envp);
 char *do_expandV2(t_minishell *minishell, char *str);
 
 // Parsing
-int parsinette(t_minishell *minishell, t_args **args);
+int parsinette(t_minishell *minishell);
 
 // SRC
 
@@ -109,11 +127,21 @@ int tokenizer(t_minishell *minishell, t_args **args);
 
 // Utils
 int tab_len(char **tab);
-int	print_token(t_args *head);
+int	print_token(t_token *head);
 void print_env(char **env);
 int set_struct_minishell(t_minishell *minishell, char **env);
 int	is_char(char suspect);
 int is_number(char mightbeanint);
 int is_uppercase(char suspect);
 int is_lowercase(char suspect);
+
+// Prototypes
+t_token	*tokenize(char *input);
+void	free_tokens(t_token *tokens);
+
+// New Expand
+char *do_expand_simple(t_minishell *minishell, char *str);
+char *extract_var_name(char *str, int start, int *end);
+char *get_env_value(t_minishell *minishell, char *var_name);
+char *remove_quotes(char *str);
 #endif

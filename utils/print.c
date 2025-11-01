@@ -13,16 +13,16 @@ void print_env(char **env)
 }
 
 
-int	print_token(t_args *head)
+int	print_token(t_token *head)
 {
-	t_args	*temp;
+	t_token	*temp;
 
 	temp = head;
 	if (temp == NULL)
 		return (ft_printf("liste Vide\n"));
 	while (temp)
 	{   
-		ft_printf("%s - ", temp->arg);
+		ft_printf("%s - ", temp->value);
         temp = temp->next;
 	}
 	return (ft_printf("\n"));
