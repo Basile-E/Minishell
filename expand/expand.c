@@ -97,6 +97,17 @@ char *do_expand(t_minishell *minishell, char *token)
     return(token);
 }
 
+void	set_quote_status(char c, t_quote *status)
+{
+    if (*status == NONE && c == '\'')
+        *status = SINGLE;
+    else if (*status == NONE && c == '"')
+        *status = DOUBLE;
+    else if ((*status == SINGLE && c == '\'') ||
+            (*status == DOUBLE && c == '"'))
+        *status = NONE;
+}
+
 char *do_expandV2(t_minishell *minishell, char *str)
 {
 	char *ret;
@@ -107,13 +118,14 @@ char *do_expandV2(t_minishell *minishell, char *str)
 	char *exp_ret;
 	int i;
 	int exp_len;
-	t_quote status;
+	t_quote status = NONE;
 
-	(void) status;
 	while(str[str_pos])
 	{
-		if(str[str_pos] == '$')
-		{
+		set_quote_status(str[str_pos], &status);
+
+		if(str[str_pos] == '$' &&  (status == NONE || status == DOUBLE)) 
+		{ 
 			token = get_expand_token(str, str_pos);
 			exp_ret = do_expand(minishell, token);
 			exp_len = ft_strlen(exp_ret);
