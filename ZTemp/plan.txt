@@ -1,6 +1,0 @@
-tokenizer :
-    fill buff while (char c != sep)
-    if sep 
-        tokenize the buff
-        tokenize the sep
-    
