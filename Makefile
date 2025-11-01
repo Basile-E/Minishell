@@ -1,10 +1,10 @@
 NAME = minishell
 
 SRC_PATH = src/
-TOKEN_PATH = token/
+TOKEN_PATH = parsing/token/
 PARSING_PATH = parsing/
-EXPAND_PATH = expand/
-UTILS_PATH = utils/
+EXPAND_PATH = parsing/expand/
+UTILS_PATH = parsing/utils/
 
 OBJ_PATH = build/
 LIBFT_PATH = libft/
