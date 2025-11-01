@@ -24,6 +24,8 @@ int parsinette(t_minishell *minishell)
     t_token *tokens;
     t_token *current;
 
+	if(check_syntax_errors(minishell->input)) // l'ajouter dans expand au lieu d'ici et faire une logique de retour d'err pour expand comme ça on pars apres l'expand comme prevu
+		return (1);
     // Tokenizer l'input complet
     tokens = tokenize(minishell->input);
     if (!tokens)

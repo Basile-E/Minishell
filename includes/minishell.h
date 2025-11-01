@@ -144,4 +144,6 @@ char *do_expand_simple(t_minishell *minishell, char *str);
 char *extract_var_name(char *str, int start, int *end);
 char *get_env_value(t_minishell *minishell, char *var_name);
 char *remove_quotes(char *str);
+void	set_quote_status(char c, t_quote *status);
+int check_syntax_errors(char *input);
 #endif

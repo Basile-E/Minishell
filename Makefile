@@ -18,7 +18,8 @@ TOKEN = \
 		tokenizer.c \
 		tokenizerv2.c
 PARSING = \
-		parsinette.c 
+		parsinette.c \
+		syntax_check.c
 EXPAND = \
 		expand.c 
 UTILS = \
