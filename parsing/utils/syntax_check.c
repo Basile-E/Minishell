@@ -21,16 +21,83 @@ int check_parentheses_syntax(char *input)
     return (0); // OK
 }
 
-int check_syntax_errors(char *input)
+int check_first_arg_is_flag(char *input)
 {
-    // Vérifier différents types d'erreurs de syntaxe
-    if (check_parentheses_syntax(input))
+    if (input[0] == '-')
+        return (1);
+    return(0);
+}
+
+int get_list_len(t_token *head)
+{
+    int len;
+    t_token *current;
+
+    len = 0;
+    current = head;
+    while (current)
+    {
+        len++;
+        current = current->next;    
+    }
+    return (len);
+}
+
+int check_last_pipe(t_token *head)
+{
+    t_token *current;
+
+    current = head;
+    while(current->next)
+        current = current->next;
+    if (current->value[0] == '|')
+        return (1);
+    return (0);
+}
+
+int check_first_pipe(t_token *head)
+{
+    if (head->value[0] == '|')
+        return (1);
+    return (0);
+}
+
+int check_pipes_first_or_last(t_token *head)
+{
+    if (check_first_pipe(head) || check_last_pipe(head))
+        return (1);
+    return (0);
+}
+
+int check_bad_redir_syntax(t_token *current)
+{
+    if (!current->next)
+        return (1);
+    if ((current->type == REDIRECT_IN && current->next->type == REDIRECT_OUT )||
+        (current->type == REDIRECT_OUT && current->next->type == REDIRECT_IN))
+        return (1);
+    if (current->next->type != WORD) // un peut le last check, je suis soit un genie soit un singe pour l'avoir mis la
         return (1);
     
-    // Vous pouvez ajouter d'autres vérifications ici :
-    // - Pipes en début/fin de ligne
-    // - Redirections sans fichier
-    // - etc.
-    
+    return (0);
+}
+
+int check_syntax_errors(t_token *head)
+{
+    t_token *current;
+
+    current = head;
+    if (check_first_arg_is_flag(head->value) || check_pipes_first_or_last(head))
+        return (1);
+    while (current)
+    {
+        if (current->type == REDIRECT_APPEND || current->type == REDIRECT_HEREDOC ||
+            current->type == REDIRECT_IN     || current->type == REDIRECT_OUT)
+        {
+            if (check_bad_redir_syntax(current))
+                return(1);
+        }
+        current = current->next;
+    }    
     return (0);
 }

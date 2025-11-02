@@ -1,77 +1,89 @@
 #include "../includes/minishell.h"
 
-// Nouvelle approche : parser directement depuis l'input
-void process_word_token(t_minishell *minishell, t_token *token)
+int process_word_token(t_minishell *minishell, t_token *token)
 {
     char *expanded;
     char *cleaned;
     
-    // 1. Expansion des variables
     expanded = do_expand_simple(minishell, token->value);
-    
-    // 2. Nettoyage des quotes
+
     cleaned = remove_quotes(expanded);
-    
-    // 3. Remplacement de la valeur
+
     free(token->value);
     token->value = cleaned;
     
     free(expanded);
+	return(1);
+}
+
+void	print_list_type_debug(t_token *head)
+{
+	t_token *current;
+
+	current = head;
+	while (current)
+    {
+        if (current->type == WORD)
+            printf("Processed word: %s\n", current->value);
+        else if (current->type == PIPE)
+            printf("Pipe found: %s\n", current->value);
+        else if (current->type == REDIRECT_OUT)
+            printf("Redirect out: %s\n", current->value);
+		else if (current->type == REDIRECT_APPEND)
+			printf("Redirect Append found : %s\n", current->value);
+		else if (current->type == REDIRECT_HEREDOC)
+			printf("Redirect Heredoc found : %s\n", current->value);
+        current = current->next;
+    }
+}
+
+int	list_expand(t_minishell *minishell, t_token *token)
+{
+	t_token *current;
+
+	current = token;
+	while (current)
+    {
+        if (current->type == WORD)
+            process_word_token(minishell, current);
+        
+		// here can go other thing like expand or string modification based on the type of the token
+        current = current->next;
+    }
+    print_list_type_debug(token);
+	return (1);
 }
 
 int parsinette(t_minishell *minishell)
 {
     t_token *tokens;
-    t_token *current;
 
-	if(check_syntax_errors(minishell->input)) // l'ajouter dans expand au lieu d'ici et faire une logique de retour d'err pour expand comme ça on pars apres l'expand comme prevu
+	if	(check_parentheses_syntax(minishell->input) || 
+		check_unclosed_quotes(minishell->input))
 		return (1);
-    // Tokenizer l'input complet
+
     tokens = tokenize(minishell->input);
     if (!tokens)
+	{
         return (1);
-    print_token(tokens);
+	} // wtf a cause du print je dois foutre des crochets 
+	
+	print_token(tokens); // debug
 
-    // Parcourir les tokens et les traiter
-    current = tokens;
-    while (current)
-    {
-        if (current->type == WORD)
-        {
-            process_word_token(minishell, current);
-            printf("Processed word: %s\n", current->value);
-        }
-        else if (current->type == PIPE)
-        {
-            printf("Pipe found: %s\n", current->value);
-        }
-        else if (current->type == REDIRECT_OUT)
-        {
-            printf("Redirect out: %s\n", current->value);
-        }
-		else if (current->type == REDIRECT_APPEND)
-		{
-			printf("Redirect Append found : %s\n", current->value);
-		}
-		else if (current->type == REDIRECT_HEREDOC)
-		{
-			printf("Redirect Heredoc found : %s\n", current->value);
-		}
-        // ... autres types
-        
-
-		/*
-			fin debug des types, a ce moment j'ai une liste de token avec tout les expand fait
-			je devrait probablement clean les quotes ?
-			ensuite je dois faire le parsing de la syntaxe
-			
-		*/
-
-
-        current = current->next;
-    }
+    if(!list_expand(minishell, tokens))
+		return (1);
     
+	if(!check_syntax_errors(tokens))
+		return (1);
 
-    free_tokens(tokens);
     return (0);
 }
+
+
+
+//     echo hello | | world → pipes consécutifs DONE
+//     echo hello > > file → redirections consécutives DONNE
+//     echo hello > → redirection sans fichier DONE
+//     echo hello | → pipe en fin de ligne DONE
+// |   echo hello → pipe en début de ligne DONE
+//     echo hello | | world → commande vide après pipe DONE

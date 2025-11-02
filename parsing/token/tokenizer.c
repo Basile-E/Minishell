@@ -13,7 +13,7 @@ void clear_buff(char *buffer)
     }
 }
 
-int check_unclosed(char *str)
+int check_unclosed_quotes(char *str)
 {
 	int i;
 	t_quote	status;
@@ -54,7 +54,7 @@ int tokenizer(t_minishell *minishell, t_args **args)
     arguments = minishell->input;
     current = *args;
 	status = NONE;
-	if (!arguments || arguments[0] == '\0' || check_unclosed(arguments))
+	if (!arguments || arguments[0] == '\0' || check_unclosed_quotes(arguments))
         return (0);
     while (arguments[i])
     {
