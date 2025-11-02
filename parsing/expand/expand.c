@@ -177,6 +177,8 @@ char *remove_quotes(char *str)
         }
         i++;
     }
+	if (str)
+		free(str);
     result[j] = '\0';
     return (result);
 }
@@ -238,6 +240,7 @@ char *do_expand_simple(t_minishell *minishell, char *str)
     char *temp;
     int i = 0;
     t_quote status = NONE;
+
     
     result = ft_strdup(""); // Start with empty string
     if (!result)
@@ -249,18 +252,18 @@ char *do_expand_simple(t_minishell *minishell, char *str)
         
         if (str[i] == '$' && status != SINGLE)
         {
-            int end;
+			int end;
             char *var_name = extract_var_name(str, i + 1, &end);
             char *var_value = get_env_value(minishell, var_name);
-            
+        
             // Concaténer la valeur (même si c'est une chaîne vide)
             temp = ft_strjoin(result, var_value);
             free(result);
             result = temp;
             i = end;
-            
+        
             free(var_name);
-            free(var_value);
+            free(var_value);	
         }
         else
         {

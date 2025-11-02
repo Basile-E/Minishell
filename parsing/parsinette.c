@@ -4,15 +4,15 @@ int process_word_token(t_minishell *minishell, t_token *token)
 {
     char *expanded;
     char *cleaned;
-    
-    expanded = do_expand_simple(minishell, token->value);
 
-    cleaned = remove_quotes(expanded);
+    expanded = do_expand_simple(minishell, token->value);
+	(void)cleaned;
+
 
     free(token->value);
-    token->value = cleaned;
-    
-    free(expanded);
+    //token->value = cleaned;
+    token->value = expanded;
+    //free(expanded);
 	return(1);
 }
 
@@ -37,6 +37,55 @@ void	print_list_type_debug(t_token *head)
     }
 }
 
+t_token	*tkn_new(char *str)
+{
+	t_token	*new;
+
+	new = malloc(sizeof(t_token));
+	if (!new)
+		return  NULL;
+	new->value = str;
+	new->next = NULL;
+	return (new);
+}
+
+
+void	tkn_append_after( t_token *current,  t_token *add)
+{
+	add->next = current->next;
+	current->next = add;
+}
+
+
+int do_field_spliting(t_token *token)
+{
+	t_token *current;
+	char **fields;
+	int i;
+
+	i = 1;
+	current = token;
+	while (current)// chelou, tester sans
+	{
+		if (ft_strlen(current->value) > 0)
+		{
+			fields = split_field(current->value, ' '); // maybe faire l'ifs "\('-')/"
+			free(current->value);
+			current->value = fields[0];
+			while(fields[i])
+			{
+				tkn_append_after(current, tkn_new(fields[i]));
+				i++;
+				current = current->next;
+
+			}
+			free(fields);
+		}
+		current = current->next;
+	}
+	return(1);
+}
+
 int	list_expand(t_minishell *minishell, t_token *token)
 {
 	t_token *current;
@@ -45,14 +94,31 @@ int	list_expand(t_minishell *minishell, t_token *token)
 	while (current)
     {
         if (current->type == WORD)
+		{
             process_word_token(minishell, current);
+			do_field_spliting(current);
+		}
         
-		// here can go other thing like expand or string modification based on the type of the token
         current = current->next;
     }
+	print_token(token);
     print_list_type_debug(token);
 	return (1);
 }
+
+int	remove_all_quote(t_token *tokens)
+{
+	t_token *current;
+
+	current = tokens;
+	while(current)
+	{
+		current->value = remove_quotes(current->value);
+		current = current->next;
+	}
+	return (1);
+}
+
 
 int parsinette(t_minishell *minishell)
 {
@@ -72,8 +138,12 @@ int parsinette(t_minishell *minishell)
 
     if(!list_expand(minishell, tokens))
 		return (1);
-    
-	if(!check_syntax_errors(tokens))
+	if (!do_field_spliting(tokens))
+		return (1);
+	if (!remove_all_quote(tokens))
+		return (1);
+	print_token(tokens);
+	if (!check_syntax_errors(tokens))
 		return (1);
 
     return (0);

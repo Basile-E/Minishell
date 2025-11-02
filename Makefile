@@ -25,7 +25,8 @@ UTILS = \
 		len.c \
 		print.c \
 		struct.c \
-		syntax_check.c
+		syntax_check.c \
+		f_split.c
 
 ALL_SRC = $(addprefix $(SRC_PATH), $(SRC)) \
 		  $(addprefix $(TOKEN_PATH), $(TOKEN)) \

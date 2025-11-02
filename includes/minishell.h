@@ -66,11 +66,6 @@ typedef struct  s_args
     struct s_args  *next;
 }               t_args;
 
-typedef struct s_cmd
-{
-	char **cmd;//  cmd[0] = echo ; cmd[1] = "bonjour" 
-	struct s_cmd *next;
-}				t_cmd;
 
 
 typedef enum e_quote
@@ -89,16 +84,22 @@ typedef enum e_token_type
     REDIRECT_APPEND,// >>
     REDIRECT_HEREDOC,// <<
     EOF_TOKEN
-} t_token_type;
+} 			t_token_type;
 
 typedef struct s_token 
 {
     t_token_type type;
     char *value;
     struct s_token *next;
-} t_token;
+} 				t_token;
 
 
+typedef struct 	s_cmd
+{
+	char **cmd;//  cmd[0] = echo ; cmd[1] = "bonjour"
+	t_token_type type;
+	struct s_cmd *next;
+}				t_cmd;
 
 ///////////////////
 /*  Fonctions   */
@@ -121,7 +122,7 @@ int parsinette(t_minishell *minishell);
 int is_space(char c);
 int is_sep(char c);
 int is_operator(char c);
-t_args *create_and_add_token(t_args **head, t_args **current, char *content);
+t_token *create_and_add_token(t_token **head, t_token **current, char *content);
 void clear_buff(char *buffer);
 int tokenizer(t_minishell *minishell, t_args **args);
 
@@ -148,7 +149,7 @@ void	set_quote_status(char c, t_quote *status);
 int check_syntax_errors(t_token *head);
 int check_parentheses_syntax(char *input);
 int check_unclosed_quotes(char *str);
-
+char	**split_field(char const *s, char c);
 
 // syntaxe 
 int check_syntax_errors(t_token *head);

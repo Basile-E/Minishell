@@ -4,7 +4,12 @@ bash-5.2$
 
 je ne gere pas le fait de ne pas avoir d'input avant << 
 
+ca devrait retourner a la ligne et attendre un input mais je ne vois pas a quoi ca sert 
+mais easy a implement 
+
 je ne gere pas encore le field splitting 
+
+
 
 voir avec emma si elle veut que je lui envoie une struct de token (celle actuelle) ou struct cmd 
 
