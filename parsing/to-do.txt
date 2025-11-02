@@ -1,0 +1,21 @@
+bash-5.2$ << test
+> ^C
+bash-5.2$ 
+
+je ne gere pas le fait de ne pas avoir d'input avant << 
+
+je ne gere pas encore le field splitting 
+
+voir avec emma si elle veut que je lui envoie une struct de token (celle actuelle) ou struct cmd 
+
+struct cmd 
+
+typedef struct s_cmd {
+    char **args;        // ["echo", "hello", NULL]
+    char *input_file;   // "input.txt" ou NULL
+    char *output_file;  // "output.txt" ou NULL
+    int append_mode;    // 1 si >>, 0 si >
+    struct s_cmd *next; // Commande après |
+} t_cmd;
+
+peut etre une fonction pre processing des token qui set toutes les var
