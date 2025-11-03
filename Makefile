@@ -5,6 +5,7 @@ TOKEN_PATH = parsing/token/
 PARSING_PATH = parsing/
 EXPAND_PATH = parsing/expand/
 UTILS_PATH = parsing/utils/
+LEXER_PATH = parsing/lexer/
 
 OBJ_PATH = build/
 LIBFT_PATH = libft/
@@ -27,12 +28,15 @@ UTILS = \
 		struct.c \
 		syntax_check.c \
 		f_split.c
+LEXER = \
+		lexer.c
 
 ALL_SRC = $(addprefix $(SRC_PATH), $(SRC)) \
 		  $(addprefix $(TOKEN_PATH), $(TOKEN)) \
 		  $(addprefix $(PARSING_PATH), $(PARSING)) \
 		  $(addprefix $(EXPAND_PATH), $(EXPAND)) \
-		  $(addprefix $(UTILS_PATH), $(UTILS))
+		  $(addprefix $(UTILS_PATH), $(UTILS)) \
+		  $(addprefix $(LEXER_PATH), $(LEXER))
 
 #SRCS = $(addprefix $(SRC_PATH), $(SRC))
 OBJ = $(addprefix $(OBJ_PATH), $(ALL_SRC:.c=.o))

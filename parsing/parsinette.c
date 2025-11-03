@@ -123,11 +123,12 @@ int	remove_all_quote(t_token *tokens)
 int parsinette(t_minishell *minishell)
 {
     t_token *tokens;
+	t_cmd 	*cmd;
 
 	if	(check_parentheses_syntax(minishell->input) || 
 		check_unclosed_quotes(minishell->input))
 		return (1);
-
+	cmd = NULL;
     tokens = tokenize(minishell->input);
     if (!tokens)
 	{
@@ -145,7 +146,9 @@ int parsinette(t_minishell *minishell)
 	print_token(tokens);
 	if (!check_syntax_errors(tokens))
 		return (1);
-
+	//if(!lexer(tokens, cmd))
+		//return (1);
+	//print_lexer(cmd);
     return (0);
 }
 
