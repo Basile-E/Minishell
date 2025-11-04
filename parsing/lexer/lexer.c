@@ -2,7 +2,7 @@
 
 /* I know a lexer is a parser, go touch grass */
 
-t_cmd *cmd_create(char **cmds, char *in_file, char *out_file, int app_mode)
+t_cmd *cmd_create(char **cmds, int fd_in, int fd_out, int app_mode)
 {
 	t_cmd *new;
 	int i;
@@ -16,10 +16,11 @@ t_cmd *cmd_create(char **cmds, char *in_file, char *out_file, int app_mode)
 		new->args[i] = ft_strdup(cmds[i]);
 		i++;
 	}
-	new->input_file = ft_strdup(in_file);
-	new->output_file = ft_strdup(out_file);
+	new->fd_in = fd_in;
+	new->fd_out = fd_out;
 	new->append_mode = app_mode;
 	new->next = NULL;
+	new->heredoc = NULL;
 	free(cmds);
 	return (new);
 }
@@ -48,29 +49,79 @@ void	print_lexer(t_cmd *cmd)
 	while (current)
 	{
 		print_env(current->args);
-		printf("%s\n", current->input_file);
-		printf("%s\n", current->output_file);
+		printf("%i\n", current->fd_in);
+		printf("%i\n", current->fd_out);
 		printf("%i\n", current->append_mode);
+		printf("%s\n", current->heredoc);
 		current = current->next;
 	}
 }
+
+// est-ce qu'il faut absolument le charger dans un fd ? si oui est-ce que je dois le mettre dans mon fd in ou c'est un fd heredoc
+char *do_heredoc(char *limiter)
+{
+	char *line;
+	char *ret_line;
+	char *line_nl;
+
+	ret_line = NULL;
+	while((line = readline("Theirdoc>")) != NULL)
+	{
+		if (ft_strncmp(line, limiter, ft_strlen(limiter)))
+			break;
+		
+		line_nl = ft_strjoin(line, "\n");
+		free(line);
+		if (!line_nl)
+		{
+			free(ret_line);
+			return(NULL);
+		}
+		if (!ret_line)
+			ret_line = line_nl;
+		else
+		{
+			ret_line = ft_strjoin(ret_line, line);
+			free(line_nl);
+			if (!ret_line)
+				return(NULL);
+		}
+	}
+	return (ret_line);
+}
+
+static int count_words_until_pipe(t_token *start)
+{
+    int count = 0;
+    while (start && start->type != PIPE)
+    {
+        if (start->type == WORD)
+            count++;
+        start = start->next;
+    }
+    return count;
+}
+
 int lexer(t_token *token, t_cmd *cmd)
 {
 	t_token *current;
 	char **cmd_tab;
+	char *heredoc;
 	int		tab_idx;
-	char *in_file;
-	char *out_file;
+	int	fd_in;
+	int fd_out;
 	int app_mode;
+	int words;
 
 	current = token;
 	tab_idx = 0;
 	app_mode = 0;
-	in_file = NULL;
-	out_file = NULL;
-	cmd_tab = NULL;
+	fd_in = 0;
+	fd_out = 0;
+	heredoc = NULL;
 	while (current)
 	{
+		words = count_words_until_pipe(token);
 		if (current->type == WORD)
 			cmd_tab[tab_idx] = ft_strdup(current->value);
 		else // on a trouver un sep, youpi !
@@ -78,21 +129,30 @@ int lexer(t_token *token, t_cmd *cmd)
 			if (current->type == REDIRECT_APPEND)
 			{
 				app_mode = 1;
-				out_file = ft_strdup(current->next->value);
+				fd_out = open(current->next->value, O_WRONLY);
+				if(!fd_out)
+					return(0); // normalement on continu vers l'exec anyway et on doit bloquer sur le fichier manquant
 			}
 			else if (current->type == REDIRECT_HEREDOC)
 			{
-				// ici il faut une fonction do_heredoc mais no idea de ce quelle return
+				heredoc = do_heredoc(current->next->value);
+				if (!heredoc)
+					return(0);
 			}
 			else if (current->type == REDIRECT_IN)
 			{
-				in_file = ft_strdup(current->next->value);
+				fd_in = open(current->next->value, O_RDONLY);
+				if (!fd_in)
+					return(0);
 			}
 			else if (current->type == REDIRECT_OUT)
 			{
-				out_file = ft_strdup(current->next->value);
+				fd_out = open(current->next->value, O_WRONLY);
+				if (!fd_out)
+					return(0);
 			}
-			cmd_append(&cmd, cmd_create(cmd_tab, in_file, out_file, app_mode));
+			if(current->type == PIPE || current->next == NULL)
+				cmd_append(&cmd, cmd_create(cmd_tab, fd_in, fd_out, app_mode));
 		}
 		current = current->next;
 		tab_idx++;

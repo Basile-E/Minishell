@@ -146,9 +146,9 @@ int parsinette(t_minishell *minishell)
 	print_token(tokens);
 	if (!check_syntax_errors(tokens))
 		return (1);
-	//if(!lexer(tokens, cmd))
-		//return (1);
-	//print_lexer(cmd);
+	if(!lexer(tokens, cmd))
+		return (1);
+	print_lexer(cmd);
     return (0);
 }
 

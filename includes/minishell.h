@@ -10,6 +10,8 @@
 #include <unistd.h>
 #include <readline/history.h>
 #include <readline/readline.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include "../libft/libft.h"
 
 ///////////////////
@@ -97,9 +99,10 @@ typedef struct s_token
 typedef struct 	s_cmd
 {
 	char **args;		// ["echo", "hello", NULL] 
-	char *input_file;   // "input.txt" ou NULL
-	char *output_file;  // "output.txt" ou NULL
+	int fd_in;   // "input.txt" ou NULL
+	int fd_out;  // "output.txt" ou NULL
 	int append_mode;	// 1 si >>, 0 si >
+	char *heredoc;
 	struct s_cmd *next; // Commande après |
 }				t_cmd;
 
