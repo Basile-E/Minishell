@@ -11,6 +11,9 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+#include <errno.h>
+
+
 
 ///////////////////
 /*  Define      */
@@ -93,5 +96,10 @@ int					tab_len(char **tab);
 int					print_token(t_args *head);
 void				print_env(char **env);
 int					set_struct_minishell(t_minishell *minishell, char **env);
+
+
+//Built-ins
+int					ft_strcmp_equal(char *s1, char *s2);
+
 
 #endif
