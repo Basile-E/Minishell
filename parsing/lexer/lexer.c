@@ -2,50 +2,66 @@
 
 /* I know a lexer is a parser, go touch grass */
 
-t_cmd *cmd_create(char **cmds, int fd_in, int fd_out, int app_mode)
+t_cmd	*cmd_create(char **cmds, int fd_in, int fd_out, int app_mode)
 {
-	t_cmd *new;
-	int i;
-	
+	t_cmd	*new;
+	int		i;
+	int		count;
+
+	if (!cmds)
+		return (NULL);
+	count = 0;
+	while (cmds[count])
+		count++;
 	new = malloc(sizeof(t_cmd));
+	if (!new)
+	{
+		// caller still owns cmds
+		return (NULL);
+	}
+	new->args = ft_calloc(count + 1, sizeof(char *));
+	if (!new->args)
+	{
+		free(new);
+		return (NULL);
+	}
 	i = 0;
-	if(!new)
-		return(NULL);
-	while(cmds[i])
+	while (i < count)
 	{
 		new->args[i] = ft_strdup(cmds[i]);
 		i++;
 	}
+	new->args[i] = NULL;
 	new->fd_in = fd_in;
 	new->fd_out = fd_out;
 	new->append_mode = app_mode;
 	new->next = NULL;
 	new->heredoc = NULL;
+	// caller passed cmds buffer ownership to us, free it
 	free(cmds);
 	return (new);
 }
 
-void cmd_append(t_cmd **cmd, t_cmd *new_node)
+void	cmd_append(t_cmd **cmd, t_cmd *new_node)
 {
-	t_cmd *current;
+	t_cmd	*current;
 
 	if (!*cmd)
 	{
 		*cmd = new_node;
-		return;
+		return ;
 	}
 	current = *cmd;
-	while(current->next)
+	while (current->next)
 		current = current->next;
 	current->next = new_node;
 }
 
 void	print_lexer(t_cmd *cmd)
 {
-	t_cmd *current;
+	t_cmd	*current;
 
 	current = cmd;
-	
 	while (current)
 	{
 		print_env(current->args);
@@ -58,120 +74,158 @@ void	print_lexer(t_cmd *cmd)
 }
 
 // est-ce qu'il faut absolument le charger dans un fd ? si oui est-ce que je dois le mettre dans mon fd in ou c'est un fd heredoc
-char *do_heredoc(char *limiter)
+int	do_heredoc(const char *limiter, char **out)
 {
-	char *line;
-	char *ret_line;
-	char *line_nl;
+	char	*line;
+	char	*ret_line;
+	char	*line_nl;
+	char	*tmp;
 
+	if (!limiter || !out)
+		return (-1);
+	*out = NULL;
 	ret_line = NULL;
-	while((line = readline("Theirdoc>")) != NULL)
+	while ((line = readline("Theirdoc>")) != NULL)
 	{
-		if (ft_strncmp(line, limiter, ft_strlen(limiter)))
-			break;
-		
+		if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0)
+		{
+			free(line);
+			break ;
+		}
 		line_nl = ft_strjoin(line, "\n");
 		free(line);
 		if (!line_nl)
 		{
 			free(ret_line);
-			return(NULL);
+			return (-1);
 		}
 		if (!ret_line)
 			ret_line = line_nl;
 		else
 		{
-			ret_line = ft_strjoin(ret_line, line);
+			tmp = ret_line;
+			ret_line = ft_strjoin(ret_line, line_nl);
+			free(tmp);
 			free(line_nl);
 			if (!ret_line)
-				return(NULL);
+				return (-1);
 		}
 	}
-	return (ret_line);
+	*out = ret_line; /* may be NULL if EOF/no lines */
+	return (0);
 }
 
-static int count_words_until_pipe(t_token *start)
+static int	count_words_until_pipe(t_token *start)
 {
-    int count = 0;
-    while (start && start->type != PIPE)
-    {
-        if (start->type == WORD)
-            count++;
-        start = start->next;
-    }
-    return count;
+	int	count;
+
+	count = 0;
+	while (start && start->type != PIPE)
+	{
+		if (start->type == WORD)
+			count++;
+		start = start->next;
+	}
+	return (count);
 }
 
-int lexer(t_token *token, t_cmd *cmd)
+int	lexer(t_token *token, t_cmd *cmd)
 {
-	t_token *current;
-	char **cmd_tab;
-	char *heredoc;
+	t_token	*current;
+	char	**cmd_tab;
+	char	*heredoc;
 	int		tab_idx;
-	int	fd_in;
-	int fd_out;
-	int app_mode;
-	int words;
+	int		fd_in;
+	int		fd_out;
+	int		app_mode;
+	int		words;
+	t_cmd	*new_node;
 
 	current = token;
+	cmd_tab = NULL;
 	tab_idx = 0;
 	app_mode = 0;
-	fd_in = 0;
-	fd_out = 0;
+	fd_in = -1;
+	fd_out = -1;
 	heredoc = NULL;
 	while (current)
 	{
-		words = count_words_until_pipe(token);
 		if (current->type == WORD)
-			cmd_tab[tab_idx] = ft_strdup(current->value);
-		else // on a trouver un sep, youpi !
 		{
-			if (current->type == REDIRECT_APPEND)
+			if (!cmd_tab)
 			{
-				app_mode = 1;
-				fd_out = open(current->next->value, O_WRONLY);
-				if(!fd_out)
-					return(0); // normalement on continu vers l'exec anyway et on doit bloquer sur le fichier manquant
+				words = count_words_until_pipe(current);
+				cmd_tab = ft_calloc(words + 1, sizeof(char *));
+				if (!cmd_tab)
+					return (0);
+				tab_idx = 0;
 			}
-			else if (current->type == REDIRECT_HEREDOC)
-			{
-				heredoc = do_heredoc(current->next->value);
-				if (!heredoc)
-					return(0);
-			}
-			else if (current->type == REDIRECT_IN)
-			{
-				fd_in = open(current->next->value, O_RDONLY);
-				if (!fd_in)
-					return(0);
-			}
-			else if (current->type == REDIRECT_OUT)
-			{
-				fd_out = open(current->next->value, O_WRONLY);
-				if (!fd_out)
-					return(0);
-			}
-			if(current->type == PIPE || current->next == NULL)
-				cmd_append(&cmd, cmd_create(cmd_tab, fd_in, fd_out, app_mode));
+			cmd_tab[tab_idx++] = ft_strdup(current->value);
+			current = current->next;
+			continue ;
+		}
+		if (!current->next)
+			return (0);
+		if (current->type == REDIRECT_APPEND)
+		{
+			fd_out = open(current->next->value, O_WRONLY | O_CREAT | O_APPEND,
+					0644);
+			if (fd_out == -1)
+				return (0);
+			current = current->next->next;
+			continue ;
+		}
+		else if (current->type == REDIRECT_HEREDOC)
+		{
+			if (do_heredoc(current->next->value, &heredoc) == -1)
+				return (0);
+			current = current->next->next;
+			continue ;
+		}
+		else if (current->type == REDIRECT_IN)
+		{
+			fd_in = open(current->next->value, O_RDONLY);
+			if (fd_in == -1)
+				return (0);
+			current = current->next->next;
+			continue ;
+		}
+		else if (current->type == REDIRECT_OUT)
+		{
+			fd_out = open(current->next->value, O_WRONLY | O_CREAT | O_TRUNC,
+					0644);  // est-ce qu'on create si il n'existe pas ?
+			if (fd_out == -1)
+				return (0);
+			current = current->next->next;
+			continue ;
+		}
+		else if (current->type == PIPE)
+		{
+			new_node = cmd_create(cmd_tab, fd_in, fd_out, app_mode);
+			if (!new_node)
+				return (0);
+			new_node->heredoc = heredoc;
+			heredoc = NULL;
+			cmd_append(&cmd, new_node);
+			cmd_tab = NULL;
+			tab_idx = 0;
+			fd_in = -1;
+			fd_out = -1;
+			app_mode = 0;
+			current = current->next;
+			continue ;
 		}
 		current = current->next;
-		tab_idx++;
 	}
-	printf("i got here\n\n\n");
+	if (cmd_tab)
+	{
+		new_node = cmd_create(cmd_tab, fd_in, fd_out, app_mode);
+		if (!new_node)
+			return (0);
+		new_node->heredoc = heredoc;
+		cmd_append(&cmd, new_node);
+	}
 	print_lexer(cmd);
-	return(1);
+	return (1);
 }
 
-
-
-// 1 create token cmd
-// 2 append cmd
-
-// token_to_cmd() : 
-// parcours la liste,
-// 	premier elem doit etre un mot, il deviens la cmd, 
-// 	puis jusquq qu'un operateur soir found il ajoute des lignes au ret_tab,
-//  		quand op is found
-// 			check de pipe ou redirection si pipe on stop ici et passe a la prochaine cmd 
-// 			else
-//  				on trouve le "sens" de la redirection et on set les params de la struct puis on passe a la prochaine cmd

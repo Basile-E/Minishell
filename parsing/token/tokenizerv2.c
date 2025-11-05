@@ -112,28 +112,22 @@ t_token	*tokenize(char *input)
     t_token	*tokens;
     int		i;
 
-
 	status = NONE;
     tokens = NULL;
     i = 0;
-    
     while (input[i])
     {
 		set_quote_status(input[i], &status);
-        // Skip whitespace
         while (input[i] && is_space(input[i]) && status == NONE)
             i++;
         
         if (!input[i])
             break;
-        
-        // Parse operators
         if (is_operator(input[i]) && status == NONE)
         {
             if (!parse_redirect_operator(input, &i, &tokens))
                 return (NULL);
         }
-        // Parse words
         else
         {
             if (!parse_word(input, &i, &tokens, status))
