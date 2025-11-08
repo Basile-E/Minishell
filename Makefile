@@ -6,6 +6,10 @@ PARSING_PATH = parsing/
 EXPAND_PATH = parsing/expand/
 UTILS_PATH = parsing/utils/
 LEXER_PATH = parsing/lexer/
+EXEC_PATH = exec/
+BUILTIN_PATH = exec/builtins/
+EXECUTIVE_PATH = exec/executive/
+ENV_PATH = exec/builtins/env.c/
 
 OBJ_PATH = build/
 LIBFT_PATH = libft/
@@ -30,6 +34,28 @@ UTILS = \
 		f_split.c
 LEXER = \
 		lexer.c
+EXEC = \
+	hitman.c
+BUILTIN = \
+	built_ins_utils.c \
+	built-ins.c \
+	cd.c \
+	echo.c \
+	exit.c \
+	export.c \
+	pdw.c \
+	unset.c
+
+ENV = \
+	create_add_env.c \
+	ft_env \
+	update_ft_env.c
+
+EXECUTIVE = \
+	execve.c
+
+
+
 
 ALL_SRC = $(addprefix $(SRC_PATH), $(SRC)) \
 		  $(addprefix $(TOKEN_PATH), $(TOKEN)) \
@@ -45,7 +71,7 @@ DPD = $(addprefix $(OBJ_PATH), $(ALL_SRC:.c=.d))
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -MMD -g -g3 #-fsanitize=address,leak,undefined
 INCS = includes/minishell.h
-INC = -Iincludes -I$(LIBFT_PATH)/includes
+INC = -I. -Iincludes -I$(LIBFT_PATH)/includes
 
 PURPLE = \033[0;35m
 NC = \033[0m
