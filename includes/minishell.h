@@ -119,9 +119,6 @@ char *do_expandV2(t_minishell *minishell, char *str);
 // Parsing
 int parsinette(t_minishell *minishell);
 
-// SRC
-
-
 // Token
 int is_space(char c);
 int is_sep(char c);
@@ -159,4 +156,17 @@ int lexer(t_token *token, t_cmd *cmd);
 // syntaxe 
 int check_syntax_errors(t_token *head);
 void	print_lexer(t_cmd *cmd);
+
+// exec built-ins
+void	ft_creat_env(t_minishell *mini, char **envp);
+void	ft_add_env(t_minishell *mini, char *new);
+int	ft_env(t_minishell *mini);
+void	ft_error(const char *str, const char *error);
+int	ft_strcmp_equal(char *s1, char *s2);
+int	does_it_exist(t_minishell *mini, char *src);
+int	ft_echo(t_minishell mini, char **argv);
+void	**ft_create_export(t_minishell *mini);
+void	ft_sort_export(char **exp);
+void	ft_export(char **exp);
+
 #endif
