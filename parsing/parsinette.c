@@ -101,8 +101,8 @@ int	list_expand(t_minishell *minishell, t_token *token)
         
         current = current->next;
     }
-	print_token(token);
-    print_list_type_debug(token);
+	//print_token(token);
+    //print_list_type_debug(token);
 	return (1);
 }
 
@@ -135,7 +135,7 @@ int parsinette(t_minishell *minishell)
         return (1);
 	} // wtf a cause du print je dois foutre des crochets 
 	
-	print_token(tokens); // debug
+	//print_token(tokens); // debug
 
     if(!list_expand(minishell, tokens))
 		return (1);
@@ -149,6 +149,7 @@ int parsinette(t_minishell *minishell)
 	if(!lexer(tokens, cmd))
 		return (1);
 	print_lexer(cmd);
+	execute(cmd, minishell);
     return (0);
 }
 

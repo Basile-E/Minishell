@@ -6,7 +6,7 @@ int is_a_builtin(char **cmd, t_minishell *mini)
 
 	//if (ft_strncmp("cd", cmd, ft_strlen(cmd) + 1))
 
-	if (ft_strncmp("echo", cmd[0], ft_strlen(cmd) + 1))
+	if (ft_strncmp("echo", cmd[0], ft_strlen(cmd[0]) + 1))
 	{
 		printf("Jason was here\n");
 		ft_echo(*mini, cmd);
@@ -18,7 +18,7 @@ int is_a_builtin(char **cmd, t_minishell *mini)
 	//if (ft_strncmp("pwd", cmd, ft_strlen(cmd) + 1))
 
 	//if (ft_strncmp("unset", cmd, ft_strlen(cmd) + 1))
-
+	return (1);
 }
 
 
@@ -28,16 +28,15 @@ int execute(t_cmd *cmd, t_minishell *mini)
 		check le cmd[0] dans is_a_builtin
 		else
 			il faut look dans .bin/
-
 	*/	
 
 	t_cmd *current;
 	char *cmd_name;
-	
+	(void) cmd_name;
 	current = cmd;
 	while(current)
 	{
-		if (is_a_builtin(current, mini))
+		if (is_a_builtin(current->args, mini))
 			continue;
 		else
 		{
@@ -45,4 +44,5 @@ int execute(t_cmd *cmd, t_minishell *mini)
 		}
 		current = current->next;
 	}
+	return(1);
 }

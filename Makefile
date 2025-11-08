@@ -43,7 +43,7 @@ BUILTIN = \
 	echo.c \
 	exit.c \
 	export.c \
-	pdw.c \
+	pwd.c \
 	unset.c
 
 ENV = \
@@ -62,7 +62,11 @@ ALL_SRC = $(addprefix $(SRC_PATH), $(SRC)) \
 		  $(addprefix $(PARSING_PATH), $(PARSING)) \
 		  $(addprefix $(EXPAND_PATH), $(EXPAND)) \
 		  $(addprefix $(UTILS_PATH), $(UTILS)) \
-		  $(addprefix $(LEXER_PATH), $(LEXER))
+		  $(addprefix $(LEXER_PATH), $(LEXER)) \
+		  $(addprefix $(EXEC_PATH), $(EXEC)) \
+		  $(addprefix $(BUILTIN_PATH), $(BUILTIN)) \
+		  $(addprefix $(ENV_PATH), $(ENV)) \
+		  $(addprefix $(EXECUTIVE_PATH), $(EXEC)) \
 
 #SRCS = $(addprefix $(SRC_PATH), $(SRC))
 OBJ = $(addprefix $(OBJ_PATH), $(ALL_SRC:.c=.o))

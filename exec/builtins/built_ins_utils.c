@@ -3,9 +3,9 @@
 void	ft_error(const char *str, const char *error)
 {
 	if (error)
-		ft_printf(2, "minishell: %s: %s\n", str, error);
+		ft_printf("minishell: %s: %s\n", str, error);
 	else
-		ft_printf(2, "minishell: error: %s\n", str);
+		ft_printf("minishell: error: %s\n", str);
 }
 
 int	ft_strcmp_equal(char *s1, char *s2)
@@ -38,4 +38,12 @@ int	does_it_exist(t_minishell *mini, char *src)
 		i++;
 	}
 	return (1);
+}
+
+int ft_strlen_y(char **tab)
+{
+	int i = 0;
+	while(tab[i])
+		i++;
+	return(i);
 }

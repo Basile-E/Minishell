@@ -22,7 +22,7 @@ int main(int ac, char **av, char **ev)
         if (!minishell->input) // est-ce que readline peut fail ?
             return(printf("Exit\n"), 0);
         add_history(minishell->input);
-        printf("Debug :\nString sent by readline : %s\n", minishell->input);
+        //printf("Debug :\nString sent by readline : %s\n", minishell->input);
         if (parsinette(minishell))
             printf("Parsing failed, try to be better at cli\n");
     }

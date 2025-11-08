@@ -168,5 +168,7 @@ int	ft_echo(t_minishell mini, char **argv);
 void	**ft_create_export(t_minishell *mini);
 void	ft_sort_export(char **exp);
 void	ft_export(char **exp);
+int	execute(t_cmd *cmd, t_minishell *mini);
+int ft_strlen_y(char **tab);
 
 #endif
