@@ -48,7 +48,7 @@ BUILTIN = \
 
 ENV = \
 	create_add_env.c \
-	ft_env \
+	ft_env.c \
 	update_ft_env.c
 
 EXECUTIVE = \
@@ -66,7 +66,7 @@ ALL_SRC = $(addprefix $(SRC_PATH), $(SRC)) \
 		  $(addprefix $(EXEC_PATH), $(EXEC)) \
 		  $(addprefix $(BUILTIN_PATH), $(BUILTIN)) \
 		  $(addprefix $(ENV_PATH), $(ENV)) \
-		  $(addprefix $(EXECUTIVE_PATH), $(EXEC)) \
+		  $(addprefix $(EXECUTIVE_PATH), $(EXECUTIVE)) \
 
 #SRCS = $(addprefix $(SRC_PATH), $(SRC))
 OBJ = $(addprefix $(OBJ_PATH), $(ALL_SRC:.c=.o))

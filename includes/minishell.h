@@ -12,6 +12,7 @@
 #include <readline/readline.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <errno.h>
 #include "../libft/libft.h"
 
 ///////////////////
@@ -151,7 +152,7 @@ int check_syntax_errors(t_token *head);
 int check_parentheses_syntax(char *input);
 int check_unclosed_quotes(char *str);
 char	**split_field(char const *s, char c);
-int lexer(t_token *token, t_cmd *cmd);
+t_cmd *lexer(t_token *token, t_cmd *cmd);
 
 // syntaxe 
 int check_syntax_errors(t_token *head);

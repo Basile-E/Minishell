@@ -2,15 +2,11 @@
 
 int is_a_builtin(char **cmd, t_minishell *mini)
 {
-	
 
 	//if (ft_strncmp("cd", cmd, ft_strlen(cmd) + 1))
-
-	if (ft_strncmp("echo", cmd[0], ft_strlen(cmd[0]) + 1))
-	{
-		printf("Jason was here\n");
+	if (ft_strncmp("echo", cmd[0], 4) == 0 && ft_strlen(cmd[0]) == 4)
 		ft_echo(*mini, cmd);
-	}
+
 	//if (ft_strncmp("exit", cmd, ft_strlen(cmd) + 1))
 
 	//if (ft_strncmp("export", cmd, ft_strlen(cmd) + 1))
@@ -24,11 +20,6 @@ int is_a_builtin(char **cmd, t_minishell *mini)
 
 int execute(t_cmd *cmd, t_minishell *mini)
 {
-	/* parcourir la liste des cmd
-		check le cmd[0] dans is_a_builtin
-		else
-			il faut look dans .bin/
-	*/	
 
 	t_cmd *current;
 	char *cmd_name;
@@ -36,12 +27,7 @@ int execute(t_cmd *cmd, t_minishell *mini)
 	current = cmd;
 	while(current)
 	{
-		if (is_a_builtin(current->args, mini))
-			continue;
-		else
-		{
-			continue;
-		}
+		is_a_builtin(current->args, mini);
 		current = current->next;
 	}
 	return(1);

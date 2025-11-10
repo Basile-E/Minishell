@@ -68,7 +68,8 @@ void	print_lexer(t_cmd *cmd)
 		printf("%i\n", current->fd_in);
 		printf("%i\n", current->fd_out);
 		printf("%i\n", current->append_mode);
-		printf("%s\n", current->heredoc);
+		if (current->heredoc)
+			printf("%s\n", current->heredoc);
 		current = current->next;
 	}
 }
@@ -129,7 +130,7 @@ static int	count_words_until_pipe(t_token *start)
 	return (count);
 }
 
-int	lexer(t_token *token, t_cmd *cmd)
+t_cmd *lexer(t_token *token, t_cmd *cmd)
 {
 	t_token	*current;
 	char	**cmd_tab;
@@ -157,7 +158,7 @@ int	lexer(t_token *token, t_cmd *cmd)
 				words = count_words_until_pipe(current);
 				cmd_tab = ft_calloc(words + 1, sizeof(char *));
 				if (!cmd_tab)
-					return (0);
+					return NULL;
 				tab_idx = 0;
 			}
 			cmd_tab[tab_idx++] = ft_strdup(current->value);
@@ -171,14 +172,14 @@ int	lexer(t_token *token, t_cmd *cmd)
 			fd_out = open(current->next->value, O_WRONLY | O_CREAT | O_APPEND,
 					0644);
 			if (fd_out == -1)
-				return (0);
+				return NULL; // a verif, il faut check ce qu'on fait quand un mauvais fichier est envoyer
 			current = current->next->next;
 			continue ;
 		}
 		else if (current->type == REDIRECT_HEREDOC)
 		{
 			if (do_heredoc(current->next->value, &heredoc) == -1)
-				return (0);
+				return NULL;
 			current = current->next->next;
 			continue ;
 		}
@@ -186,7 +187,7 @@ int	lexer(t_token *token, t_cmd *cmd)
 		{
 			fd_in = open(current->next->value, O_RDONLY);
 			if (fd_in == -1)
-				return (0);
+				return NULL;
 			current = current->next->next;
 			continue ;
 		}
@@ -195,7 +196,7 @@ int	lexer(t_token *token, t_cmd *cmd)
 			fd_out = open(current->next->value, O_WRONLY | O_CREAT | O_TRUNC,
 					0644);  // est-ce qu'on create si il n'existe pas ?
 			if (fd_out == -1)
-				return (0);
+				return NULL;
 			current = current->next->next;
 			continue ;
 		}
@@ -203,7 +204,7 @@ int	lexer(t_token *token, t_cmd *cmd)
 		{
 			new_node = cmd_create(cmd_tab, fd_in, fd_out, app_mode);
 			if (!new_node)
-				return (0);
+				return NULL;
 			new_node->heredoc = heredoc;
 			heredoc = NULL;
 			cmd_append(&cmd, new_node);
@@ -221,11 +222,10 @@ int	lexer(t_token *token, t_cmd *cmd)
 	{
 		new_node = cmd_create(cmd_tab, fd_in, fd_out, app_mode);
 		if (!new_node)
-			return (0);
+			return NULL;
 		new_node->heredoc = heredoc;
 		cmd_append(&cmd, new_node);
 	}
-	print_lexer(cmd);
-	return (1);
+	return (cmd);
 }
 

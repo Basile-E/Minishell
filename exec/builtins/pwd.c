@@ -8,7 +8,7 @@ int	ft_pwd(void)
 	path = getcwd(NULL, 0);
 	if (!path)
 		return (ft_error("getcwd", strerror(errno)), 1);
-	ft_printf(1, "%s\n", path);
+	ft_printf("%s\n", path);
 	free(path);
 	return (0);
 }
