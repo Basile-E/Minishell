@@ -5,18 +5,18 @@ qlq chose qui n'existe pas cela ne fait rien */
 
 #include "minishell.h"
 
-int	env_unset_one(char ***env, const char *name)
-{
-	size_t	i; 
-	size_t	var_len;
+// int	env_unset_one(char ***env, const char *name)
+// {
+// 	size_t	i; 
+// 	size_t	var_len;
 
-	i = 0;
-	var_len = ft_strlen();
-	while (argv[i])
-}
+// 	i = 0;
+// 	var_len = ft_strlen();
+// 	while (argv[i])
+// }
 
 
-int	ft_unset(char **argv, t_minishell *mini)
-{
+// int	ft_unset(char **argv, t_minishell *mini)
+// {
 	
-}
+// }

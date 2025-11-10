@@ -88,16 +88,16 @@ int check_syntax_errors(t_token *head)
 
     current = head;
     if (check_first_arg_is_flag(head->value) || check_pipes_first_or_last(head))
-        return (1);
+        return (0);
     while (current)
     {
         if (current->type == REDIRECT_APPEND || current->type == REDIRECT_HEREDOC ||
             current->type == REDIRECT_IN     || current->type == REDIRECT_OUT)
         {
             if (check_bad_redir_syntax(current))
-                return(1);
+                return(0);
         }
         current = current->next;
     }    
-    return (0);
+    return (1);
 }

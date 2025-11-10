@@ -242,7 +242,7 @@ char *do_expand_simple(t_minishell *minishell, char *str)
     t_quote status = NONE;
 
     
-    result = ft_strdup(""); // Start with empty string
+    result = ft_strdup("");
     if (!result)
         return (NULL);
     

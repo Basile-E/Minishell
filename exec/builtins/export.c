@@ -38,10 +38,11 @@ void	**ft_create_export(t_minishell *mini)
 			error_exp(exp, i - 1);
 			return (NULL);
 		}
-		ft_strcpy(exp[i], mini->env[i]);
+		ft_strlcpy(exp[i], mini->env[i], ft_strlen(mini->env[i]));
 		i++;
 	}
 	exp[i] = NULL;
+	return (NULL);
 }
 
 void	ft_sort_export(char **exp)
@@ -50,6 +51,7 @@ void	ft_sort_export(char **exp)
 	int		j;
 	char	*swap;
 
+	j = 0;
 	i = 0;
 	while(exp[i][j])
 	{

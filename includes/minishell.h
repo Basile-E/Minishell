@@ -2,7 +2,7 @@
  #define MINISHELL_H
 
 ///////////////////
-/*  Includes    */
+/*  Includes	*/
 /////////////////
 
 #include <stdio.h>
@@ -10,10 +10,13 @@
 #include <unistd.h>
 #include <readline/history.h>
 #include <readline/readline.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <errno.h>
 #include "../libft/libft.h"
 
 ///////////////////
-/*  Define      */
+/*  Define	  */
 /////////////////
 
 
@@ -35,36 +38,36 @@
 #   define DONT_KILL 0
 
 // because it's nicer when it's shiny
-#   define RED      "\033[31m"
-#   define GREEN    "\033[32m"
+#   define RED	  "\033[31m"
+#   define GREEN	"\033[32m"
 #   define YELLOW   "\033[33m"
-#   define BLUE     "\033[34m"
+#   define BLUE	 "\033[34m"
 #   define MAGENTA  "\033[35m"
-#   define CYAN     "\033[36m"
-#   define RESET    "\033[0m"
-#   define BOLD     "\033[1m"
-#   define PINK     "\033[38;5;218m"
+#   define CYAN	 "\033[36m"
+#   define RESET	"\033[0m"
+#   define BOLD	 "\033[1m"
+#   define PINK	 "\033[38;5;218m"
 
 ///////////////////
-/*  Structs     */
+/*  Structs	 */
 /////////////////
 
 // simulation struct
 typedef struct  s_minishell
 {
-    char    *input;
-    int     status;
-    char    **env;
-}               t_minishell;
+	char	*input;
+	int	 status;
+	char	**env;
+}			   t_minishell;
 
 // la linked list des token (args -> token)
 typedef struct  s_args
 {
-    char    *arg;
-    int     clean;
-    int     type;
-    struct s_args  *next;
-}               t_args;
+	char	*arg;
+	int	 clean;
+	int	 type;
+	struct s_args  *next;
+}			   t_args;
 
 
 
@@ -77,34 +80,36 @@ typedef enum e_quote
 
 typedef enum e_token_type 
 {
-    WORD,
-    PIPE,           // |
-    REDIRECT_IN,    // <
-    REDIRECT_OUT,   // >
-    REDIRECT_APPEND,// >>
-    REDIRECT_HEREDOC,// <<
-    EOF_TOKEN
+	WORD,
+	PIPE,		   // |
+	REDIRECT_IN,	// <
+	REDIRECT_OUT,   // >
+	REDIRECT_APPEND,// >>
+	REDIRECT_HEREDOC,// <<
+	EOF_TOKEN
 } 			t_token_type;
 
 typedef struct s_token 
 {
-    t_token_type type;
-    char *value;
-    struct s_token *next;
+	t_token_type type;
+	char *value;
+	struct s_token *next;
 } 				t_token;
 
 
 typedef struct 	s_cmd
 {
-	char **cmd;//  cmd[0] = echo ; cmd[1] = "bonjour"
-	t_token_type type;
-	struct s_cmd *next;
+	char **args;		// ["echo", "hello", NULL] 
+	int fd_in;   // "input.txt" ou NULL
+	int fd_out;  // "output.txt" ou NULL
+	int append_mode;	// 1 si >>, 0 si >
+	char *heredoc;
+	struct s_cmd *next; // Commande après |
 }				t_cmd;
 
 ///////////////////
 /*  Fonctions   */
 /////////////////
-
 
 // Expand
 char *do_expand(t_minishell *minishell, char *str);
@@ -114,9 +119,6 @@ char *do_expandV2(t_minishell *minishell, char *str);
 
 // Parsing
 int parsinette(t_minishell *minishell);
-
-// SRC
-
 
 // Token
 int is_space(char c);
@@ -150,7 +152,24 @@ int check_syntax_errors(t_token *head);
 int check_parentheses_syntax(char *input);
 int check_unclosed_quotes(char *str);
 char	**split_field(char const *s, char c);
+t_cmd *lexer(t_token *token, t_cmd *cmd);
 
 // syntaxe 
 int check_syntax_errors(t_token *head);
+void	print_lexer(t_cmd *cmd);
+
+// exec built-ins
+void	ft_creat_env(t_minishell *mini, char **envp);
+void	ft_add_env(t_minishell *mini, char *new);
+int	ft_env(t_minishell *mini);
+void	ft_error(const char *str, const char *error);
+int	ft_strcmp_equal(char *s1, char *s2);
+int	does_it_exist(t_minishell *mini, char *src);
+int	ft_echo(t_minishell mini, char **argv);
+void	**ft_create_export(t_minishell *mini);
+void	ft_sort_export(char **exp);
+void	ft_export(char **exp);
+int	execute(t_cmd *cmd, t_minishell *mini);
+int ft_strlen_y(char **tab);
+
 #endif

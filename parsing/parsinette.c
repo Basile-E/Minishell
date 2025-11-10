@@ -101,8 +101,6 @@ int	list_expand(t_minishell *minishell, t_token *token)
         
         current = current->next;
     }
-	print_token(token);
-    print_list_type_debug(token);
 	return (1);
 }
 
@@ -123,37 +121,33 @@ int	remove_all_quote(t_token *tokens)
 int parsinette(t_minishell *minishell)
 {
     t_token *tokens;
+	t_cmd 	*cmd;
 
 	if	(check_parentheses_syntax(minishell->input) || 
 		check_unclosed_quotes(minishell->input))
 		return (1);
-
+	cmd = NULL;
     tokens = tokenize(minishell->input);
     if (!tokens)
-	{
         return (1);
-	} // wtf a cause du print je dois foutre des crochets 
-	
-	print_token(tokens); // debug
-
     if(!list_expand(minishell, tokens))
 		return (1);
 	if (!do_field_spliting(tokens))
 		return (1);
 	if (!remove_all_quote(tokens))
 		return (1);
-	print_token(tokens);
 	if (!check_syntax_errors(tokens))
 		return (1);
-
+	cmd = lexer(tokens, cmd);
+	execute(cmd, minishell);
     return (0);
 }
 
 
 
-//     echo hello | | world → pipes consécutifs DONE
+//     echo hello || world → pipes consécutifs DONE
 //     echo hello > > file → redirections consécutives DONNE
 //     echo hello > → redirection sans fichier DONE
 //     echo hello | → pipe en fin de ligne DONE
-// |   echo hello → pipe en début de ligne DONE
-//     echo hello | | world → commande vide après pipe DONE
+// ||  echo hello → pipe en début de ligne DONE
+//     echo hello || world → commande vide après pipe DONE
