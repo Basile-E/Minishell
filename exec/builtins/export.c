@@ -21,7 +21,7 @@ static void error_exp(char **exp, int i)
 	free(exp);
 }
 
-void	**ft_create_export(t_minishell *mini)
+char	**ft_create_export(t_minishell *mini)
 {
 	int	i;
 	char **exp;
@@ -38,14 +38,14 @@ void	**ft_create_export(t_minishell *mini)
 			error_exp(exp, i - 1);
 			return (NULL);
 		}
-		ft_strlcpy(exp[i], mini->env[i], ft_strlen(mini->env[i]));
+		ft_strlcpy(exp[i], mini->env[i], ft_strlen(mini->env[i]) + 1);
 		i++;
 	}
 	exp[i] = NULL;
-	return (NULL);
+	return (exp);
 }
 
-void	ft_sort_export(char **exp)
+void 	ft_sort_export(char **exp)
 {
 	int		i;
 	int		j;
@@ -53,29 +53,36 @@ void	ft_sort_export(char **exp)
 
 	j = 0;
 	i = 0;
-	while(exp[i][j])
+	while(exp[i])
 	{
-		j = 0;
-		if (ft_strcmp_equal(exp[i], exp[i + 1]) > 0)
+		j = 1;
+		while (exp[j])
 		{
-			swap = exp[i];
-			exp[i] = exp[i + 1];
-			exp[i + 1] = swap;
+			if (ft_strcmp_equal(exp[j - 1], exp[j]) > 0)
+			{
+				swap = exp[j - 1];
+				exp[j - 1] = exp[j];
+				exp[j] = swap;
+			}
+			j++;
 		}
-		j++;
+		i++;
 	}
-	i++;
 }
 
-void	ft_export(char **exp)
+void	ft_export(t_minishell *mini)
 {
 	int	i;
+	char **exp;
 
 	i = 0;
+	exp = ft_create_export(mini);
+	ft_sort_export(exp);
 	if (!exp)
 		return;
 	while (exp[i])
 	{
+		ft_putstr_fd("export ", 1);
 		ft_putstr_fd(exp[i], 1);
 		ft_putchar_fd('\n', 1);
 		i++;

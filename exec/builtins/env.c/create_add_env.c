@@ -34,7 +34,7 @@ void	ft_creat_env(t_minishell *mini, char **envp)
 			error_env(mini, i - 1);
 			return;
 		}
-		ft_strlcpy(mini->env[i], envp[i], ft_strlen(envp[i]));
+		ft_strlcpy(mini->env[i], envp[i], ft_strlen(envp[i]) + 1);
 		i++;
 	}
 	mini->env[i] = NULL;

@@ -11,7 +11,7 @@ int main(int ac, char **av, char **ev)
     minishell = malloc(sizeof(t_minishell));
     prompt = BOLD CYAN "RicoShell" RESET PINK " ➜ " RESET;
     
-    set_struct_minishell(minishell, ev);
+    set_struct_minishell(minishell, ev); //ici remplir env 
 
     while (42)
     {

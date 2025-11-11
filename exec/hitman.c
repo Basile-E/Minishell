@@ -4,16 +4,17 @@ int is_a_builtin(char **cmd, t_minishell *mini)
 {
 
 	//if (ft_strncmp("cd", cmd, ft_strlen(cmd) + 1))
-	if (ft_strncmp("echo", cmd[0], 4) == 0 && ft_strlen(cmd[0]) == 4)
+	if (!ft_strncmp("echo", cmd[0], 4) && ft_strlen(cmd[0]) == 4)
 		ft_echo(*mini, cmd);
-
-	//if (ft_strncmp("exit", cmd, ft_strlen(cmd) + 1))
-
-	//if (ft_strncmp("export", cmd, ft_strlen(cmd) + 1))
-
-	//if (ft_strncmp("pwd", cmd, ft_strlen(cmd) + 1))
-
-	//if (ft_strncmp("unset", cmd, ft_strlen(cmd) + 1))
+		// if (ft_strncmp("exit", *cmd, ft_strlen(*cmd) + 1))
+		// 	ft_exit()
+	if (!ft_strncmp("export", *cmd, ft_strlen(*cmd) + 1))
+		ft_export(mini);
+	if (!ft_strncmp("pwd", *cmd, ft_strlen(*cmd) + 1))
+		ft_pwd();
+	if (!ft_strncmp("env", *cmd, ft_strlen(*cmd) + 1))
+		ft_env(mini);
+//	if (ft_strncmp("unset", *cmd, ft_strlen(*cmd) + 1))
 	return (1);
 }
 

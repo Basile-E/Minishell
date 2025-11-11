@@ -166,11 +166,12 @@ void	ft_error(const char *str, const char *error);
 int	ft_strcmp_equal(char *s1, char *s2);
 int	does_it_exist(t_minishell *mini, char *src);
 int	ft_echo(t_minishell mini, char **argv);
-void	**ft_create_export(t_minishell *mini);
+char	**ft_create_export(t_minishell *mini);
 void	ft_sort_export(char **exp);
-void	ft_export(char **exp);
+void	ft_export(t_minishell *mini);
 int	execute(t_cmd *cmd, t_minishell *mini);
 int ft_strlen_y(char **tab);
 int	ft_exit(char **argv, t_minishell *mini, int in_child);
+int	ft_pwd(void);
 
 #endif
