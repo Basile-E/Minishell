@@ -63,7 +63,7 @@ void	ft_add_env(t_minishell *mini, char *new)
 		free(new_mini);
 		return;
 	}
-	ft_strlcpy(dst, new, ft_strlen(new));
+	ft_strlcpy(dst, new, ft_strlen(new) + 1);
 	new_mini[i] = dst;
 	new_mini[i + 1] = NULL;
 	free(mini->env);
