@@ -70,21 +70,31 @@ void 	ft_sort_export(char **exp)
 	}
 }
 
-void	ft_export(t_minishell *mini)
+void	ft_export(t_minishell *mini, char **cmd)
 {
 	int	i;
 	char **exp;
 
-	i = 0;
 	exp = ft_create_export(mini);
+	ft_update_env(mini, *exp);
 	ft_sort_export(exp);
 	if (!exp)
 		return;
-	while (exp[i])
+	i = 0;
+	if (!cmd[1])
 	{
-		ft_putstr_fd("export ", 1);
-		ft_putstr_fd(exp[i], 1);
-		ft_putchar_fd('\n', 1);
-		i++;
+		while (exp[i])
+		{
+				ft_putstr_fd("export ", 1);
+				ft_putstr_fd(exp[i], 1);
+				ft_putchar_fd('\n', 1);
+				i++;
+		}
+	}
+	else
+	{
+		print_env(cmd);
+		printf("cmd[1] == %s\n", cmd[1]);
+		ft_update_env(mini, cmd[1]);
 	}
 }

@@ -1,8 +1,8 @@
 /*
 		- echo -n OK
-		- cd relative or absolute path
+		- cd relative or absolute path 
 		- pwd OK
-		- export  
+		- export  OK
 		- unset 
 		- env  
 		- exit 

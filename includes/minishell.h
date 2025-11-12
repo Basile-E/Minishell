@@ -161,6 +161,7 @@ void	print_lexer(t_cmd *cmd);
 // exec built-ins
 void	ft_creat_env(t_minishell *mini, char **envp);
 void	ft_add_env(t_minishell *mini, char *new);
+void	ft_update_env(t_minishell *mini, char *new);
 int	ft_env(t_minishell *mini);
 void	ft_error(const char *str, const char *error);
 int	ft_strcmp_equal(char *s1, char *s2);
@@ -168,10 +169,11 @@ int	does_it_exist(t_minishell *mini, char *src);
 int	ft_echo(t_minishell mini, char **argv);
 char	**ft_create_export(t_minishell *mini);
 void	ft_sort_export(char **exp);
-void	ft_export(t_minishell *mini);
+void	ft_export(t_minishell *mini, char **cmd);
 int	execute(t_cmd *cmd, t_minishell *mini);
 int ft_strlen_y(char **tab);
 int	ft_exit(char **argv, t_minishell *mini, int in_child);
+int	ft_unset(char **argv, t_minishell *mini);
 int	ft_pwd(void);
 
 #endif
