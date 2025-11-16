@@ -14,6 +14,7 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <string.h> // may be illegal, sert a strerror
+#include <sys/wait.h> // same shit, sert aux pipes
 #include "../libft/libft.h"
 
 ///////////////////

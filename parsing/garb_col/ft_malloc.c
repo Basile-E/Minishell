@@ -32,14 +32,21 @@ void *ft_malloc(int size, t_alloc **head)
     printf("debug: %p\n", (void *)adr);
     return (adr);
 }
-// how do we free the list itself ?
+
 void free_alloc(t_alloc *head)
 {
+    t_alloc *current;
+    t_alloc *next;
     
-    while(head)
+    current = head;
+    while(current)
     {
+        next = current->next;
         printf("debug: %p\n is gonna be freed\n", (void *)head->adr);
-        free(head->adr);
+        if (head->adr) // est-ce que une adress 
+            free(head->adr);
         head = head->next;
+        free(current);
+        current = next;
     }
 }

@@ -41,7 +41,6 @@ static int	to_exit_status(const char *str)
 int	ft_exit(char **argv, t_minishell *mini, int in_child)
 {
 	int status = 0;
-
 	free_alloc(mini->alloc);
 	ft_putendl_fd("exit", 1);
 	if (!argv || !argv[1])
