@@ -5,17 +5,17 @@ Pas besoin de creer de double tableau (choix) donc impossibilite de trier */
 
 #include "minishell.h"
 
-void update_SHLVL(t_minishell *mini)
-{
-	int 	lv;
-	int		i;
+// void update_SHLVL(t_minishell *mini)
+// {
+// 	int 	lv;
+// 	int		i;
 
-	i = 0;
-	while (mini->env[i] && ft_strnstr(mini->env[i], "SHLVL", 5) == 0)
-		i++;
-	lv = ft_atoi(mini->env[i] + 6);
-	return;
-}
+// 	i = 0;
+// 	while (mini->env[i] && ft_strnstr(mini->env[i], "SHLVL", 5) == 0)
+// 		i++;
+// 	lv = ft_atoi(mini->env[i] + 6);
+// 	return;
+// }
 
 static void	error_env(t_minishell *mini, int i)
 {

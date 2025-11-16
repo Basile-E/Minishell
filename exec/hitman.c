@@ -1,5 +1,14 @@
 #include "minishell.h"
 
+/*
+	pseudo exec pipes :
+		il y a un mega monde où je peux faire une fonction qui reprend l'exec de pipex
+		et fait une boucle ou on ouvre un fd on envoie on exec avec le fd et on le ferme
+		puis on ouvre un fd sur l'output de la cmd et rebelotte tant qu'il y a des cmd[i + 1]
+
+*/
+
+
 char	*find_path(char *cmd, char **envp)
 {
 	char	**paths;
