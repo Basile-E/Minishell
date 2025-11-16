@@ -26,7 +26,8 @@ char	**ft_create_export(t_minishell *mini)
 	int	i;
 	char **exp;
 
-	exp = malloc(sizeof(char *) * (ft_strlen_y(mini->env) + 1));
+	exp = ft_malloc(sizeof(char *) * (ft_strlen_y(mini->env) + 1), &mini->alloc);
+	printf("debug: %p\n both line should be the same\n", (void *)exp);
 	if (!mini->env)
 		return (0);
 	i = 0;

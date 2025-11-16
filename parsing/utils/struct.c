@@ -4,6 +4,7 @@ int set_struct_minishell(t_minishell *minishell, char **env)
 {
     minishell->input = NULL;
     minishell->status = DONT_KILL;
+    minishell->alloc = NULL;
     ft_creat_env(minishell, env);
     return (1);
 }

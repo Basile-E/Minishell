@@ -10,6 +10,7 @@ EXEC_PATH = exec/
 BUILTIN_PATH = exec/builtins/
 EXECUTIVE_PATH = exec/executive/
 ENV_PATH = exec/builtins/env.c/
+GARB_PATH = parsing/garb_col/
 
 OBJ_PATH = build/
 LIBFT_PATH = libft/
@@ -54,6 +55,8 @@ ENV = \
 EXECUTIVE = \
 	execve.c
 
+GARB_COL = \
+	ft_malloc.c
 
 
 
@@ -67,6 +70,7 @@ ALL_SRC = $(addprefix $(SRC_PATH), $(SRC)) \
 		  $(addprefix $(BUILTIN_PATH), $(BUILTIN)) \
 		  $(addprefix $(ENV_PATH), $(ENV)) \
 		  $(addprefix $(EXECUTIVE_PATH), $(EXECUTIVE)) \
+		  $(addprefix $(GARB_PATH), $(GARB_COL)) 
 
 #SRCS = $(addprefix $(SRC_PATH), $(SRC))
 OBJ = $(addprefix $(OBJ_PATH), $(ALL_SRC:.c=.o))

@@ -15,10 +15,7 @@ t_cmd	*cmd_create(char **cmds, int fd_in, int fd_out, int app_mode)
 		count++;
 	new = malloc(sizeof(t_cmd));
 	if (!new)
-	{
-		// caller still owns cmds
 		return (NULL);
-	}
 	new->args = ft_calloc(count + 1, sizeof(char *));
 	if (!new->args)
 	{
@@ -37,7 +34,7 @@ t_cmd	*cmd_create(char **cmds, int fd_in, int fd_out, int app_mode)
 	new->append_mode = app_mode;
 	new->next = NULL;
 	new->heredoc = NULL;
-	// caller passed cmds buffer ownership to us, free it
+	new->in_child = 0;
 	free(cmds);
 	return (new);
 }

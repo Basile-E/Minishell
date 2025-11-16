@@ -42,7 +42,7 @@ int	ft_exit(char **argv, t_minishell *mini, int in_child)
 {
 	int status = 0;
 
-	(void)mini;
+	free_alloc(mini->alloc);
 	ft_putendl_fd("exit", 1);
 	if (!argv || !argv[1])
 	{
@@ -65,7 +65,9 @@ int	ft_exit(char **argv, t_minishell *mini, int in_child)
 		return (1);
 	}
 	status = to_exit_status(argv[1]);
+	free_alloc(mini->alloc);
 	if (in_child)
 		_exit(status);
 	exit(status);
+	
 }

@@ -13,10 +13,11 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <string.h> // may be illegal, sert a strerror
 #include "../libft/libft.h"
 
 ///////////////////
-/*  Define	  */
+/*  Define	  */			//<- un peut cheum avec du recul
 /////////////////
 
 
@@ -53,11 +54,19 @@
 /////////////////
 
 // simulation struct
+typedef struct s_alloc 
+{
+	void **adr;
+	struct s_alloc *next;
+} 				t_alloc;
+
+
 typedef struct  s_minishell
 {
 	char	*input;
 	int	 status;
 	char	**env;
+	t_alloc *alloc;
 }			   t_minishell;
 
 // la linked list des token (args -> token)
@@ -96,7 +105,6 @@ typedef struct s_token
 	struct s_token *next;
 } 				t_token;
 
-
 typedef struct 	s_cmd
 {
 	char **args;		// ["echo", "hello", NULL] 
@@ -104,6 +112,7 @@ typedef struct 	s_cmd
 	int fd_out;  // "output.txt" ou NULL
 	int append_mode;	// 1 si >>, 0 si >
 	char *heredoc;
+	int in_child;
 	struct s_cmd *next; // Commande après |
 }				t_cmd;
 
@@ -175,5 +184,8 @@ int ft_strlen_y(char **tab);
 int	ft_exit(char **argv, t_minishell *mini, int in_child);
 int	ft_unset(char **argv, t_minishell *mini);
 int	ft_pwd(void);
+
+void *ft_malloc(int size, t_alloc **head);
+void free_alloc(t_alloc *head);
 
 #endif
