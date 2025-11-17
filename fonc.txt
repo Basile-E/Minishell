@@ -1,1 +1,0 @@
-int fonct(t_cmd *cmds, )

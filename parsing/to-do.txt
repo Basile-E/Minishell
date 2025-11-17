@@ -13,7 +13,3 @@ mais easy a implement
 cat a un fonctionement chelou, il rentre dans une boucle inf 
 
 
-NOTE TO SELF :
-la l'exec commence a etre propre, mais il faut fork pour que le process n'overite pas le shell
-apres avoir fork je peux faire mon check de pipe et si il y a un pipe je peux lancer la seconde cmd ?
-
