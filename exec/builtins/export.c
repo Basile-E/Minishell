@@ -27,7 +27,6 @@ char	**ft_create_export(t_minishell *mini)
 	char **exp;
 
 	exp = ft_malloc(sizeof(char *) * (ft_strlen_y(mini->env) + 1), &mini->alloc);
-	printf("debug: %p\n both line should be the same\n", (void *)exp);
 	if (!mini->env)
 		return (0);
 	i = 0;
@@ -76,6 +75,8 @@ void	ft_export(t_minishell *mini, char **cmd)
 	int	i;
 	char **exp;
 
+	if (!mini->env)
+		return ;
 	exp = ft_create_export(mini);
 	ft_update_env(mini, *exp);
 	ft_sort_export(exp);
@@ -95,7 +96,6 @@ void	ft_export(t_minishell *mini, char **cmd)
 	else
 	{
 		print_env(cmd);
-		printf("cmd[1] == %s\n", cmd[1]);
 		ft_update_env(mini, cmd[1]);
 	}
 }

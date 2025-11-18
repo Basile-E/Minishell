@@ -39,7 +39,6 @@ EXEC = \
 	hitman.c
 BUILTIN = \
 	built_ins_utils.c \
-	built-ins.c \
 	cd.c \
 	echo.c \
 	exit.c \

@@ -40,6 +40,7 @@ char	*find_path(char *cmd, char **envp)
 
 void	error(void)
 {
+<<<<<<< Updated upstream
 	perror("Error");
 	exit(EXIT_FAILURE);
 }
@@ -106,11 +107,18 @@ int check_for_builtin(char **cmd)
 		return (1);
 	if (!ft_strncmp("exit", *cmd, ft_strlen(*cmd) + 1))
 		return (1);
+=======
+	if (!ft_strncmp("echo", cmd[0], 4) && ft_strlen(cmd[0]) == 4)
+		ft_echo(*mini, cmd);
+	if (!ft_strncmp("exit", *cmd, ft_strlen(*cmd) + 1))
+		ft_exit(cmd, mini);
+>>>>>>> Stashed changes
 	if (!ft_strncmp("export", *cmd, ft_strlen(*cmd) + 1))
 		return (1);
 	if (!ft_strncmp("pwd", *cmd, ft_strlen(*cmd) + 1))
 		return (1);
 	if (!ft_strncmp("env", *cmd, ft_strlen(*cmd) + 1))
+<<<<<<< Updated upstream
 		return (1);
 	return (0);
 }
@@ -136,6 +144,14 @@ int is_a_builtin(char **cmd, t_minishell *mini, int in_child)
 		return(1);
 	}
 	return (0);
+=======
+		ft_env(mini);
+	if (!ft_strncmp("unset", *cmd, ft_strlen(*cmd) + 1))
+		ft_unset(cmd, mini);
+	if (!ft_strncmp("cd", *cmd, ft_strlen(*cmd) + 1))
+		ft_cd(cmd, mini);
+	return (1);
+>>>>>>> Stashed changes
 }
 
 

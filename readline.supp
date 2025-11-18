@@ -1,0 +1,23 @@
+# readline.supp — ignore les leaks internes de readline / history
+
+{
+   readline_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,possible
+   fun:malloc
+   ...
+   fun:xmalloc
+   ...
+   fun:rl_initialize
+   fun:readline
+}
+
+{
+   readline_history_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,possible
+   fun:malloc
+   ...
+   fun:add_history
+}
+

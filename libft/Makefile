@@ -91,16 +91,16 @@ BONUS_OBJS 	= $(BONUS_SRCS:.c=.o)
 all:		${NAME}
 
 ${NAME}: 	${OBJS}
-			@echo "\n$(NAME): $(GREEN)$(NAME) was created$(RESET)"
+			@echo "$(NAME): $(GREEN)$(NAME) was created$(RESET)"
 			ar -rcs ${NAME} ${OBJS}
 
 bonus:		${NAME} ${BONUS_OBJS}
-			@echo "\n$(NAME): $(GREEN)$(NAME) was created with Bonus$(RESET)"
+			@echo "$(NAME): $(GREEN)$(NAME) was created with Bonus$(RESET)"
 			ar -rcs ${NAME} ${BONUS_OBJS}
 			@echo
 
 .c.o:
-			@echo "\n$(NAME): $(GREEN)object files were created$(RESET)"
+			@echo "$(NAME): $(GREEN)object files were created$(RESET)"
 			${CC} ${FLAGS} -c $< -o ${<:.c=.o}
 
 clean:

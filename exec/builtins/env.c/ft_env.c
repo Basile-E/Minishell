@@ -4,6 +4,8 @@ int	ft_env(t_minishell *mini)
 {
 	int	i;
 
+	if (!mini->env)
+		return(0);
 	i = 0;
 	while (mini->env[i])
 	{

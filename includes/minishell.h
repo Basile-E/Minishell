@@ -79,8 +79,6 @@ typedef struct  s_args
 	struct s_args  *next;
 }			   t_args;
 
-
-
 typedef enum e_quote
 {
 	NONE,
@@ -182,9 +180,10 @@ void	ft_sort_export(char **exp);
 void	ft_export(t_minishell *mini, char **cmd);
 int	execute(t_cmd *cmd, t_minishell *mini);
 int ft_strlen_y(char **tab);
-int	ft_exit(char **argv, t_minishell *mini, int in_child);
+int	ft_exit(char **argv, t_minishell *mini);
 int	ft_unset(char **argv, t_minishell *mini);
 int	ft_pwd(void);
+int	ft_cd(char **argv, t_minishell *mini);
 
 void *ft_malloc(int size, t_alloc **head);
 void free_alloc(t_alloc *head);
