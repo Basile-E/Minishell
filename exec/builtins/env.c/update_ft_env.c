@@ -19,10 +19,9 @@ void	ft_update_env(t_minishell *mini, char *new)
 	if (!mini->env[i])
 		return (ft_add_env( mini, new));
 	free(mini->env[i]);
-	dst = malloc(ft_strlen(new) + 1);
+	dst = ft_malloc(ft_strlen(new) + 1, &mini->alloc);
 	if (!dst)
 		return (ft_error("update env", strerror(errno)), _exit(1));
 	ft_strlcpy(dst, new, ft_strlen(new) + 1);
 	mini->env[i] = dst;
 }
-

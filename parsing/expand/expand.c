@@ -161,7 +161,6 @@ char *get_env_value(t_minishell *minishell, char *var_name)
     int i = 0;
     int len = ft_strlen(var_name);
     
-    // Variables spéciales - REPLACE ft_strcmp with ft_strncmp
     if (ft_strncmp(var_name, "?", 1) == 0 && ft_strlen(var_name) == 1)
         return (ft_itoa(minishell->status));
     if (ft_strncmp(var_name, "$", 1) == 0 && ft_strlen(var_name) == 1)
@@ -205,7 +204,6 @@ char *extract_var_name(char *str, int start, int *end)
     return (ft_substr(str, start, i - start));
 }
 
-// Fonction d'expansion simplifiée et corrigée
 char *do_expand_simple(t_minishell *minishell, char *str)
 {
     char *result;
@@ -228,7 +226,6 @@ char *do_expand_simple(t_minishell *minishell, char *str)
             char *var_name = extract_var_name(str, i + 1, &end);
             char *var_value = get_env_value(minishell, var_name);
         
-            // Concaténer la valeur (même si c'est une chaîne vide)
             temp = ft_strjoin(result, var_value);
             free(result);
             result = temp;

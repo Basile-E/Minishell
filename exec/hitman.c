@@ -54,12 +54,17 @@ char *get_current_path()
 	return (path);
 }
 
+// void exec_mult(char **cmd, char **envp)
+// {
+
+// }
 
 void	exec_single(char **cmd, char **envp)
 {
 	char	*path;
 	int		pid;
 
+	path = NULL;
 	if (cmd[0][0] == '.' && cmd[0][1] == '/')
 	{
 		if (access(cmd[0], F_OK | X_OK) == 0)
@@ -76,7 +81,8 @@ void	exec_single(char **cmd, char **envp)
 	}
 	else 
 	{
-		path = find_path(cmd[0], envp);
+		if (access(cmd[0], F_OK | X_OK) == 0)
+			path = find_path(cmd[0], envp);
 		if (!path)	
 		{
 			ft_putstr_fd("Error: command not found: ", 2);
@@ -150,13 +156,11 @@ int execute(t_cmd *cmd, t_minishell *mini)
 	{
 		if (!is_a_builtin(current->args, mini, current->in_child))
 		{
-			// if (current->in_child)
-			// {
-			// 	//exec_w_child();
-			// }
+			// if (current->args[1])
+			// 	//exec_mult(current->args, mini->env);
 			// else
 			exec_single(current->args, mini->env);
-		}		
+		}
 		if (current->next)
 			current->next->in_child = 1;
 		current = current->next;

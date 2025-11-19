@@ -128,10 +128,12 @@ int parsinette(t_minishell *minishell)
 		return (1);
 	cmd = NULL;
     tokens = tokenize(minishell->input);
-    if (!tokens)
+    print_token(tokens);
+	if (!tokens)
         return (1);
     if(!list_expand(minishell, tokens))
 		return (1);
+	print_token(tokens);
 	if (!do_field_spliting(tokens))
 		return (1);
 	if (!remove_all_quote(tokens))
@@ -139,6 +141,7 @@ int parsinette(t_minishell *minishell)
 	if (!check_syntax_errors(tokens))
 		return (1);
 	cmd = lexer(tokens, cmd);
+	print_lexer(cmd);
 	execute(cmd, minishell);
     return (0);
 }
