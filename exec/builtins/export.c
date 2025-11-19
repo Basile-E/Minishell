@@ -85,12 +85,11 @@ void	ft_export(t_minishell *mini, char **cmd)
 	i = 0;
 	if (!cmd[1])
 	{
-		while (exp[i])
+		while (exp[i++])
 		{
 				ft_putstr_fd("export ", 1);
 				ft_putstr_fd(exp[i], 1);
 				ft_putchar_fd('\n', 1);
-				i++;
 		}
 	}
 	else
