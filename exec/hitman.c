@@ -40,118 +40,21 @@ char	*find_path(char *cmd, char **envp)
 
 void	error(void)
 {
-<<<<<<< Updated upstream
-	perror("Error");
-	exit(EXIT_FAILURE);
-}
-
-char *get_current_path()
-{
-	char	*path;
-
-	path = getcwd(NULL, 0);
-	if (!path)
-		return (ft_error("getcwd", strerror(errno)), NULL);
-	return (path);
-}
-
-
-void	exec_single(char **cmd, char **envp)
-{
-	char	*path;
-	int		pid;
-
-	if (cmd[0][0] == '.' && cmd[0][1] == '/')
-	{
-		if (access(cmd[0], F_OK | X_OK) == 0)
-			path = ft_strdup(cmd[0]);
-		else
-		{
-			ft_putstr_fd("Error: command not found: ", 2);
-			ft_putstr_fd(cmd[0], 2);
-			ft_putstr_fd("\n", 2);
-			return;
-		}
-		// if (execve(get_current_path(), cmd, envp) == -1) // le path de get_cur_path ne sera probablement jamais free sauf si execve le fait, je peux le load dans un str avant et free apres exec
-		// 	error();
-	}
-	else 
-	{
-		path = find_path(cmd[0], envp);
-		if (!path)	
-		{
-			ft_putstr_fd("Error: command not found: ", 2);
-			ft_putstr_fd(cmd[0], 2);
-			ft_putstr_fd("\n", 2);
-			return;
-		} // a replace par un printf_fd pour passer sous les 25 lignes
-	}
-	pid = fork();
-	if (pid == 0)
-	{
-		if (execve(path, cmd, envp) == -1)
-			error();
-	}
-	else if (pid > 0)
-	{
-		wait(NULL);
-	}
-	else
-		error();
-}
-
-
-int check_for_builtin(char **cmd)
-{
-	if (!ft_strncmp("echo", *cmd, ft_strlen(*cmd) + 1))
-		return (1);
-	if (!ft_strncmp("exit", *cmd, ft_strlen(*cmd) + 1))
-		return (1);
-=======
-	if (!ft_strncmp("echo", cmd[0], 4) && ft_strlen(cmd[0]) == 4)
+	if (!ft_strncmp("echgio", cmd[0], 4) && ft_strlen(cmd[0]) == 4)
 		ft_echo(*mini, cmd);
 	if (!ft_strncmp("exit", *cmd, ft_strlen(*cmd) + 1))
 		ft_exit(cmd, mini);
->>>>>>> Stashed changes
 	if (!ft_strncmp("export", *cmd, ft_strlen(*cmd) + 1))
 		return (1);
 	if (!ft_strncmp("pwd", *cmd, ft_strlen(*cmd) + 1))
 		return (1);
 	if (!ft_strncmp("env", *cmd, ft_strlen(*cmd) + 1))
-<<<<<<< Updated upstream
-		return (1);
-	return (0);
-}
-
-int is_a_builtin(char **cmd, t_minishell *mini, int in_child)
-{
-	if (check_for_builtin(cmd))
-	{
-		// if (ft_strncmp("cd", cmd, ft_strlen(cmd) + 1))
-
-		if (!ft_strncmp("echo", cmd[0], 4) && ft_strlen(cmd[0]) == 4)
-			ft_echo(*mini, cmd);
-		if (!ft_strncmp("exit", *cmd, ft_strlen(*cmd) + 1))
-			ft_exit(cmd, mini, in_child);
-		if (!ft_strncmp("export", *cmd, ft_strlen(*cmd) + 1))
-			ft_export(mini, cmd);
-		if (!ft_strncmp("pwd", *cmd, ft_strlen(*cmd) + 1))
-			ft_pwd();
-		if (!ft_strncmp("env", *cmd, ft_strlen(*cmd) + 1))
-			ft_env(mini);
-		// if (!ft_strncmp("unset", *cmd, ft_strlen(*cmd) + 1))
-		// 	ft_unset(cmd, mini);
-		return(1);
-	}
-	return (0);
-=======
 		ft_env(mini);
 	if (!ft_strncmp("unset", *cmd, ft_strlen(*cmd) + 1))
 		ft_unset(cmd, mini);
 	if (!ft_strncmp("cd", *cmd, ft_strlen(*cmd) + 1))
 		ft_cd(cmd, mini);
 	return (1);
->>>>>>> Stashed changes
 }
 
 

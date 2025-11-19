@@ -1,4 +1,4 @@
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 int check_parentheses_syntax(char *input)
 {

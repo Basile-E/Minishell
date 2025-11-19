@@ -33,7 +33,6 @@ int	ft_echo(t_minishell mini, char **argv)
 	int i;
 	int n_flag;
 
-	(void) mini;
 	if (!argv)
 		return (0);
 	i = 1;
