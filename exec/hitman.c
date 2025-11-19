@@ -54,10 +54,46 @@ char *get_current_path()
 	return (path);
 }
 
-// void exec_mult(char **cmd, char **envp)
-// {
+void exec_mult(t_cmd *cmd, t_minishell *mini)
+{
+	int fd[2];
+	int last_pipe;
+	int pid;
+	char *path;
+	t_cmd *current;
 
-// }
+	current = cmd;
+	last_pipe = -1;
+	while (current->next)
+	{
+		pipe(fd);
+		pid = fork();
+		if (pid > 0)
+		{
+			close(fd[1]);
+			last_pipe = fd[0];
+		}
+		if (pid == 0)
+		{
+			close(fd[0]);
+			dup2(1, fd[1]);
+			if (last_pipe != -1)
+				dup2(0, last_pipe);
+			path = find_path(current->args[0], mini->env);
+			execve(path, current->args, mini->env);
+		}
+		current = current->next;
+	}
+	if (current)
+	{
+		pid = fork();
+		if (last_pipe > 0)
+			dup2(0, last_pipe);
+		path = find_path(current->args[0], mini->env);
+		if (pid == 0)
+			execve(path, current->args, mini->env);
+	}
+}
 
 void	exec_single(char **cmd, char **envp)
 {
@@ -94,6 +130,7 @@ void	exec_single(char **cmd, char **envp)
 	pid = fork();
 	if (pid == 0)
 	{
+		//printf("debug path : ", );
 		if (execve(path, cmd, envp) == -1)
 			error();
 	}
@@ -152,14 +189,23 @@ int execute(t_cmd *cmd, t_minishell *mini)
 	char *cmd_name;
 	(void) cmd_name;
 	current = cmd;
+	print_lexer(cmd);
 	while(current)
 	{
 		if (!is_a_builtin(current->args, mini, current->in_child))
 		{
-			// if (current->args[1])
-			// 	//exec_mult(current->args, mini->env);
+			
+			// if (current->next)
+			// {
+			// printf("i went here\n");
+			exec_mult(current, mini);
+			// }
 			// else
-			exec_single(current->args, mini->env);
+			// {
+			// 	printf("i went here\n");
+			// 	exec_single(current->args, mini->env);
+			// }
+			//exec_single(current->args, mini->env);
 		}
 		if (current->next)
 			current->next->in_child = 1;
