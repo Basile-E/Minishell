@@ -9,6 +9,10 @@ int main(int ac, char **av, char **ev)
     t_minishell *minishell;
 
     minishell = malloc(sizeof(t_minishell));
+    prompt = "\001\033[1;36m\002RicoShell \001\033[0;95m\002\001➜\002 \001\033[0m\002";
+    //prompt = "\001\033[32m\002minishell$ \001\033[0m\002";
+
+
 	// ft_bzero(&minishell, sizeof(t_minishell));
 	minishell->env = NULL;
     prompt = BOLD CYAN "RicoShell" RESET PINK " ➜ " RESET;

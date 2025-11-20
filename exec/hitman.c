@@ -126,7 +126,8 @@ void exec_mult(t_cmd *cmd, t_minishell *mini)
             }
             if (is_a_builtin(current->args, mini, 1))
                 exit(0);
-            path = find_path(current->args[0], mini->env);
+            if (mini->env)
+				path = find_path(current->args[0], mini->env);
             if (!path)
             {
                 ft_putstr_fd("Command not found: ", 2);
@@ -184,6 +185,8 @@ void	exec_single(char **cmd, char **envp)
 	}
 	else 
 	{
+		if (!envp)
+			return;
 		path = find_path(cmd[0], envp);
 		if (!path)	
 		{
