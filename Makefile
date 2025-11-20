@@ -9,7 +9,7 @@ LEXER_PATH = parsing/lexer/
 EXEC_PATH = exec/
 BUILTIN_PATH = exec/builtins/
 EXECUTIVE_PATH = exec/executive/
-ENV_PATH = exec/builtins/env.c/
+ENV_PATH = exec/builtins/env/
 GARB_PATH = parsing/garb_col/
 
 OBJ_PATH = build/

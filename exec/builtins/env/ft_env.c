@@ -5,6 +5,8 @@ int	ft_env(t_minishell *mini)
 	int	i;
 
 	i = 0;
+	if (!mini->env)
+		return (0);
 	while (mini->env[i])
 	{
 		ft_putstr_fd(mini->env[i], 1);

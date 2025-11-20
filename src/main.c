@@ -9,6 +9,8 @@ int main(int ac, char **av, char **ev)
     t_minishell *minishell;
 
     minishell = malloc(sizeof(t_minishell));
+	// ft_bzero(&minishell, sizeof(t_minishell));
+	minishell->env = NULL;
     prompt = BOLD CYAN "RicoShell" RESET PINK " ➜ " RESET;
     
     set_struct_minishell(minishell, ev); //ici remplir env 
@@ -19,7 +21,7 @@ int main(int ac, char **av, char **ev)
             break;
 
         minishell->input = readline(prompt);
-        if (!minishell->input) // est-ce que readline peut fail ?
+        if (!minishell->input) // ctrl d
             return(printf("Exit\n"), 0);
         add_history(minishell->input);
         //printf("Debug :\nString sent by readline : %s\n", minishell->input);
