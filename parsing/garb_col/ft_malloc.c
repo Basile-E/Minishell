@@ -17,7 +17,8 @@ void	add_alloc(t_alloc **head, t_alloc *new_token)
 
 t_alloc	*create_alloc(void *adr)
 {
-    t_alloc *alloc = malloc(sizeof(t_alloc));
+    t_alloc *alloc;
+    alloc = malloc(sizeof(t_alloc));
     if (!alloc)
         return (NULL);
     alloc->adr = adr;
@@ -43,8 +44,7 @@ void free_alloc(t_alloc *head)
     {
         next = current->next;
         printf("debug: %p\n is gonna be freed\n", (void *)head->adr);
-        if (head->adr) // est-ce que une adress 
-            free(head->adr);
+        free(head->adr);
         head = head->next;
         free(current);
         current = next;

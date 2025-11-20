@@ -1,18 +1,5 @@
 #include "../includes/minishell.h"
 
-// Vérifie si le caractère est un opérateur
-// int	is_operator(char c)
-// {
-//	 return (c == '|' || c == '<' || c == '>');
-// }
-
-// Vérifie si le caractère est un whitespace
-// int	is_whitespace(char c)
-// {
-//	 return (c == ' ' || c == '\t' || c == '\n');
-// }
-
-// Crée un nouveau token
 t_token	*create_token(t_token_type type, char *value)
 {
 	t_token	*token;
@@ -26,7 +13,6 @@ t_token	*create_token(t_token_type type, char *value)
 	return (token);
 }
 
-// Ajoute un token à la liste
 void	add_token(t_token **head, t_token *new_token)
 {
 	t_token	*current;
@@ -42,50 +28,69 @@ void	add_token(t_token **head, t_token *new_token)
 	current->next = new_token;
 }
 
-// Parse les opérateurs de redirection
-int	parse_redirect_operator(char *input, int *i, t_token **tokens)
+static void crea_tok_pipe(int *i, t_token **tokens)
 {
-	t_token	*token;
+	t_token *token;
 
+	token = create_token(PIPE, "|");
+	*i += 1;
+	add_token(tokens, token);
+}
+
+static void crea_tok_app(char *input, int *i, t_token **tokens)
+{
+	t_token *token;
+	
+	if (input[*i + 1] && input[*i + 1] == '>')
+	{
+		token = create_token(REDIRECT_APPEND, ">>");
+		*i += 2;
+	}
+	else
+	{
+		token = create_token(REDIRECT_OUT, ">");
+		*i += 1;
+	}
+	add_token(tokens, token);
+}
+
+static void crea_tok_her(char *input, int *i, t_token **tokens)
+{
+	t_token *token;
+
+
+	if (input[*i + 1] && input[*i + 1] == '<')
+	{
+		token = create_token(REDIRECT_HEREDOC, "<<");
+		*i += 2;
+	}
+	else
+	{
+		token = create_token(REDIRECT_IN, "<");
+		*i += 1;
+	}
+	add_token(tokens, token);
+}
+
+int parse_redirect_operator(char *input, int *i, t_token **tokens)
+{
 	if (input[*i] == '<')
 	{
-		if (input[*i + 1] == '<')
-		{
-			token = create_token(REDIRECT_HEREDOC, "<<");
-			*i += 2;
-		}
-		else
-		{
-			token = create_token(REDIRECT_IN, "<");
-			*i += 1;
-		}
+		crea_tok_her(input, i, tokens);
 	}
 	else if (input[*i] == '>')
 	{
-		if (input[*i + 1] == '>')
-		{
-			token = create_token(REDIRECT_APPEND, ">>");
-			*i += 2;
-		}
-		else
-		{
-			token = create_token(REDIRECT_OUT, ">");
-			*i += 1;
-		}
+		crea_tok_app(input, i, tokens);
 	}
 	else if (input[*i] == '|')
 	{
-		token = create_token(PIPE, "|");
-		*i += 1;
+		crea_tok_pipe(i, tokens);
 	}
 	else
 		return (0);
-	
-	add_token(tokens, token);
 	return (1);
 }
 
-// Parse un mot (word token)
 int	parse_word(char *input, int *i, t_token **tokens, t_quote status)
 {
 	int		start;
@@ -105,16 +110,20 @@ int	parse_word(char *input, int *i, t_token **tokens, t_quote status)
 	return (1);
 }
 
-// Fonction principale de tokenisation
+static void set_var(t_quote *status, t_token **tokens, int *i)
+{
+	*status = NONE;
+	*tokens = NULL;
+	*i = 0;
+}
+
 t_token	*tokenize(char *input)
 {
 	t_quote status;
 	t_token	*tokens;
 	int		i;
 
-	status = NONE;
-	tokens = NULL;
-	i = 0;
+	set_var(&status, &tokens, &i);
 	while (input[i])
 	{
 		set_quote_status(input[i], &status);
@@ -134,11 +143,9 @@ t_token	*tokenize(char *input)
 				return (NULL);
 		}
 	}
-	
 	return (tokens);
 }
 
-// Libère la liste de tokens
 void	free_tokens(t_token *tokens)
 {
 	t_token	*current;

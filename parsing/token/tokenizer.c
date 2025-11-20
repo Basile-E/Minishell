@@ -1,6 +1,5 @@
 #include "../includes/minishell.h"
 
-
 void clear_buff(char *buffer)
 {
     int i;
@@ -33,8 +32,3 @@ int check_unclosed_quotes(char *str)
 	}
 	return((int)status);
 }
-
-
-// c'est ok manque juste les doubles opperateur 
-// je peux en faire un check dans le parsing
-

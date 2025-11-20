@@ -37,7 +37,7 @@ char *get_expand_token(char *str, int beg_token)
 	if (!res)
 		return(NULL);
 	j = 0;
-	while(j < len && is_char(str[beg_token])) //!is_sep(str[beg_token])
+	while(j < len && is_char(str[beg_token]))
 	{
 		res[j] = str[beg_token];
 		beg_token++;
@@ -61,7 +61,7 @@ char *do_expand(t_minishell *minishell, char *token)
 		{
 			y = ft_strlen(token) + 1;
 			env_value = ft_strdup(minishell->env[i] + y);
-            free(token); // pas sur, token atais initialiser ici mais le code a changer depuis;
+            free(token);
             return (env_value);
         }
         i++;
@@ -125,7 +125,6 @@ char *do_expandV2(t_minishell *minishell, char *str)
 	return (ret);
 }
 
-// Fonction pour nettoyer les quotes d'une string
 char *remove_quotes(char *str)
 {
     char *result;
@@ -155,7 +154,6 @@ char *remove_quotes(char *str)
     return (result);
 }
 
-// Fonction pour obtenir une variable d'environnement
 char *get_env_value(t_minishell *minishell, char *var_name)
 {
     int i = 0;
@@ -165,8 +163,6 @@ char *get_env_value(t_minishell *minishell, char *var_name)
         return (ft_itoa(minishell->status));
     if (ft_strncmp(var_name, "$", 1) == 0 && ft_strlen(var_name) == 1)
         return (ft_itoa(getpid()));
-    
-    // Variables d'environnement normales
     while (minishell->env[i])
     {
         if (ft_strncmp(var_name, minishell->env[i], len) == 0 
@@ -176,31 +172,25 @@ char *get_env_value(t_minishell *minishell, char *var_name)
         }
         i++;
     }
-    
-    // Variable non trouvée = chaîne vide
     return (ft_strdup(""));
 }
 
-// Fonction pour extraire le nom de variable après $
+
 char *extract_var_name(char *str, int start, int *end)
 {
-    int i = start;
+    int i;
     
-    // Cas spéciaux : $? et $$
+    i = start;
     if (str[i] == '?' || str[i] == '$')
     {
         *end = i + 1;
         return (ft_substr(str, i, 1));
     }
-    
-    // Variables normales : lettres, chiffres et _
     while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
         i++;
-    
     *end = i;
     if (i == start)
         return (ft_strdup(""));
-    
     return (ft_substr(str, start, i - start));
 }
 
@@ -208,29 +198,26 @@ char *do_expand_simple(t_minishell *minishell, char *str)
 {
     char *result;
     char *temp;
-    int i = 0;
-    t_quote status = NONE;
+    int i;
+    t_quote status;
 
-    
+    i = 0;
+    status = NONE;
     result = ft_strdup("");
     if (!result)
         return (NULL);
-    
     while (str[i])
     {
         set_quote_status(str[i], &status);
-        
         if (str[i] == '$' && status != SINGLE)
         {
 			int end;
             char *var_name = extract_var_name(str, i + 1, &end);
             char *var_value = get_env_value(minishell, var_name);
-        
             temp = ft_strjoin(result, var_value);
             free(result);
             result = temp;
             i = end;
-        
             free(var_name);
             free(var_value);	
         }
@@ -239,14 +226,12 @@ char *do_expand_simple(t_minishell *minishell, char *str)
             char char_str[2];
             char_str[0] = str[i];
             char_str[1] = '\0';
-            
             temp = ft_strjoin(result, char_str);
             free(result);
             result = temp;
             i++;
         }
     }
-    
     return (result);
 }
 

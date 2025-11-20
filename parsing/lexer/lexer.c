@@ -2,6 +2,7 @@
 
 /* I know a lexer is a parser, go touch grass */
 
+// strat faire une petite cmd qui set let var en bas et should be good
 t_cmd	*cmd_create(char **cmds, int fd_in, int fd_out, int app_mode)
 {
 	t_cmd	*new;
@@ -71,6 +72,9 @@ void	print_lexer(t_cmd *cmd)
 	}
 }
 
+/*
+	strat, le dernier else peut pot etre une fonc mais ca va etre chaud pour le reste
+*/
 // est-ce qu'il faut absolument le charger dans un fd ? si oui est-ce que je dois le mettre dans mon fd in ou c'est un fd heredoc
 int	do_heredoc(const char *limiter, char **out)
 {
@@ -83,7 +87,7 @@ int	do_heredoc(const char *limiter, char **out)
 		return (-1);
 	*out = NULL;
 	ret_line = NULL;
-	while ((line = readline("Theirdoc>")) != NULL)
+	while ((line = readline("Theredoc>")) != NULL)
 	{
 		if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0)
 		{
@@ -109,7 +113,7 @@ int	do_heredoc(const char *limiter, char **out)
 				return (-1);
 		}
 	}
-	*out = ret_line; /* may be NULL if EOF/no lines */
+	*out = ret_line; 
 	return (0);
 }
 
@@ -127,6 +131,10 @@ static int	count_words_until_pipe(t_token *start)
 	return (count);
 }
 
+
+/*
+	strat, faire une struct avec toutes les var et faire des micro fonc pour chaque if de type qui prend juste la struct en param
+*/
 t_cmd *lexer(t_token *token, t_cmd *cmd)
 {
 	t_token	*current;

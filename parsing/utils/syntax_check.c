@@ -9,16 +9,15 @@ int check_parentheses_syntax(char *input)
     {
         set_quote_status(input[i], &status);
         
-        // Vérifier les parenthèses seulement hors des quotes
         if ((input[i] == '(' || input[i] == ')') && status == NONE)
         {
-            // Parenthèses détectées hors quotes = erreur de syntaxe
+
             printf("bash: erreur de syntaxe près du symbole inattendu « %c »\n", input[i]);
-            return (1); // Erreur
+            return (1);
         }
         i++;
     }
-    return (0); // OK
+    return (0);
 }
 
 int check_first_arg_is_flag(char *input)

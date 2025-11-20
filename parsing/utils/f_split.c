@@ -47,6 +47,14 @@ static size_t	count_words(char const *str, char c)
 	return (words);
 }
 
+static void set_int( size_t *i, size_t *split_i, size_t *word_len, t_quote *status)
+{
+	*i = 0;
+	*split_i = 0;
+	*word_len = 0;
+	*status = NONE;
+}
+
 static char	**alloc_word(char const *s, char c, char **split, size_t s_len)
 {
 	size_t	i;
@@ -54,10 +62,7 @@ static char	**alloc_word(char const *s, char c, char **split, size_t s_len)
 	size_t	word_len;
 	t_quote status;
 
-	i = 0;
-	split_i = 0;
-	word_len = 0;
-	status = NONE;
+	set_int(&i, &split_i, &word_len, &status);
 	while (i < s_len + 1 && s_len > 0)
 	{
 		set_quote_status(s[i], &status);

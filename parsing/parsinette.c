@@ -65,11 +65,11 @@ int do_field_spliting(t_token *token)
 
 	i = 1;
 	current = token;
-	while (current)// chelou, tester sans
+	while (current)
 	{
 		if (ft_strlen(current->value) > 0)
 		{
-			fields = split_field(current->value, ' '); // maybe faire l'ifs "\('-')/"
+			fields = split_field(current->value, ' ');
 			free(current->value);
 			current->value = fields[0];
 			while(fields[i])
@@ -142,12 +142,3 @@ int parsinette(t_minishell *minishell)
 	execute(cmd, minishell);
     return (0);
 }
-
-
-
-//     echo hello || world → pipes consécutifs DONE
-//     echo hello > > file → redirections consécutives DONNE
-//     echo hello > → redirection sans fichier DONE
-//     echo hello | → pipe en fin de ligne DONE
-// ||  echo hello → pipe en début de ligne DONE
-//     echo hello || world → commande vide après pipe DONE
