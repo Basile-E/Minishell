@@ -1,15 +1,3 @@
-/*built-ins incluent
-		- echo -n
-		- cd relative or absolute path
-		- pwd
-		- export
-		- unset
-		- env
-		- exit */
-
-// on regarde si le n flag est la, il va ajouter un '/n'
-// a la ligne renvoye par minishell
-
 #include "minishell.h"
 
 static int	ft_n_flag(char *str)
@@ -30,8 +18,8 @@ static int	ft_n_flag(char *str)
 
 int	ft_echo(t_minishell mini, char **argv)
 {
-	int i;
-	int n_flag;
+	int	i;
+	int	n_flag;
 
 	(void) mini;
 	if (!argv)

@@ -15,7 +15,7 @@ int main(int ac, char **av, char **ev)
 
 	// ft_bzero(&minishell, sizeof(t_minishell));
 	minishell->env = NULL;
-    prompt = BOLD CYAN "RicoShell" RESET PINK " ➜ " RESET;
+    // prompt = BOLD CYAN "RicoShell" RESET PINK " ➜ " RESET;
     
     set_struct_minishell(minishell, ev); //ici remplir env 
 

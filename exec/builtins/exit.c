@@ -1,72 +1,102 @@
-/*
-** exit builtin
-** behavior:
-**  - exit [n]
-**  - if n is not numeric -> print error and exit 255
-**  - if more than one arg and first is numeric -> print "too many arguments" and return 1 (do not exit when in parent)
-**  - if called in child (in_child == 1) -> call _exit(status)
-*/
+#include "minishell.h"
 
-#include "../../includes/minishell.h"
-#include <stdlib.h>
-#include <errno.h>
-
-static int	is_num(const char *str)
+static long long	ft_atoi_2(char *src)
 {
-	int i = 0;
+	int			i;
+	int			s;
+	long long	res;
 
-	if (!str || !*str)
-		return (0);
-	if (str[0] == '+' || str[0] == '-')
-		i = 1;
-	while (str[i])
+	i = 0;
+	s = 0;
+	if (src[i] == '-')
+		s = 1;
+	if (src[i] == '-' || src[i] == '+')
+		i++;
+	res = 0;
+	while (src[i] >= '0' && src[i] <= '9')
 	{
-		if (!ft_isdigit(str[i]))
-			return (0);
+		res = res * 10 + (src[i] - '0');
 		i++;
 	}
-	return (1);
+	if (s == 1)
+		return (res * -1);
+	return (res);
 }
 
-static int	to_exit_status(const char *str)
+static int	verif_long_long_2(char *nbr)
 {
-	int val;
+	int		i;
+	int		j;
+	char	*longlong;
 
-	if (!str)
-		return (0);
-	val = ft_atoi(str);
-	return (val & 0xFF);
-}
-
-int	ft_exit(char **argv, t_minishell *mini, int in_child)
-{
-	int status = 0;
-	free_alloc(mini->alloc);
-	ft_putendl_fd("exit", 1);
-	if (!argv || !argv[1])
+	i = 0;
+	j = 0;
+	longlong = "9223372036854775807";
+	if (nbr[i] == '+')
+		longlong = "+9223372036854775807";
+	while (nbr[i] && longlong[i])
 	{
-		if (in_child)
-			_exit(0);
-		exit(0);
+		if (nbr[i] > longlong[i])
+			j++;
+		i++;
 	}
-	if (!is_num(argv[1]))
-	{
-		ft_putstr_fd("minishell: exit: ", 2);
-		ft_putstr_fd(argv[1], 2);
-		ft_putendl_fd(": numeric argument required", 2);
-		if (in_child)
-			_exit(255);
-		exit(255);
-	}
-	if (argv[2])
-	{
-		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
+	if ((longlong[i] == 0 && j > 0) || (longlong[i] == 0 && nbr[i] != 0))
 		return (1);
+	return (0);
+}
+
+static int	verif_long_long(char *nbr)
+{
+	int		i;
+	int		j;
+	char	*longlong_ng;
+
+	i = 0;
+	j = 0;
+	longlong_ng = "-9223372036854775808";
+	if (nbr[i] == '-')
+	{
+		while (nbr[i] && longlong_ng[i])
+		{
+			if (nbr[i] > longlong_ng[i])
+				j++;
+			i++;
+		}
+		if ((longlong_ng[i] == 0 && j > 0) || (longlong_ng[i] == 0 && nbr[i] != 0))
+			return (1);
+		return (0);
 	}
-	status = to_exit_status(argv[1]);
-	free_alloc(mini->alloc);
-	if (in_child)
-		_exit(status);
-	exit(status);
-	
+	return (verif_long_long_2(nbr));
+}
+
+static int	nbr_exit(char **argv, t_minishell *mini, char *nbr)
+{
+	int i;
+
+	if (nbr == NULL)
+		return (0);
+	if (nbr[0] == '\0')
+	{
+		mini->status = 2;
+		return (ft_error("exit", "numeric argument required"), 0);
+	}
+	i = 0;
+	if (nbr[i] == '+' || nbr[i] == '-')
+		i++;
+	while (nbr[i] && (nbr[i] >= '0' && nbr[i] <= '9'))
+		i++;
+	if (nbr[i] != '\0')
+	{
+		mini->status = 2;
+		return (ft_error("exit", "numeric argument required"), 0);
+	}
+	if (verif_long_long(nbr) != 0)
+	{
+		mini->status = 2;
+		return (ft_error("exit", "numeric argument required"), 0);
+	}
+	if (argv && argv[2] != NULL)
+		return (ft_error("exit", "too many arguments"), 1);
+	mini->status = (unsigned char)ft_atoi_2(nbr);
+	return (0);
 }

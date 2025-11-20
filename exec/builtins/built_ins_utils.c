@@ -40,10 +40,12 @@ int	does_it_exist(t_minishell *mini, char *src)
 	return (1);
 }
 
-int ft_strlen_y(char **tab)
+int	ft_strlen_y(char **tab)
 {
-	int i = 0;
-	while(tab[i])
+	int	i;
+
+	i = 0;
+	while (tab[i])
 		i++;
-	return(i);
+	return (i);
 }
