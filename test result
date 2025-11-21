@@ -1,34 +1,36 @@
-Based on the test results, I can see that your minishell has several areas that need improvement. Let me create a comprehensive list of the failing parts organized by category:
-
 📋 Minishell Test Failure Analysis
 🔧 Builtins Issues
-Echo Command Problems:
-Quote handling in echo - Tests 9-12: Fails to handle single quotes within double quotes and vice versa
-Special character handling - Test 13: Wildcard expansion happening when it shouldn't (shows file listing instead of literal *)
-Dollar sign handling - Tests 17, 19: echo "$" and echo $ should output $ but outputs nothing
+
+Echo Command Problems: done
+<!-- Quote handling in echo - Tests 9-12: Fails to handle single quotes within double quotes and vice versa  -->
+<!-- Special character handling - Test 13: Wildcard expansion happening when it shouldn't (shows file listing instead of literal *)  -->
+<!-- Dollar sign handling - Tests 17, 19: echo "$" and echo $ should output $ but outputs nothing -->
+
+
 Export Command Problems:
-Debug output - Tests 24-32: Shows debug information that shouldn't be printed
-Exit code handling - All export tests show "is gonna be freed" instead of proper exit codes
-Error messages - Missing proper error messages for invalid identifiers
-Multiple arguments - Doesn't handle multiple export arguments correctly
+<!-- Debug output - Tests 24-32: Shows debug information that shouldn't be printed
+Exit code handling - All export tests show "is gonna be freed" instead of proper exit codes -->
+<!-- Error messages - Missing proper error messages for invalid identifiers -->
+Multiple arguments - Doesn't handle multiple export arguments correctly a
 
 
-Unset Command Problems:
-Error output - Tests 33-38: Shows "unset" error message when it should be silent
+<!-- Unset Command Problems:
+Error output - Tests 33-38: Shows "unset" error message when it should be silent -->
 
-CD Command Problems:
+
+<!-- CD Command Problems:
 Error handling - Tests 40-41: Wrong exit codes and missing proper error messages
 Too many arguments - Should return exit code 1 with proper error message
 Exit Command Problems:
-Error messages - Tests 50-51: Wrong exit codes and different error message format
+Error messages - Tests 50-51: Wrong exit codes and different error message format -->
 
 
-Empty Command Problem:
-Parsing failure - Test 52: Should handle empty input gracefully
-
+<!-- Empty Command Problem:
+Parsing failure - Test 52: Should handle empty input gracefully -->
 
 
 🔀 Pipes Issues
+
 Grep with special characters - Test 55: Exit code mismatch
 Export in pipeline - Test 56: Export doesn't work properly in pipelines
 
@@ -36,14 +38,15 @@ Export in pipeline - Test 56: Export doesn't work properly in pipelines
 
 📁 Redirections Issues
 
-Input Redirection Problems:
-Basic input redirection - Tests 57, 60, 67, 68, 74: Input redirection not working properly
-File with spaces - Test 62: Segfault (exit code 139) when handling files with spaces
-Multiple input files - Test 58: Wrong behavior with multiple input redirections
-Missing file handling - Tests 64-66, 76-80: Wrong exit codes and missing error messages
+<!-- Input Redirection Problems: -->
+<!-- Basic input redirection - Tests 57, 60, 67, 68, 74: Input redirection not working properly -->
+<!-- File with spaces - Test 62: Segfault (exit code 139) when handling files with spaces -->
+<!-- Multiple input files - Test 58: Wrong behavior with multiple input redirections
+Missing file handling - Tests 64-66, 76-80: Wrong exit codes and missing error messages -->
 
 
 Output Redirection Problems:
+
 All output redirection tests failing - Tests 81-131: Output is going to stdout instead of files
 File permissions - Tests 85, 88-89, etc.: Wrong exit codes for permission denied
 File with spaces - Test 86: Segfault when creating files with spaces in name

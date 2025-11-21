@@ -3,6 +3,17 @@
 /* I know a lexer is a parser, go touch grass */
 
 // strat faire une petite cmd qui set let var en bas et should be good
+void cmd_set(t_cmd *new, int fd_in, int fd_out, int app_mode, int i)
+{
+	new->args[i] = NULL;
+	new->fd_in = fd_in;
+	new->fd_out = fd_out;
+	new->append_mode = app_mode;
+	new->next = NULL;
+	new->heredoc = NULL;
+	new->in_child = 0;
+}
+
 t_cmd	*cmd_create(char **cmds, int fd_in, int fd_out, int app_mode)
 {
 	t_cmd	*new;
@@ -23,19 +34,10 @@ t_cmd	*cmd_create(char **cmds, int fd_in, int fd_out, int app_mode)
 		free(new);
 		return (NULL);
 	}
-	i = 0;
-	while (i < count)
-	{
+	i = -1;
+	while (++i < count)
 		new->args[i] = ft_strdup(cmds[i]);
-		i++;
-	}
-	new->args[i] = NULL;
-	new->fd_in = fd_in;
-	new->fd_out = fd_out;
-	new->append_mode = app_mode;
-	new->next = NULL;
-	new->heredoc = NULL;
-	new->in_child = 0;
+	cmd_set(new, fd_in, fd_out, app_mode, i);
 	free(cmds);
 	return (new);
 }
@@ -75,13 +77,39 @@ void	print_lexer(t_cmd *cmd)
 /*
 	strat, le dernier else peut pot etre une fonc mais ca va etre chaud pour le reste
 */
-// est-ce qu'il faut absolument le charger dans un fd ? si oui est-ce que je dois le mettre dans mon fd in ou c'est un fd heredoc
-int	do_heredoc(const char *limiter, char **out)
+int be_a_heredoc(char **line, char **ret_line, char **limiter, char **line_nl)
+{
+	char *tmp;
+
+	if (ft_strncmp(*line, *limiter, ft_strlen(*limiter)) == 0)
+	{
+		free(*line);
+		return(0);
+	}
+	*line_nl = ft_strjoin(*line, "\n");
+	free(*line);
+	if (!*line_nl)
+		return (free(ret_line), -1);
+	if (!*ret_line)
+		*ret_line = *line_nl;
+	else
+	{
+		tmp = *ret_line;
+		*ret_line = ft_strjoin(*ret_line, *line_nl);
+		free(tmp);
+		free(*line_nl);
+		if (!*ret_line)
+			return (-1);
+	}
+	return (1);
+}
+
+int	do_heredoc(char *limiter, char **out)
 {
 	char	*line;
 	char	*ret_line;
 	char	*line_nl;
-	char	*tmp;
+	int		here_ret;
 
 	if (!limiter || !out)
 		return (-1);
@@ -89,29 +117,11 @@ int	do_heredoc(const char *limiter, char **out)
 	ret_line = NULL;
 	while ((line = readline("Theredoc>")) != NULL)
 	{
-		if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0)
-		{
-			free(line);
-			break ;
-		}
-		line_nl = ft_strjoin(line, "\n");
-		free(line);
-		if (!line_nl)
-		{
-			free(ret_line);
+		here_ret = be_a_heredoc(&line, &ret_line, &limiter, &line_nl);
+		if (here_ret == 0)
+			break;
+		else if (here_ret == -1)
 			return (-1);
-		}
-		if (!ret_line)
-			ret_line = line_nl;
-		else
-		{
-			tmp = ret_line;
-			ret_line = ft_strjoin(ret_line, line_nl);
-			free(tmp);
-			free(line_nl);
-			if (!ret_line)
-				return (-1);
-		}
 	}
 	*out = ret_line; 
 	return (0);
@@ -174,8 +184,7 @@ t_cmd *lexer(t_token *token, t_cmd *cmd)
 			return (0);
 		if (current->type == REDIRECT_APPEND)
 		{
-			fd_out = open(current->next->value, O_WRONLY | O_CREAT | O_APPEND,
-					0644);
+			fd_out = open(current->next->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
 			if (fd_out == -1)
 				return NULL; // a verif, il faut check ce qu'on fait quand un mauvais fichier est envoyer
 			current = current->next->next;

@@ -11,7 +11,6 @@ int check_parentheses_syntax(char *input)
         
         if ((input[i] == '(' || input[i] == ')') && status == NONE)
         {
-
             printf("bash: erreur de syntaxe près du symbole inattendu « %c »\n", input[i]);
             return (1);
         }

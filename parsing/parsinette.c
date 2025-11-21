@@ -86,6 +86,22 @@ int do_field_spliting(t_token *token)
 	return(1);
 }
 
+int should_expand_wildcards(char *value)
+{
+    int i = 0;
+    t_quote status;
+    
+	status = NONE;
+    while (value[i])
+    {
+        set_quote_status(value[i], &status);
+        if (value[i] == '*' && status != NONE)
+            return (0); // Don't expand if * is quoted
+        i++;
+    }
+    return (1); // OK to expand
+}
+
 int	list_expand(t_minishell *minishell, t_token *token)
 {
 	t_token *current;
@@ -126,9 +142,10 @@ int parsinette(t_minishell *minishell)
 	if	(check_parentheses_syntax(minishell->input) || 
 		check_unclosed_quotes(minishell->input))
 		return (1);
+	if (!minishell->input[0])
+		return(0);
 	cmd = NULL;
     tokens = tokenize(minishell->input);
-	// print_token(tokens);
 	if (!tokens)
         return (1);
     if(!list_expand(minishell, tokens))
@@ -139,11 +156,12 @@ int parsinette(t_minishell *minishell)
 	// print_token(tokens);
 	if (!remove_all_quote(tokens))
 		return (1);
-	// print_token(tokens);
+	print_token(tokens);
 	if (!check_syntax_errors(tokens))
 		return (1);
 	cmd = lexer(tokens, cmd);
-	// print_lexer(cmd);
+	if (!cmd)
+		return (1);
 	execute(cmd, minishell);
     return (0);
 }

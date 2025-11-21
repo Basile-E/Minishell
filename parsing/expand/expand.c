@@ -128,19 +128,32 @@ char *do_expandV2(t_minishell *minishell, char *str)
 char *remove_quotes(char *str)
 {
     char *result;
-    int i = 0; 
-	int j = 0;
-    int len = ft_strlen(str);
-    t_quote status = NONE;
+    int i;
+    int j;
+    int len;
+    t_quote status;
+    char quote_char;
     
+    i = 0;
+    j = 0;
+    len = ft_strlen(str);
+    status = NONE;
+    quote_char = '\0';
     result = malloc(len + 1);
     if (!result)
         return (NULL);
-    
     while (str[i])
     {
-        if (str[i] == '\'' || str[i] == '"')
-            set_quote_status(str[i], &status);
+        if (status == NONE && (str[i] == '\'' || str[i] == '"'))
+        {
+            quote_char = str[i];
+            status = (str[i] == '\'') ? SINGLE : DOUBLE;
+        }
+        else if (status != NONE && str[i] == quote_char)
+        {
+            status = NONE;
+            quote_char = '\0';
+        }
         else
         {
             result[j] = str[i];
@@ -148,8 +161,8 @@ char *remove_quotes(char *str)
         }
         i++;
     }
-	if (str)
-		free(str);
+    if (str)
+        free(str);
     result[j] = '\0';
     return (result);
 }
@@ -194,6 +207,13 @@ char *extract_var_name(char *str, int start, int *end)
     return (ft_substr(str, start, i - start));
 }
 
+int check_dolar_sign(char *str, int i)
+{
+    if (str[i] == '$' && str[i + 1] && str[i + 1] != '"')
+        return(0);
+    return (1);
+}
+
 char *do_expand_simple(t_minishell *minishell, char *str)
 {
     char *result;
@@ -209,8 +229,9 @@ char *do_expand_simple(t_minishell *minishell, char *str)
     while (str[i])
     {
         set_quote_status(str[i], &status);
-        if (str[i] == '$' && status != SINGLE)
+        if (str[i] == '$' && str[i + 1] && str[i + 1] != '"' && str[i + 1] != '\'' && status != SINGLE)
         {
+            // une full fonction
 			int end;
             char *var_name = extract_var_name(str, i + 1, &end);
             char *var_value = get_env_value(minishell, var_name);

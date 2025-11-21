@@ -30,7 +30,7 @@ void *ft_malloc(int size, t_alloc **head)
 {
     void *adr = malloc(size);
     add_alloc(head, create_alloc(adr));
-    printf("debug: %p\n", (void *)adr);
+    // printf("debug: %p\n", (void *)adr);
     return (adr);
 }
 
@@ -43,7 +43,7 @@ void free_alloc(t_alloc *head)
     while(current)
     {
         next = current->next;
-        printf("debug: %p\n is gonna be freed\n", (void *)head->adr);
+        // printf("debug: %p\n is gonna be freed\n", (void *)head->adr);
         free(head->adr);
         head = head->next;
         free(current);

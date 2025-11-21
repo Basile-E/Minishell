@@ -3,6 +3,7 @@
 
 ///////////////////
 /*  Includes	*/
+/*  Includes	*/
 /////////////////
 
 #include <stdio.h>
@@ -15,9 +16,15 @@
 #include <errno.h>
 #include <string.h> // may be illegal, sert a strerror
 #include <sys/wait.h> // same shit, sert aux pipes
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <string.h> // may be illegal, sert a strerror
+#include <sys/wait.h> // same shit, sert aux pipes
 #include "../libft/libft.h"
 
 ///////////////////
+/*  Define	  */			//<- un peut cheum avec du recul
 /*  Define	  */			//<- un peut cheum avec du recul
 /////////////////
 
@@ -42,15 +49,23 @@
 // because it's nicer when it's shiny
 #   define RED	  "\033[31m"
 #   define GREEN	"\033[32m"
+#   define RED	  "\033[31m"
+#   define GREEN	"\033[32m"
 #   define YELLOW   "\033[33m"
+#   define BLUE	 "\033[34m"
 #   define BLUE	 "\033[34m"
 #   define MAGENTA  "\033[35m"
 #   define CYAN	 "\033[36m"
 #   define RESET	"\033[0m"
 #   define BOLD	 "\033[1m"
 #   define PINK	 "\033[38;5;218m"
+#   define CYAN	 "\033[36m"
+#   define RESET	"\033[0m"
+#   define BOLD	 "\033[1m"
+#   define PINK	 "\033[38;5;218m"
 
 ///////////////////
+/*  Structs	 */
 /*  Structs	 */
 /////////////////
 

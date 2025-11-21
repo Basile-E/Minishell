@@ -10,15 +10,8 @@ int main(int ac, char **av, char **ev)
 
     minishell = malloc(sizeof(t_minishell));
     prompt = "\001\033[1;36m\002RicoShell \001\033[0;95m\002\001➜\002 \001\033[0m\002";
-    //prompt = "\001\033[32m\002minishell$ \001\033[0m\002";
 
-
-	// ft_bzero(&minishell, sizeof(t_minishell));
-	minishell->env = NULL;
-    // prompt = BOLD CYAN "RicoShell" RESET PINK " ➜ " RESET;
-    
     set_struct_minishell(minishell, ev); //ici remplir env 
-
     while (42)
     {
         if (minishell->status == KILL_SIM)
@@ -28,8 +21,8 @@ int main(int ac, char **av, char **ev)
         if (!minishell->input) // ctrl d
             return(printf("Exit\n"), 0);
         add_history(minishell->input);
-        //printf("Debug :\nString sent by readline : %s\n", minishell->input);
-        if (parsinette(minishell))
+        printf("Debug :\nString sent by readline : %s\n", minishell->input);
+        if (!parsinette(minishell))
             printf("Parsing failed, try to be better at cli\n");
     }
     return(0);
