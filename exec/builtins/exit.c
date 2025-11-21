@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: emle-vou <emle-vou@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/21 19:27:51 by emle-vou          #+#    #+#             */
+/*   Updated: 2025/11/21 19:35:38 by emle-vou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static long long	ft_atoi_2(char *src)
@@ -62,7 +74,8 @@ static int	verif_long_long(char *nbr)
 				j++;
 			i++;
 		}
-		if ((longlong_ng[i] == 0 && j > 0) || (longlong_ng[i] == 0 && nbr[i] != 0))
+		if ((longlong_ng[i] == 0 && j > 0) || (longlong_ng[i] == 0
+				&& nbr[i] != 0))
 			return (1);
 		return (0);
 	}
@@ -71,13 +84,14 @@ static int	verif_long_long(char *nbr)
 
 static int	nbr_exit(char **argv, t_minishell *mini, char *nbr)
 {
-	int i;
+	int	i;
 
 	if (nbr == NULL)
 		return (0);
 	if (nbr[0] == '\0')
 	{
-		return (mini->status = 2, ft_error("exit", "numeric argument required"), 0);
+		return (mini->status = 2, ft_error("exit", "numeric argument required"),
+			0);
 	}
 	i = 0;
 	if (nbr[i] == '+' || nbr[i] == '-')
@@ -85,19 +99,16 @@ static int	nbr_exit(char **argv, t_minishell *mini, char *nbr)
 	while (nbr[i] && (nbr[i] >= '0' && nbr[i] <= '9'))
 		i++;
 	if (nbr[i] != '\0')
-	{
-		return (mini->status = 2, ft_error("exit", "numeric argument required"), 0);
-	}
+		return (mini->status = 2,
+			ft_error("exit", "numeric argument required"), 0);
 	if (verif_long_long(nbr) != 0)
-	{
-		return (mini->status = 2, ft_error("exit", "numeric argument required"), 0);
-	}
+		return (mini->status = 2,
+			ft_error("exit", "numeric argument required"), 0);
 	if (argv && argv[2] != NULL)
 		return (ft_error("exit", "too many arguments"), 1);
 	mini->status = (unsigned char)ft_atoi_2(nbr);
 	return (0);
 }
-
 
 int	ft_exit(char **argv, t_minishell *mini)
 {

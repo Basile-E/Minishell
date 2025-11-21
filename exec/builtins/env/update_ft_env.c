@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   update_ft_env.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: emle-vou <emle-vou@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/21 19:27:02 by emle-vou          #+#    #+#             */
+/*   Updated: 2025/11/21 19:50:57 by emle-vou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	ft_update_env(t_minishell *mini, char *new)
@@ -5,10 +17,8 @@ void	ft_update_env(t_minishell *mini, char *new)
 	int		i;
 	char	*dst;
 
-	// if (verif_value(new) != 0) // check si lq value existe deja ?
-	// 	return ;
 	if (!mini->env)
-		return (ft_add_env( mini, new));
+		return (ft_add_env(mini, new));
 	i = 0;
 	while (mini->env[i])
 	{
@@ -17,7 +27,7 @@ void	ft_update_env(t_minishell *mini, char *new)
 		i++;
 	}
 	if (!mini->env[i])
-		return (ft_add_env( mini, new));
+		return (ft_add_env(mini, new));
 	free(mini->env[i]);
 	dst = ft_malloc(ft_strlen(new) + 1, &mini->alloc);
 	if (!dst)

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   echo.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: emle-vou <emle-vou@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/21 19:27:42 by emle-vou          #+#    #+#             */
+/*   Updated: 2025/11/21 19:27:43 by emle-vou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	ft_n_flag(char *str)
@@ -21,7 +33,7 @@ int	ft_echo(t_minishell mini, char **argv)
 	int	i;
 	int	n_flag;
 
-	(void) mini;
+	(void)mini;
 	if (!argv)
 		return (0);
 	i = 1;

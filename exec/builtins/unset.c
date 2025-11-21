@@ -1,9 +1,16 @@
-#include "../../includes/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   unset.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: emle-vou <emle-vou@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/21 19:28:13 by emle-vou          #+#    #+#             */
+/*   Updated: 2025/11/21 19:49:53 by emle-vou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-/*
-** unset command removes environment variables from the shell environment
-** Returns 0 on success, 1 if invalid arguments are provided
-*/
+#include "minishell.h"
 
 static int	is_valid_identifier(const char *str)
 {
@@ -23,22 +30,22 @@ static int	is_valid_identifier(const char *str)
 	return (1);
 }
 
-static void	free_array(char **arr)
-{
-	int	i;
+// static void	free_array(char **arr)
+// {
+// 	int	i;
 
-	if (!arr)
-		return ;
-	i = 0;
-	while (arr[i])
-	{
-		free(arr[i]);
-		i++;
-	}
-	free(arr);
-}
+// 	if (!arr)
+// 		return ;
+// 	i = 0;
+// 	while (arr[i])
+// 	{
+// 		free(arr[i]);
+// 		i++;
+// 	}
+// 	free(arr);
+// }
 
-static void	remove_env_var(char ***env, const char *name)
+static void	remove_env_var(char ***env, const char *name, t_minishell *mini)
 {
 	int		i;
 	int		j;
@@ -50,21 +57,19 @@ static void	remove_env_var(char ***env, const char *name)
 	i = 0;
 	while ((*env)[i])
 		i++;
-	new_env = (char **)malloc(sizeof(char *) * i);
+	new_env = (char **)ft_malloc(sizeof(char *) * i, &mini->alloc);
 	if (!new_env)
 		return ;
-	i = 0;
 	j = 0;
 	name_len = ft_strlen(name);
 	while ((*env)[i])
 	{
-		if (ft_strncmp((*env)[i], name, name_len) != 0 || 
-			(*env)[i][name_len] != '=')
+		if (ft_strncmp((*env)[i], name, name_len) != 0
+			|| (*env)[i][name_len] != '=')
 			new_env[j++] = ft_strdup((*env)[i]);
 		i++;
 	}
 	new_env[j] = NULL;
-	free_array(*env);
 	*env = new_env;
 }
 
@@ -87,7 +92,7 @@ int	ft_unset(char **argv, t_minishell *mini)
 			status = 1;
 		}
 		else
-			remove_env_var(&mini->env, argv[i]);
+			remove_env_var(&mini->env, argv[i], mini);
 		i++;
 	}
 	return (status);
