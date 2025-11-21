@@ -45,15 +45,15 @@ BUILTIN = \
 	exit.c \
 	export.c \
 	pwd.c \
-	unset.c
+	unset.c \
+	cd_utils.c
 
 ENV = \
 	create_add_env.c \
 	ft_env.c \
 	update_ft_env.c
 
-EXECUTIVE = \
-	execve.c
+# EXECUTIVE =
 
 GARB_COL = \
 	ft_malloc.c
@@ -77,7 +77,7 @@ OBJ = $(addprefix $(OBJ_PATH), $(ALL_SRC:.c=.o))
 DPD = $(addprefix $(OBJ_PATH), $(ALL_SRC:.c=.d))
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -MMD -g -g3 #-fsanitize=address,leak,undefined
+CFLAGS = -Wall -Wextra -Werror -MMD -g -g3 -fsanitize=address,leak,undefined
 INCS = includes/minishell.h
 INC = -I. -Iincludes -I$(LIBFT_PATH)/includes
 

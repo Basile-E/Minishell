@@ -77,8 +77,7 @@ static int	nbr_exit(char **argv, t_minishell *mini, char *nbr)
 		return (0);
 	if (nbr[0] == '\0')
 	{
-		mini->status = 2;
-		return (ft_error("exit", "numeric argument required"), 0);
+		return (mini->status = 2, ft_error("exit", "numeric argument required"), 0);
 	}
 	i = 0;
 	if (nbr[i] == '+' || nbr[i] == '-')
@@ -87,16 +86,26 @@ static int	nbr_exit(char **argv, t_minishell *mini, char *nbr)
 		i++;
 	if (nbr[i] != '\0')
 	{
-		mini->status = 2;
-		return (ft_error("exit", "numeric argument required"), 0);
+		return (mini->status = 2, ft_error("exit", "numeric argument required"), 0);
 	}
 	if (verif_long_long(nbr) != 0)
 	{
-		mini->status = 2;
-		return (ft_error("exit", "numeric argument required"), 0);
+		return (mini->status = 2, ft_error("exit", "numeric argument required"), 0);
 	}
 	if (argv && argv[2] != NULL)
 		return (ft_error("exit", "too many arguments"), 1);
 	mini->status = (unsigned char)ft_atoi_2(nbr);
+	return (0);
+}
+
+
+int	ft_exit(char **argv, t_minishell *mini)
+{
+	int	nb_error;
+
+	if (nbr_exit(argv, mini, argv[1]) == 1)
+		return (1);
+	nb_error = mini->status;
+	exit(nb_error);
 	return (0);
 }
