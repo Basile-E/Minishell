@@ -6,7 +6,7 @@
 /*   By: emle-vou <emle-vou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 19:28:00 by emle-vou          #+#    #+#             */
-/*   Updated: 2025/11/21 19:48:44 by emle-vou         ###   ########.fr       */
+/*   Updated: 2025/11/21 21:48:59 by emle-vou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ char	**ft_create_export(t_minishell *mini)
 
 	if (!mini->env)
 		return (0);
-	exp = ft_malloc((sizeof(char *) * (ft_strlen_y(mini->env) + 1)), &mini->alloc);
+	exp = ft_malloc((sizeof(char *) * (ft_strlen_y(mini->env) + 1)),
+			&mini->alloc);
 	i = 0;
 	while (mini->env[i])
 	{

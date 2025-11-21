@@ -6,7 +6,7 @@
 /*   By: emle-vou <emle-vou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 19:26:28 by emle-vou          #+#    #+#             */
-/*   Updated: 2025/11/21 20:30:51 by emle-vou         ###   ########.fr       */
+/*   Updated: 2025/11/21 21:48:33 by emle-vou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ void	ft_creat_env(t_minishell *mini, char **envp)
 
 	if (!envp || !envp[0])
 		return ;
-	// int len = 0;
-	mini->env = ft_malloc(sizeof(char *) * (ft_strlen_y(envp) + 1), &mini->alloc);
+	mini->env = ft_malloc(sizeof(char *) * (ft_strlen_y(envp) + 1),
+			&mini->alloc);
 	if (!mini->env)
 		return ;
 	i = 0;
@@ -57,9 +57,8 @@ void	ft_add_env(t_minishell *mini, char *new)
 
 	if (!mini->env)
 		return ;
-	// for (int len; mini->env[i], len++;)
-	// 	;
-	new_mini = ft_malloc(sizeof(char *) * (ft_strlen_y(mini->env) + 1), &mini->alloc);
+	new_mini = ft_malloc(sizeof(char *) * (ft_strlen_y(mini->env) + 1),
+			&mini->alloc);
 	if (!new_mini)
 		return ;
 	i = -1;
