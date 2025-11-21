@@ -156,7 +156,7 @@ int parsinette(t_minishell *minishell)
 	// print_token(tokens);
 	if (!remove_all_quote(tokens))
 		return (1);
-	print_token(tokens);
+	// print_token(tokens);
 	if (!check_syntax_errors(tokens))
 		return (1);
 	cmd = lexer(tokens, cmd);
