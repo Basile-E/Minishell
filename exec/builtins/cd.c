@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: basile <basile@student.42.fr>              +#+  +:+       +#+        */
+/*   By: emle-vou <emle-vou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 19:27:36 by emle-vou          #+#    #+#             */
-/*   Updated: 2025/11/22 06:23:20 by basile           ###   ########.fr       */
+/*   Updated: 2025/11/22 19:47:21 by emle-vou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,19 @@ static void	set_env_var(char **env, char *name, char *value)
 	int		i;
 	size_t	len;
 	char	*new;
+	char *tmp;
 
 	len = ft_strlen(name);
-	new = ft_strjoin(name, value);
+	new = ft_strjoin(name, "=");
 	if (!new)
 		return ;
-	i = 0;
-	while (env[i])
+	tmp = ft_strjoin(new, value);
+	free(new);
+	new = tmp;
+	if (!new)
+		return ;
+	i = -1;
+	while (env[++i])
 	{
 		if (ft_strncmp(env[i], name, len) == 0 && env[i][len] == '=')
 		{
@@ -49,7 +55,6 @@ static void	set_env_var(char **env, char *name, char *value)
 			env[i] = new;
 			return ;
 		}
-		i++;
 	}
 	free(new);
 }

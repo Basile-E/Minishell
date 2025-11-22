@@ -13,88 +13,60 @@
 
 #include "minishell.h"
 
-static int	is_valid_identifier(const char *str)
+static void	remove_line_env(t_minishell *mini, char *str)
+{
+	int		i;
+	int		j;
+	char	**new_mini;
+
+	new_mini = malloc(sizeof(char *) * (ft_strlen_y(mini->env) + 1));
+	if (!new_mini)
+		return (ft_error("rm line env", strerror(errno)));
+	i = 0;
+	j = 0;
+	while (mini->env[i])
+	{
+		if (ft_strcmp_equal(str, mini->env[i]) == 0)
+			free(mini->env[i]);
+		else
+		{
+			new_mini[j] = mini->env[i];
+			j++;
+		}
+		i++;
+	}
+	new_mini[j] = NULL;
+	if (mini->env)
+		free(mini->env);
+	mini->env = new_mini;
+}
+
+static int	does_it_exist_env(t_minishell *mini, char *src)
 {
 	int	i;
 
-	if (!str || !*str)
-		return (0);
-	if (!ft_isalpha(str[0]) && str[0] != '_')
-		return (0);
-	i = 1;
-	while (str[i])
+	i = 0;
+	while (mini->env[i])
 	{
-		if (!ft_isalnum(str[i]) && str[i] != '_')
+		if (ft_strcmp_equal(src, mini->env[i]) == 0)
 			return (0);
 		i++;
 	}
 	return (1);
 }
 
-// static void	free_array(char **arr)
-// {
-// 	int	i;
-
-// 	if (!arr)
-// 		return ;
-// 	i = 0;
-// 	while (arr[i])
-// 	{
-// 		free(arr[i]);
-// 		i++;
-// 	}
-// 	free(arr);
-// }
-
-static void	remove_env_var(char ***env, const char *name, t_minishell *mini)
-{
-	int		i;
-	int		j;
-	char	**new_env;
-	size_t	name_len;
-
-	if (!env || !*env || !name)
-		return ;
-	i = 0;
-	while ((*env)[i])
-		i++;
-	new_env = (char **)ft_malloc(sizeof(char *) * i, &mini->alloc);
-	if (!new_env)
-		return ;
-	j = 0;
-	name_len = ft_strlen(name);
-	while ((*env)[i])
-	{
-		if (ft_strncmp((*env)[i], name, name_len) != 0
-			|| (*env)[i][name_len] != '=')
-			new_env[j++] = ft_strdup((*env)[i]);
-		i++;
-	}
-	new_env[j] = NULL;
-	*env = new_env;
-}
-
-int	ft_unset(char **argv, t_minishell *mini)
+int	ft_unset(t_minishell *mini, char **args)
 {
 	int	i;
-	int	status;
 
-	status = 0;
-	if (!argv || !argv[1] || !mini)
+	i = 0;
+	if (args == NULL)
 		return (0);
-	i = 1;
-	while (argv[i])
+	while (args[i])
 	{
-		if (!is_valid_identifier(argv[i]))
-		{
-			ft_putstr_fd("minishell: unset: `", 2);
-			ft_putstr_fd(argv[i], 2);
-			ft_putstr_fd("': not a valid identifier\n", 2);
-			status = 1;
-		}
-		else
-			remove_env_var(&mini->env, argv[i], mini);
+		if (does_it_exist_env(mini, args[i]) == 0)
+			remove_line_env(mini, args[i]);
 		i++;
 	}
-	return (status);
+	return (0);
 }

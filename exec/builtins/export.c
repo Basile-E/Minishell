@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emle-vou <emle-vou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 19:28:00 by emle-vou          #+#    #+#             */
-/*   Updated: 2025/11/22 16:08:04 by baecoliv         ###   ########.fr       */
+/*   Updated: 2025/11/22 18:52:23 by emle-vou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ void	ft_export(t_minishell *mini, char **cmd)
 
 	if (!mini->env[0])
 		return; 
-
 	if (cmd[1])
 	{
 		print_env(cmd);

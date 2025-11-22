@@ -44,7 +44,7 @@ int is_a_builtin(char **cmd, t_minishell *mini)
 		if (!ft_strncmp("env", *cmd, ft_strlen(*cmd) + 1))
 			ft_env(mini);
 		if (!ft_strncmp("unset", *cmd, ft_strlen(*cmd) + 1))
-			ft_unset(cmd, mini);
+			ft_unset(mini, cmd);
 		return(1);
 	}
 	return (0);
