@@ -24,7 +24,7 @@ Final To-Do :
     [] fix l'export
 [] fix les leak dans les child 
 [] ajout des signaux
-[] check des leak "final"
+[] check leak "final"
 [] check les retours d'erreur
 [] gerer les erreur d'affichage de multiples msg d'erreur
 [] creation animation

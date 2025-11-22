@@ -9,6 +9,7 @@ int main(int ac, char **av, char **ev)
     t_minishell *minishell;
 
     minishell = malloc(sizeof(t_minishell));
+	normal_signal();
     prompt = "\001\033[1;36m\002RicoShell \001\033[0;95m\002\001➜\002 \001\033[0m\002";
     set_struct_minishell(minishell, ev); //ici remplir env
     while (42)

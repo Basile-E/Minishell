@@ -28,6 +28,7 @@
 /*  Define	  */			//<- un peut cheum avec du recul
 /////////////////
 
+extern volatile sig_atomic_t	g_signal;
 
 // Types of files, sert au tokenizer pour arg.type
 #   define  FONCTION 1
@@ -208,5 +209,17 @@ int	ft_cd(char **argv, t_minishell *mini);
 
 void *ft_malloc(int size, t_alloc **head);
 void free_alloc(t_alloc *head);
+
+//signals
+void	normal_signal(void);
+void	in_exec_signal(void);
+void	child_signal(void);
+void	heredoc_signal(void);
+void	handle_normal_sigint(int sig);
+void	handle_exec_sigint(int sig);
+void	handle_heredoc_sigint(int sig);
+void	handle_sigquit(int sig);
+void	handle_sigchld(int sig);
+
 
 #endif
