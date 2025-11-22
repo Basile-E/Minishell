@@ -17,8 +17,14 @@ on ne devrait afficher que le dernier msg d'erreur
 
 
 
-il manque basiquement quelques retours d'erreur mais sinon c'est top
+Final To-Do :
 
-
-
-field split (de singe)
+[] fix unset
+[] fix field spliting
+    [] fix l'export
+[] fix les leak dans les child 
+[] ajout des signaux
+[] check des leak "final"
+[] check les retours d'erreur
+[] gerer les erreur d'affichage de multiples msg d'erreur
+[] creation animation
