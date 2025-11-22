@@ -19,10 +19,10 @@ on ne devrait afficher que le dernier msg d'erreur
 
 Final To-Do :
 
-[] fix unset
-[] fix field spliting 
-    [] fix l'export
-[] ajout des signaux
+[x] fix unset
+[x] fix field spliting 
+    [x] fix l'export
+[x] ajout des signaux
 [] fix les leak dans les child 
 [] check des leak "final"
 [] check les retours d'erreur
