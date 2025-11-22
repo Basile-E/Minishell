@@ -6,7 +6,7 @@
 /*   By: emle-vou <emle-vou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 19:27:36 by emle-vou          #+#    #+#             */
-/*   Updated: 2025/11/22 19:47:21 by emle-vou         ###   ########.fr       */
+/*   Updated: 2025/11/22 19:55:42 by emle-vou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	set_env_var(char **env, char *name, char *value)
 	int		i;
 	size_t	len;
 	char	*new;
-	char *tmp;
+	char	*tmp;
 
 	len = ft_strlen(name);
 	new = ft_strjoin(name, "=");

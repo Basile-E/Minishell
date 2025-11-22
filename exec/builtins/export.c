@@ -6,7 +6,7 @@
 /*   By: emle-vou <emle-vou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 19:28:00 by emle-vou          #+#    #+#             */
-/*   Updated: 2025/11/22 18:52:23 by emle-vou         ###   ########.fr       */
+/*   Updated: 2025/11/22 19:57:19 by emle-vou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	ft_sort_export(char **exp)
 	j = 0;
 	i = 0;
 	if (!exp)
-		return;
+		return ;
 	while (exp[i])
 	{
 		j = 1;
@@ -81,7 +81,7 @@ void	ft_export(t_minishell *mini, char **cmd)
 	char	**exp;
 
 	if (!mini->env[0])
-		return; 
+		return ;
 	if (cmd[1])
 	{
 		print_env(cmd);

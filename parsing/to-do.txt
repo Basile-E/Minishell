@@ -28,3 +28,10 @@ Final To-Do :
 [] check les retours d'erreur
 [] gerer les erreur d'affichage de multiples msg d'erreur
 [] creation animation
+
+
+--> Fiche de correction a voir :
+[] Run absolute path command comme /bin/ls`
+[] Return value of a process (echo $?)
+[] Environment path marche encore quand PATH est unset 
+[]

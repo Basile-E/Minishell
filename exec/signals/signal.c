@@ -1,8 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signal.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: emle-vou <emle-vou@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/22 19:57:50 by emle-vou          #+#    #+#             */
+/*   Updated: 2025/11/22 20:00:03 by emle-vou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include <signal.h>
-
-
-extern volatile sig_atomic_t	g_signal;
 
 void	handle_normal_sigint(int sig)
 {

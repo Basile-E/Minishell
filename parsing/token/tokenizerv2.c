@@ -20,7 +20,7 @@ void	add_token(t_token **head, t_token *new_token)
 	if (!*head)
 	{
 		*head = new_token;
-		return;
+		return ;
 	}
 	current = *head;
 	while (current->next)
@@ -28,19 +28,19 @@ void	add_token(t_token **head, t_token *new_token)
 	current->next = new_token;
 }
 
-static void crea_tok_pipe(int *i, t_token **tokens)
+static void	crea_tok_pipe(int *i, t_token **tokens)
 {
-	t_token *token;
+	t_token	*token;
 
 	token = create_token(PIPE, "|");
 	*i += 1;
 	add_token(tokens, token);
 }
 
-static void crea_tok_app(char *input, int *i, t_token **tokens)
+static void	crea_tok_app(char *input, int *i, t_token **tokens)
 {
-	t_token *token;
-	
+	t_token	*token;
+
 	if (input[*i + 1] && input[*i + 1] == '>')
 	{
 		token = create_token(REDIRECT_APPEND, ">>");
@@ -54,10 +54,9 @@ static void crea_tok_app(char *input, int *i, t_token **tokens)
 	add_token(tokens, token);
 }
 
-static void crea_tok_her(char *input, int *i, t_token **tokens)
+static void	crea_tok_her(char *input, int *i, t_token **tokens)
 {
-	t_token *token;
-
+	t_token	*token;
 
 	if (input[*i + 1] && input[*i + 1] == '<')
 	{
@@ -72,7 +71,7 @@ static void crea_tok_her(char *input, int *i, t_token **tokens)
 	add_token(tokens, token);
 }
 
-int parse_redirect_operator(char *input, int *i, t_token **tokens)
+int	parse_redirect_operator(char *input, int *i, t_token **tokens)
 {
 	if (input[*i] == '<')
 	{
@@ -99,9 +98,9 @@ int	parse_word(char *input, int *i, t_token **tokens, t_quote status)
 	t_token	*token;
 
 	start = *i;
-	while (input[*i] && (( !is_space(input[*i]) && !is_operator(input[*i])) || status != NONE))
+	while (input[*i] && ((!is_space(input[*i]) && !is_operator(input[*i]))
+			|| status != NONE))
 		(*i)++;
-	
 	len = *i - start;
 	word = ft_substr(input, start, len);
 	token = create_token(WORD, word);
@@ -110,7 +109,7 @@ int	parse_word(char *input, int *i, t_token **tokens, t_quote status)
 	return (1);
 }
 
-static void set_var(t_quote *status, t_token **tokens, int *i)
+static void	set_var(t_quote *status, t_token **tokens, int *i)
 {
 	*status = NONE;
 	*tokens = NULL;
@@ -119,7 +118,7 @@ static void set_var(t_quote *status, t_token **tokens, int *i)
 
 t_token	*tokenize(char *input)
 {
-	t_quote status;
+	t_quote	status;
 	t_token	*tokens;
 	int		i;
 
@@ -131,7 +130,7 @@ t_token	*tokenize(char *input)
 			i++;
 		set_quote_status(input[i], &status);
 		if (!input[i])
-			break;
+			break ;
 		if (is_operator(input[i]) && status == NONE)
 		{
 			if (!parse_redirect_operator(input, &i, &tokens))
