@@ -1,0 +1,30 @@
+dans le parsing si un erreur est trouve 
+
+
+RicoShell ➜grep hi "<infile" <         ./test_files/infilee
+grep - hi - <infile - < - ./test_files/infile - 
+grep: <infile: Aucun fichier ou dossier de ce nom
+grep: <: Aucun fichier ou dossier de ce nom
+grep: ./test_files/infile: Aucun fichier ou dossier de ce nom
+RicoShell ➜ 
+
+bash-5.2$ grep hi "<infile" <         ./test_files/infile
+bash: ./test_files/infile: Aucun fichier ou dossier de ce nom
+bash-5.2$ 
+
+
+on ne devrait afficher que le dernier msg d'erreur
+
+
+
+Final To-Do :
+
+[] fix unset
+[] fix field spliting 
+    [] fix l'export
+[] ajout des signaux
+[] fix les leak dans les child 
+[] check des leak "final"
+[] check les retours d'erreur
+[] gerer les erreur d'affichage de multiples msg d'erreur
+[] creation animation
