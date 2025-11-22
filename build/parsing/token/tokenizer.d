@@ -1,2 +1,2 @@
 build/parsing/token/tokenizer.o: parsing/token/tokenizer.c \
- includes/../includes/minishell.h includes/../includes/../libft/libft.h
+  includes/../includes/minishell.h includes/../libft/libft.h

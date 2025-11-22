@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: basile <basile@student.42.fr>              +#+  +:+       +#+        */
+/*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 19:28:00 by emle-vou          #+#    #+#             */
-/*   Updated: 2025/11/22 08:00:07 by basile           ###   ########.fr       */
+/*   Updated: 2025/11/22 16:08:04 by baecoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ void	ft_sort_export(char **exp)
 
 	j = 0;
 	i = 0;
+	if (!exp)
+		return;
 	while (exp[i])
 	{
 		j = 1;
@@ -77,6 +79,9 @@ void	ft_export(t_minishell *mini, char **cmd)
 {
 	int		i;
 	char	**exp;
+
+	if (!mini->env[0])
+		return; 
 
 	if (cmd[1])
 	{
