@@ -1,21 +1,16 @@
-/*Si plus que env alors faire un return 2 et envoyer un message d'erreur \
-D'abord je recup envp et je le copie dans un double tableau
-ATTENTION je ne vais pas trier la commande export car ce n'est precise ni dans le sujet 
-Pas besoin de creer de double tableau (choix) donc impossibilite de trier */
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   create_add_env.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: basile <basile@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/21 19:26:28 by emle-vou          #+#    #+#             */
+/*   Updated: 2025/11/22 06:24:09 by basile           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
-
-// void update_SHLVL(t_minishell *mini)
-// {
-// 	int 	lv;
-// 	int		i;
-
-// 	i = 0;
-// 	while (mini->env[i] && ft_strnstr(mini->env[i], "SHLVL", 5) == 0)
-// 		i++;
-// 	lv = ft_atoi(mini->env[i] + 6);
-// 	return;
-// }
 
 static void	error_env(t_minishell *mini, int i)
 {
@@ -34,18 +29,19 @@ void	ft_creat_env(t_minishell *mini, char **envp)
 	int	i;
 
 	if (!envp || !envp[0])
-		return;
-	mini->env = malloc(sizeof(char *) * (ft_strlen_y(envp) + 1));
+		return ;
+	mini->env = ft_malloc(sizeof(char *) * (ft_strlen_y(envp) + 1),
+			&mini->alloc);
 	if (!mini->env)
-		return;
+		return ;
 	i = 0;
 	while (envp[i])
 	{
-		mini->env[i] = malloc(ft_strlen(envp[i]) + 1);
+		mini->env[i] = ft_malloc(ft_strlen(envp[i]) + 1, &mini->alloc);
 		if (!mini->env[i])
 		{
 			error_env(mini, i - 1);
-			return;
+			return ;
 		}
 		ft_strlcpy(mini->env[i], envp[i], ft_strlen(envp[i]) + 1);
 		i++;
@@ -60,26 +56,24 @@ void	ft_add_env(t_minishell *mini, char *new)
 	char	*dst;
 
 	if (!mini->env)
-		return;
-	new_mini = malloc(sizeof(char *) * (ft_strlen_y(mini->env) + 2));
+		return ;
+	new_mini = ft_malloc(sizeof(char *) * (ft_strlen_y(mini->env) + 1),
+			&mini->alloc);
 	if (!new_mini)
-		return;
-	i = 0;
-	while (mini->env[i])
-	{
+		return ;
+	i = -1;
+	while (mini->env[++i])
 		new_mini[i] = mini->env[i];
-		i++;
-	}
-	dst = malloc(ft_strlen(new) + 1);
+	dst = ft_malloc(ft_strlen(new) + 1, &mini->alloc);
 	if (!dst)
 	{
 		free(new_mini);
-		return;
+		return ;
 	}
 	ft_strlcpy(dst, new, ft_strlen(new) + 1);
 	new_mini[i] = dst;
 	new_mini[i + 1] = NULL;
 	free(mini->env);
 	mini->env = new_mini;
-	return;
+	return ;
 }

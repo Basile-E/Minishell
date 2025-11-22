@@ -39,7 +39,6 @@ EXEC = \
 	hitman.c
 BUILTIN = \
 	built_ins_utils.c \
-	built-ins.c \
 	cd.c \
 	echo.c \
 	exit.c \
@@ -77,7 +76,7 @@ OBJ = $(addprefix $(OBJ_PATH), $(ALL_SRC:.c=.o))
 DPD = $(addprefix $(OBJ_PATH), $(ALL_SRC:.c=.d))
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -MMD -g -g3 -fsanitize=address,leak,undefined
+CFLAGS = -Wall -Wextra -Werror -MMD -g -g3 #-fsanitize=address,leak,undefined
 INCS = includes/minishell.h
 INC = -I. -Iincludes -I$(LIBFT_PATH)/includes
 
