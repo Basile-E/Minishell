@@ -78,7 +78,6 @@ int	check_bad_redir_syntax(t_token *current)
 			&& current->next->type == REDIRECT_IN))
 		return (1);
 	if (current->next->type != WORD) // un peut le last check,
-		je suis soit un genie soit un singe pour l'avoir mis la
 		return (1);
 	return (0);
 }

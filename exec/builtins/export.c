@@ -6,7 +6,7 @@
 /*   By: emle-vou <emle-vou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 19:28:00 by emle-vou          #+#    #+#             */
-/*   Updated: 2025/11/22 19:57:19 by emle-vou         ###   ########.fr       */
+/*   Updated: 2025/11/23 19:20:47 by emle-vou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,18 +80,21 @@ void	ft_export(t_minishell *mini, char **cmd)
 	int		i;
 	char	**exp;
 
-	if (!mini->env[0])
+	if (!mini || !mini->env)
 		return ;
-	if (cmd[1])
+	if (cmd && cmd[1])
 	{
-		print_env(cmd);
-		ft_update_env(mini, cmd[1]);
+		i = 1;
+		while (cmd[i])
+		{
+			ft_update_env(mini, cmd[i]);
+			i++;
+		}
 		return ;
 	}
 	exp = ft_create_export(mini);
 	if (!exp)
 		return ;
-	ft_update_env(mini, *exp);
 	ft_sort_export(exp);
 	i = 0;
 	while (exp[i])

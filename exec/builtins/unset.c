@@ -6,11 +6,25 @@
 /*   By: emle-vou <emle-vou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 19:28:13 by emle-vou          #+#    #+#             */
-/*   Updated: 2025/11/22 19:57:31 by emle-vou         ###   ########.fr       */
+/*   Updated: 2025/11/23 19:03:26 by emle-vou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static int	existing_var(t_minishell *mini, char *src)
+{
+	int	i;
+
+	i = 0;
+	while (mini->env[i])
+	{
+		if (ft_strcmp_equal(src, mini->env[i]) == 0)
+			return (0);
+		i++;
+	}
+	return (1);
+}
 
 static void	remove_line_env(t_minishell *mini, char *str)
 {
@@ -40,20 +54,6 @@ static void	remove_line_env(t_minishell *mini, char *str)
 	mini->env = new_mini;
 }
 
-static int	does_it_exist_env(t_minishell *mini, char *src)
-{
-	int	i;
-
-	i = 0;
-	while (mini->env[i])
-	{
-		if (ft_strcmp_equal(src, mini->env[i]) == 0)
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
 int	ft_unset(t_minishell *mini, char **args)
 {
 	int	i;
@@ -63,7 +63,7 @@ int	ft_unset(t_minishell *mini, char **args)
 		return (0);
 	while (args[i])
 	{
-		if (does_it_exist_env(mini, args[i]) == 0)
+		if (existing_var(mini, args[i]) == 0)
 			remove_line_env(mini, args[i]);
 		i++;
 	}
