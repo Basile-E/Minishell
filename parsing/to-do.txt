@@ -28,3 +28,5 @@ Final To-Do :
 [] check les retours d'erreur
 [] gerer les erreur d'affichage de multiples msg d'erreur
 [] creation animation
+
+
