@@ -31,20 +31,6 @@ static int	is_valid_identifier(const char *str)
 	return (1);
 }
 
-// static void	free_array(char **arr)
-// {
-// 	int	i;
-
-// 	if (!arr)
-// 		return ;
-// 	i = 0;
-// 	while (arr[i])
-// 	{
-// 		free(arr[i]);
-// 		i++;
-// 	}
-// 	free(arr);
-// }
 
 static void	remove_env_var(char ***env, const char *name, t_minishell *mini)
 {
@@ -67,7 +53,7 @@ static void	remove_env_var(char ***env, const char *name, t_minishell *mini)
 	{
 		if (ft_strncmp((*env)[i], name, name_len + 1) == 0
 			|| (*env)[i][name_len] != '=')
-			new_env[j++] = ft_strdup_gc((*env)[i]);
+			new_env[j++] = ft_strdup_gc((*env)[i], mini);
 		i++;
 	}
 	new_env[j] = NULL;

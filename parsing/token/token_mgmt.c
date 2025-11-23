@@ -7,7 +7,7 @@ t_token	*create_and_add_token(t_token **head, t_token **current, char *content)
 	new_node = malloc(sizeof(t_token));
 	if (!new_node)
 		return (NULL);
-	new_node->value = ft_strdup_gc(content);
+	new_node->value = ft_strdup(content);
 	new_node->next = NULL;
 	if (!*head)
 	{

@@ -84,7 +84,7 @@ int do_field_spliting(t_token *token)
 	return(1);
 }
 
-int should_expand_wildcards(char *value)
+int	should_expand_wildcards(char *value)
 {
     int i = 0;
     t_quote status;

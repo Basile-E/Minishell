@@ -80,7 +80,7 @@ char *do_expand(t_minishell *minishell, char *token)
 			&& minishell->env[i][ft_strlen(token)] == '=')
 		{
 			y = ft_strlen(token) + 1;
-			env_value = ft_strdup_gc(minishell->env[i] + y);
+			env_value = ft_strdup_gc(minishell->env[i] + y, minishell);
             free(token);
             return (env_value);
         }
@@ -203,14 +203,14 @@ char *get_env_value(t_minishell *minishell, char *var_name)
         if (ft_strncmp(var_name, minishell->env[i], len) == 0 
             && minishell->env[i][len] == '=')
         {
-            return (ft_strdup_gc(minishell->env[i] + len + 1));
+            return (ft_strdup_gc(minishell->env[i] + len + 1, minishell));
         }
         i++;
     }
-    return (ft_strdup_gc(""));
+    return (ft_strdup_gc("", minishell));
 }
 
-char *extract_var_name(char *str, int start, int *end)
+char *extract_var_name(char *str, int start, int *end, t_minishell **mini)
 {
     int i;
     
@@ -224,7 +224,7 @@ char *extract_var_name(char *str, int start, int *end)
         i++;
     *end = i;
     if (i == start)
-        return (ft_strdup_gc(""));
+        return (ft_strdup_gc("", mini));
     return (ft_substr(str, start, i - start));
 }
 
@@ -237,7 +237,7 @@ int check_dolar_sign(char *str, int i)
 
 void expandinette(t_minishell *minishell, t_expandinette *exp, char *str)
 {
-    exp->var_name = extract_var_name(str, exp->i + 1, &exp->end);
+    exp->var_name = extract_var_name(str, exp->i + 1, &exp->end, &minishell);
     exp->var_value = get_env_value(minishell, exp->var_name);
     exp->temp = ft_strjoin(exp->result, exp->var_value);
     free(exp->result);
@@ -247,11 +247,11 @@ void expandinette(t_minishell *minishell, t_expandinette *exp, char *str)
     free(exp->var_value);
 }
 
-void    set_expand(t_expandinette *exp, t_quote *status)
+void    set_expand(t_expandinette *exp, t_quote *status, t_minishell *mini)
 {
     exp->i = 0;
     *status = NONE;
-    exp->result = ft_strdup_gc("");
+    exp->result = ft_strdup_gc("", mini);
 }
 
 char *do_expand_simple(t_minishell *minishell, char *str)
@@ -259,7 +259,7 @@ char *do_expand_simple(t_minishell *minishell, char *str)
     t_quote status;
     t_expandinette exp;
  
-    set_expand(&exp, &status);
+    set_expand(&exp, &status, minishell);
     if (!exp.result)
         return (NULL);
     while (str[exp.i])

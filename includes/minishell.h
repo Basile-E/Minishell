@@ -171,7 +171,6 @@ void	free_tokens(t_token *tokens);
 
 // New Expand
 char *do_expand_simple(t_minishell *minishell, char *str);
-char *extract_var_name(char *str, int start, int *end);
 char *get_env_value(t_minishell *minishell, char *var_name);
 char *remove_quotes(char *str);
 void	set_quote_status(char c, t_quote *status);
@@ -210,5 +209,7 @@ int	ft_cd(char **argv, t_minishell *mini);
 
 void *ft_malloc(int size, t_alloc **head);
 void free_alloc(t_alloc *head);
+char	*ft_strdup_gc(char *src, t_minishell *mini);
+char *extract_var_name(char *str, int start, int *end, t_minishell **mini);
 
 #endif

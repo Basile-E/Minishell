@@ -27,13 +27,13 @@ void cmd_set(t_cmd *new, int fd_in, int fd_out, int app_mode, int i)
 	new->in_child = 0;
 }
 
-char	*ft_strdup_gc_gc(char *src, t_minishell *mini)
+char	*ft_strdup_gc(char *src, t_minishell **mini)
 {
 	int		i;
 	char	*dup;
 
 	i = 0;
-	dup = (char *)ft_malloc((ft_strlen(src) + 1) * sizeof(char), &mini->alloc);
+	dup = (char *)ft_malloc((ft_strlen(src) + 1) * sizeof(char), (*mini)->alloc);
 	if (!dup)
 		return (NULL);
 	while (src[i])
@@ -93,7 +93,7 @@ t_cmd	*cmd_create(char **cmds, int fd_in, int fd_out, int app_mode)
 	}
 	i = -1;
 	while (++i < count)
-		new->args[i] = ft_strdup_gc(cmds[i]);
+		new->args[i] = ft_strdup(cmds[i]);
 	cmd_set(new, fd_in, fd_out, app_mode, i);
 	free(cmds);
 	return (new);
@@ -166,7 +166,7 @@ typedef struct s_heredoc
     int		here_ret;
 }				t_heredoc;
 
-int	do_heredoc(char *limiter, char **out)
+int	do_heredoc(char *limiter, char **out, t_minishell *mini)
 {
     t_heredoc her;
 
@@ -189,7 +189,7 @@ int	do_heredoc(char *limiter, char **out)
     if (her.line == NULL)
         printf("minishell: warning: here-document\n");
     if (!her.ret_line)
-        her.ret_line = ft_strdup_gc("");
+        her.ret_line = ft_strdup("");
     *out = her.ret_line; 
     return (0);
 }
@@ -208,7 +208,7 @@ static int	count_words_until_pipe(t_token *start)
 	return (count);
 }
 
-int	do_type_word(t_lexer *lexer, t_token **current)
+int	do_type_word(t_lexer *lexer, t_token **current, t_minishell *mini)
 {
 	if (!lexer->cmd_tab)
 	{
@@ -218,7 +218,7 @@ int	do_type_word(t_lexer *lexer, t_token **current)
 			return (0);
 		lexer->tab_idx = 0;
 	}
-	lexer->cmd_tab[lexer->tab_idx++] = ft_strdup_gc((*current)->value);
+	lexer->cmd_tab[lexer->tab_idx++] = ft_strdup((*current)->value);
 	*current = (*current)->next;
 	return (1);
 }

@@ -8,7 +8,7 @@ t_token	*create_token(t_token_type type, char *value)
 	if (!token)
 		return (NULL);
 	token->type = type;
-	token->value = ft_strdup_gc(value);
+	token->value = ft_strdup(value);
 	token->next = NULL;
 	return (token);
 }
