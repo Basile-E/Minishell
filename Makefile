@@ -28,7 +28,10 @@ TOKEN = \
 PARSING = \
 		parsinette.c 
 EXPAND = \
-		expand.c 
+		expand.c \
+		expand_init.c \
+		expand_quotes.c
+
 UTILS = \
 		len.c \
 		print.c \

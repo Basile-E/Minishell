@@ -11,13 +11,13 @@
 # include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h> // may be illegal, sert a strerror
 # include <sys/stat.h>
 # include <sys/wait.h> // same shit, sert aux pipes
 # include <unistd.h>
-#include <signal.h>
 
 ///////////////////
 /*  Define		*/ //<- un peut cheum avec du recul
@@ -106,27 +106,27 @@ typedef enum e_quote
 	DOUBLE
 }								t_quote;
 
-//struct expand
+// struct expand
 typedef struct s_expandinette
 {
-	int		end;
-	char	*var_name;
-	char	*var_value;
-	char	char_str[2];
-	char	*result;
-	char	*temp;
-	int		i;
-}			t_expandinette;
+	int							end;
+	char						*var_name;
+	char						*var_value;
+	char						char_str[2];
+	char						*result;
+	char						*temp;
+	int							i;
+}								t_expandinette;
 
 typedef struct s_r_quote
 {
-	char	*result;
-	int		i;
-	int		j;
-	int		len;
-	t_quote	status;
-	char	quote_char;
-}			t_r_quote;
+	char						*result;
+	int							i;
+	int							j;
+	int							len;
+	t_quote						status;
+	char						quote_char;
+}								t_r_quote;
 
 typedef enum e_token_type
 {
@@ -161,11 +161,29 @@ typedef struct s_cmd
 /*  Fonctions   */
 /////////////////
 
-// Expand
-char							*do_expand(t_minishell *minishell, char *str);
+// expand
+char							*extract_var_name(char *str, int start,
+									int *end);
+int								check_dolar_sign(char *str, int i);
+void							expandinette(t_minishell *minishell,
+									t_expandinette *exp, char *str);
+void							set_expand(t_expandinette *exp,
+									t_quote *status);
+char							*do_expand_simple(t_minishell *minishell,
+									char *str);
+
+// expand_init
 int								check_for_expand(char *str);
-char							*find_path(char *cmd, char **envp);
-char							*do_expandV2(t_minishell *minishell, char *str);
+int								get_word_len(char *str);
+char							*get_expand_token(char *str, int beg_token);
+char							*do_expand(t_minishell *minishell, char *token);
+char							*get_env_value(t_minishell *minishell,
+									char *var_name);
+
+// expand quotes
+void							set_quote_status(char c, t_quote *status);
+void							set_quote(t_r_quote *r_quote, char *str);
+char							*remove_quotes(char *str);
 
 // Parsing
 int								parsinette(t_minishell *minishell);
