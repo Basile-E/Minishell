@@ -27,7 +27,7 @@ void cmd_set(t_cmd *new, int fd_in, int fd_out, int app_mode, int i)
 	new->in_child = 0;
 }
 
-char	*ft_strdup_gc(char *src, t_minishell *mini)
+char	*ft_strdup_gc_gc(char *src, t_minishell *mini)
 {
 	int		i;
 	char	*dup;
@@ -93,7 +93,7 @@ t_cmd	*cmd_create(char **cmds, int fd_in, int fd_out, int app_mode)
 	}
 	i = -1;
 	while (++i < count)
-		new->args[i] = ft_strdup(cmds[i]);
+		new->args[i] = ft_strdup_gc(cmds[i]);
 	cmd_set(new, fd_in, fd_out, app_mode, i);
 	free(cmds);
 	return (new);
@@ -131,9 +131,6 @@ void	print_lexer(t_cmd *cmd)
 	}
 }
 
-/*
-	strat, le dernier else peut pot etre une fonc mais ca va etre chaud pour le reste
-*/
 int be_a_heredoc(char **line, char **ret_line, char **limiter, char **line_nl)
 {
 	char *tmp;
@@ -192,7 +189,7 @@ int	do_heredoc(char *limiter, char **out)
     if (her.line == NULL)
         printf("minishell: warning: here-document\n");
     if (!her.ret_line)
-        her.ret_line = ft_strdup("");
+        her.ret_line = ft_strdup_gc("");
     *out = her.ret_line; 
     return (0);
 }
@@ -221,7 +218,7 @@ int	do_type_word(t_lexer *lexer, t_token **current)
 			return (0);
 		lexer->tab_idx = 0;
 	}
-	lexer->cmd_tab[lexer->tab_idx++] = ft_strdup((*current)->value);
+	lexer->cmd_tab[lexer->tab_idx++] = ft_strdup_gc((*current)->value);
 	*current = (*current)->next;
 	return (1);
 }
@@ -265,8 +262,6 @@ int do_type_redirher(t_lexer *lexer, t_token **current)
 	return (1);
 }
 
-
-
 int do_type_redirin(t_lexer *lexer, t_token **current)
 {
 	lexer->fd_in = open((*current)->next->value, O_RDONLY);
@@ -275,7 +270,6 @@ int do_type_redirin(t_lexer *lexer, t_token **current)
 	*current = (*current)->next->next;
 	return (1);
 }
-
 
 int do_type_redirout(t_lexer *lexer, t_token **current)
 {
@@ -308,9 +302,6 @@ int do_lexing(t_lexer *lexer, t_cmd **new_node, t_cmd **cmd)
 	return(1);
 }
 
-/*
-	strat, faire une struct avec toutes les var et faire des micro fonc pour chaque if de type qui prend juste la struct en param
-*/
 int lexinette(t_lexer *lexer, t_token **current, t_cmd **new_node, t_cmd **cmd)
 {
 	if ((*current)->type == WORD)

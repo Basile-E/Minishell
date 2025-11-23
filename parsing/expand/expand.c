@@ -80,7 +80,7 @@ char *do_expand(t_minishell *minishell, char *token)
 			&& minishell->env[i][ft_strlen(token)] == '=')
 		{
 			y = ft_strlen(token) + 1;
-			env_value = ft_strdup(minishell->env[i] + y);
+			env_value = ft_strdup_gc(minishell->env[i] + y);
             free(token);
             return (env_value);
         }
@@ -203,11 +203,11 @@ char *get_env_value(t_minishell *minishell, char *var_name)
         if (ft_strncmp(var_name, minishell->env[i], len) == 0 
             && minishell->env[i][len] == '=')
         {
-            return (ft_strdup(minishell->env[i] + len + 1));
+            return (ft_strdup_gc(minishell->env[i] + len + 1));
         }
         i++;
     }
-    return (ft_strdup(""));
+    return (ft_strdup_gc(""));
 }
 
 char *extract_var_name(char *str, int start, int *end)
@@ -224,7 +224,7 @@ char *extract_var_name(char *str, int start, int *end)
         i++;
     *end = i;
     if (i == start)
-        return (ft_strdup(""));
+        return (ft_strdup_gc(""));
     return (ft_substr(str, start, i - start));
 }
 
@@ -251,7 +251,7 @@ void    set_expand(t_expandinette *exp, t_quote *status)
 {
     exp->i = 0;
     *status = NONE;
-    exp->result = ft_strdup("");
+    exp->result = ft_strdup_gc("");
 }
 
 char *do_expand_simple(t_minishell *minishell, char *str)
