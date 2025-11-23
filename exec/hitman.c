@@ -205,7 +205,7 @@ int	check_exec(t_cmd *cmd, t_minishell *mini, char **path)
 	if (cmd->args[0][0] == '.' && cmd->args[0][1] == '/')
 	{
 		if (access(cmd->args[0], F_OK | X_OK) == 0)
-			*path = ft_strdup_gc(cmd->args[0], mini);
+			*path = ft_strdup_gc(cmd->args[0], &mini);
 		else
 		{
 			put_err_msg(cmd->args[0]);

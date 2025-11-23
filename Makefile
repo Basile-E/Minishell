@@ -34,9 +34,14 @@ UTILS = \
 		syntax_check.c \
 		f_split.c
 LEXER = \
-		lexer.c
+		lexer.c \
+		cmd_utils.c \
+		do_type.c \
+		heredoc_utils.c \
+		lexer_utils.c \
+		memory_mgmt.c
 EXEC = \
-	hitman.c
+	hitman.c 
 BUILTIN = \
 	built_ins_utils.c \
 	cd.c \
