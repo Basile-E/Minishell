@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_add_env.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: basile <basile@student.42.fr>              +#+  +:+       +#+        */
+/*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 19:26:28 by emle-vou          #+#    #+#             */
-/*   Updated: 2025/11/22 06:24:09 by basile           ###   ########.fr       */
+/*   Updated: 2025/11/23 19:13:19 by baecoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	ft_add_env(t_minishell *mini, char *new)
 
 	if (!mini->env)
 		return ;
-	new_mini = ft_malloc(sizeof(char *) * (ft_strlen_y(mini->env) + 1),
+	new_mini = ft_malloc(sizeof(char *) * (ft_strlen_y(mini->env) + 2),
 			&mini->alloc);
 	if (!new_mini)
 		return ;

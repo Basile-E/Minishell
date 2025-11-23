@@ -23,6 +23,28 @@ typedef struct s_r_quote
 
 int	check_for_expand(char *str)
 {
+	int		end;
+	char	*var_name;
+	char	*var_value;
+	char	char_str[2];
+	char	*result;
+	char	*temp;
+	int		i;
+}
+t_expandinette;
+
+typedef struct s_r_quote
+{
+	char	*result;
+	int		i;
+	int		j;
+	int		len;
+	t_quote	status;
+	char	quote_char;
+}			t_r_quote;
+
+int	check_for_expand(char *str)
+{
 	int	i;
 
 	i = 0;
@@ -155,6 +177,15 @@ void	set_quote(t_r_quote *r_quote, char *str)
 	r_quote->result = malloc(r_quote->len + 1);
 }
 
+void	do_quote(char *str, t_r_quote *r_quote)
+{
+	r_quote->quote_char = str[r_quote->i];
+	if (str[r_quote->i] == '\'')
+		r_quote->status = SINGLE;
+	else
+		r_quote->status = DOUBLE;
+}
+
 char	*remove_quotes(char *str)
 {
 	t_r_quote	r_quote;
@@ -166,10 +197,7 @@ char	*remove_quotes(char *str)
 	{
 		if (r_quote.status == NONE && (str[r_quote.i] == '\''
 				|| str[r_quote.i] == '"'))
-		{
-			r_quote.quote_char = str[r_quote.i];
-			r_quote.status = (str[r_quote.i] == '\'') ? SINGLE : DOUBLE;
-		}
+			do_quote(str, &r_quote); // changes here make sure its ok
 		else if (r_quote.status != NONE && str[r_quote.i] == r_quote.quote_char)
 		{
 			r_quote.status = NONE;

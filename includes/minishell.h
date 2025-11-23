@@ -6,17 +6,24 @@
 /*  Includes	*/
 /////////////////
 
-# include "../libft/libft.h"
-# include <errno.h>
-# include <fcntl.h>
-# include <readline/history.h>
-# include <readline/readline.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h> // may be illegal, sert a strerror
-# include <sys/stat.h>
-# include <sys/wait.h> // same shit, sert aux pipes
-# include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <readline/history.h>
+#include <readline/readline.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <string.h> // may be illegal, sert a strerror
+#include <sys/wait.h> // same shit, sert aux pipes
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <string.h> // may be illegal, sert a strerror
+#include <sys/wait.h> // same shit, sert aux pipes
+#include "../libft/libft.h"
+#include <signal.h>
+
 
 ///////////////////
 /*  Define		*/ //<- un peut cheum avec du recul

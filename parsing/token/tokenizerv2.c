@@ -90,7 +90,7 @@ int	parse_redirect_operator(char *input, int *i, t_token **tokens)
 	return (1);
 }
 
-int	parse_word(char *input, int *i, t_token **tokens, t_quote status)
+int	parse_word(char *input, int *i, t_token **tokens, t_quote *status)
 {
 	int		start;
 	int		len;
@@ -98,9 +98,11 @@ int	parse_word(char *input, int *i, t_token **tokens, t_quote status)
 	t_token	*token;
 
 	start = *i;
-	while (input[*i] && ((!is_space(input[*i]) && !is_operator(input[*i]))
-			|| status != NONE))
+	while (input[*i] && (( !is_space(input[*i]) && !is_operator(input[*i])) || *status != NONE))
+	{
+		set_quote_status(input[*i], status);	
 		(*i)++;
+	}
 	len = *i - start;
 	word = ft_substr(input, start, len);
 	token = create_token(WORD, word);
@@ -138,7 +140,7 @@ t_token	*tokenize(char *input)
 		}
 		else
 		{
-			if (!parse_word(input, &i, &tokens, status))
+			if (!parse_word(input, &i, &tokens, &status))
 				return (NULL);
 		}
 	}

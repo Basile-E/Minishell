@@ -19,12 +19,12 @@ on ne devrait afficher que le dernier msg d'erreur
 
 Final To-Do :
 
-[] fix unset
-[] fix field spliting
-    [] fix l'export
+[x] fix unset
+[x] fix field spliting 
+    [x] fix l'export
+[x] ajout des signaux
 [] fix les leak dans les child 
-[] ajout des signaux
-[] check leak "final"
+[] check des leak "final"
 [] check les retours d'erreur
 [] gerer les erreur d'affichage de multiples msg d'erreur
 [] creation animation

@@ -12,7 +12,7 @@ typedef struct s_lexer
 	int		app_mode;
 	int		words;
 	int		ret_val;
-}			t_lexer;
+}				t_lexer;
 
 // strat faire une petite cmd qui set let var en bas et should be good
 void	cmd_set(t_cmd *new, int fd_in, int fd_out, int app_mode, int i)
@@ -25,6 +25,50 @@ void	cmd_set(t_cmd *new, int fd_in, int fd_out, int app_mode, int i)
 	new->heredoc = NULL;
 	new->in_child = 0;
 }
+
+char	*ft_strdup_gc(char *src, t_minishell *mini)
+{
+	int		i;
+	char	*dup;
+
+	i = 0;
+	dup = (char *)ft_malloc((ft_strlen(src) + 1) * sizeof(char), &mini->alloc);
+	if (!dup)
+		return (NULL);
+	while (src[i])
+	{
+		dup[i] = src[i];
+		++i;
+	}
+	dup[i] = '\0';
+	return (dup);
+}
+
+void	*ft_calloc_gc(size_t nbr_elements, size_t element_size, t_minishell *mini)
+{
+	void	*ptr;
+
+	ptr = ft_malloc(nbr_elements * element_size, &mini->alloc);
+	if (ptr == NULL)
+		return (NULL);
+	ft_bzero(ptr, nbr_elements * element_size);
+	return (ptr);
+}
+
+char	*ft_strjoin_gc(const char *s1, const char *s2, t_minishell *mini)
+{
+	char	*str;
+
+	if (!s1 || !s2)
+		return (NULL);
+	str = (char *)ft_calloc_gc((ft_strlen(s1) + ft_strlen(s2)) + 1, sizeof(char), &mini->alloc);
+	if (!str)
+		return (NULL);
+	ft_strlcpy(str, s1, ft_strlen(s1) + 1);
+	ft_strlcat(str, s2, ft_strlen(s1) + ft_strlen(s2) + 1);
+	return (str);
+}
+
 
 t_cmd	*cmd_create(char **cmds, int fd_in, int fd_out, int app_mode)
 {
@@ -120,38 +164,37 @@ int	be_a_heredoc(char **line, char **ret_line, char **limiter, char **line_nl)
 typedef struct s_heredoc
 {
 	char	*line;
-	char	*ret_line;
-	char	*line_nl;
-	int		here_ret;
-}			t_heredoc;
+    char	*ret_line;
+    char	*line_nl;
+    int		here_ret;
+}				t_heredoc;
 
 int	do_heredoc(char *limiter, char **out)
 {
-	t_heredoc	her;
+    t_heredoc her;
 
-	if (!limiter || !out)
-		return (-1);
-	if (*out)
-	{
-		free(*out);
-		*out = NULL;
-	}
-	her.ret_line = NULL;
-	while ((her.line = readline("Theredoc>")) != NULL)
-	{
-		her.here_ret = be_a_heredoc(&her.line, &her.ret_line, &limiter,
-				&her.line_nl);
-		if (her.here_ret == 0)
-			break ;
-		else if (her.here_ret == -1)
-			return (-1);
-	}
-	if (her.line == NULL)
-		printf("minishell: warning: here-document\n");
-	if (!her.ret_line)
-		her.ret_line = ft_strdup("");
-	*out = her.ret_line;
-	return (0);
+    if (!limiter || !out)
+        return (-1);
+    if (*out)
+    {
+        free(*out);
+        *out = NULL;
+    }
+    her.ret_line = NULL;
+    while ((her.line = readline("Theredoc>")) != NULL)
+    {
+        her.here_ret = be_a_heredoc(&her.line, &her.ret_line, &limiter, &her.line_nl);
+        if (her.here_ret == 0)
+            break;
+        else if (her.here_ret == -1)
+            return (-1);
+    }
+    if (her.line == NULL)
+        printf("minishell: warning: here-document\n");
+    if (!her.ret_line)
+        her.ret_line = ft_strdup("");
+    *out = her.ret_line; 
+    return (0);
 }
 
 static int	count_words_until_pipe(t_token *start)
@@ -183,11 +226,9 @@ int	do_type_word(t_lexer *lexer, t_token **current)
 	return (1);
 }
 
-int	do_type_pipe(t_token **current, t_cmd **new_node, t_lexer *lexer,
-		t_cmd **cmd)
+int	do_type_pipe(t_token **current, t_cmd **new_node, t_lexer *lexer, t_cmd **cmd)
 {
-	(*new_node) = cmd_create(lexer->cmd_tab, lexer->fd_in, lexer->fd_out,
-			lexer->app_mode);
+	(*new_node) = cmd_create(lexer->cmd_tab, lexer->fd_in, lexer->fd_out, lexer->app_mode);
 	if (!(*new_node))
 		return (0);
 	(*new_node)->heredoc = lexer->heredoc;
@@ -202,30 +243,31 @@ int	do_type_pipe(t_token **current, t_cmd **new_node, t_lexer *lexer,
 	return (1);
 }
 
-int	do_type_redirapp(t_lexer *lexer, t_token **current)
+int do_type_redirapp(t_lexer *lexer, t_token **current)
 {
-	lexer->fd_out = open((*current)->next->value, O_WRONLY | O_CREAT | O_APPEND,
-			0644);
+	lexer->fd_out = open((*current)->next->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (lexer->fd_out == -1)
 		return (0);
 	*current = (*current)->next->next;
 	return (1);
 }
 
-int	do_type_redirher(t_lexer *lexer, t_token **current)
+int do_type_redirher(t_lexer *lexer, t_token **current)
 {
 	if (lexer->heredoc)
-	{
-		free(lexer->heredoc);
-		lexer->heredoc = NULL;
-	}
+    {
+        free(lexer->heredoc);
+        lexer->heredoc = NULL;
+    }
 	if (do_heredoc((*current)->next->value, &lexer->heredoc) == -1)
 		return (0);
 	*current = (*current)->next->next;
 	return (1);
 }
 
-int	do_type_redirin(t_lexer *lexer, t_token **current)
+
+
+int do_type_redirin(t_lexer *lexer, t_token **current)
 {
 	lexer->fd_in = open((*current)->next->value, O_RDONLY);
 	if (lexer->fd_in == -1)
@@ -234,17 +276,17 @@ int	do_type_redirin(t_lexer *lexer, t_token **current)
 	return (1);
 }
 
-int	do_type_redirout(t_lexer *lexer, t_token **current)
+
+int do_type_redirout(t_lexer *lexer, t_token **current)
 {
-	lexer->fd_out = open((*current)->next->value, O_WRONLY | O_CREAT | O_TRUNC,
-			0644); // est-ce qu'on create si il n'existe pas ?
+	lexer->fd_out = open((*current)->next->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);  // est-ce qu'on create si il n'existe pas ?
 	if (lexer->fd_out == -1)
 		return (0);
 	*current = (*current)->next->next;
 	return (1);
 }
 
-void	set_lexer(t_lexer **lexer)
+void set_lexer(t_lexer **lexer)
 {
 	*lexer = malloc(sizeof(t_lexer));
 	(*lexer)->cmd_tab = NULL;
@@ -256,22 +298,21 @@ void	set_lexer(t_lexer **lexer)
 	(*lexer)->heredoc = NULL;
 }
 
-int	do_lexing(t_lexer *lexer, t_cmd **new_node, t_cmd **cmd)
+int do_lexing(t_lexer *lexer, t_cmd **new_node, t_cmd **cmd)
 {
-	(*new_node) = cmd_create(lexer->cmd_tab, lexer->fd_in, lexer->fd_out,
-			lexer->app_mode);
+	(*new_node) = cmd_create(lexer->cmd_tab, lexer->fd_in, lexer->fd_out, lexer->app_mode);
 	if (!*new_node)
 		return (0);
 	(*new_node)->heredoc = lexer->heredoc;
 	cmd_append(cmd, *new_node);
-	return (1);
+	return(1);
 }
 
 /*
 	strat,
 		faire une struct avec toutes les var et faire des micro fonc pour chaque if de type qui prend juste la struct en param
 */
-int	lexinette(t_lexer *lexer, t_token **current, t_cmd **new_node, t_cmd **cmd)
+int lexinette(t_lexer *lexer, t_token **current, t_cmd **new_node, t_cmd **cmd)
 {
 	if ((*current)->type == WORD)
 		lexer->ret_val = do_type_word(lexer, current);
@@ -292,17 +333,17 @@ int	lexinette(t_lexer *lexer, t_token **current, t_cmd **new_node, t_cmd **cmd)
 	return (lexer->ret_val);
 }
 
-t_cmd	*lexer(t_token *token, t_cmd *cmd)
+t_cmd *lexer(t_token *token, t_cmd *cmd)
 {
 	t_token	*current;
-	t_lexer	*lexer;
+	t_lexer *lexer;
 	t_cmd	*new_node;
 
 	current = token;
 	set_lexer(&lexer);
 	while (current)
 		if (!lexinette(lexer, &current, &new_node, &cmd))
-			return (NULL);
+			return NULL;
 	if (lexer->cmd_tab)
 		do_lexing(lexer, &new_node, &cmd);
 	return (cmd);

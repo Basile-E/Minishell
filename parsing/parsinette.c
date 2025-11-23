@@ -59,19 +59,19 @@ int	do_field_spliting(t_token *token)
 	char	**fields;
 	int		i;
 
-	i = 1;
 	current = token;
 	while (current)
 	{
+		i = 0;
 		if (ft_strlen(current->value) > 0)
 		{
 			fields = split_field(current->value, ' ');
 			free(current->value);
 			current->value = fields[0];
-			while (fields[i])
+			while(fields[++i])
 			{
 				tkn_append_after(current, tkn_new(fields[i]));
-				i++;
+				current->next->type = WORD;
 				current = current->next;
 			}
 			free(fields);
