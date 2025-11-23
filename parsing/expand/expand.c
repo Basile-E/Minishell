@@ -267,14 +267,12 @@ char *do_expand_simple(t_minishell *minishell, char *str)
         set_quote_status(str[exp.i], &status);
         if (str[exp.i] == '$' && str[exp.i + 1] && str[exp.i + 1] != '"' 
                 && str[exp.i + 1] != '\'' && status != SINGLE)
-
 			expandinette(minishell, &exp, str);
         else
         {
             exp.char_str[0] = str[exp.i];
             exp.char_str[1] = '\0';
             exp.temp = ft_strjoin(exp.result, exp.char_str);
-            free(exp.result);
             exp.result = exp.temp;
             exp.i++;
         }

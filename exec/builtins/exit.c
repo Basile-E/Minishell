@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: basile <basile@student.42.fr>              +#+  +:+       +#+        */
+/*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 19:27:51 by emle-vou          #+#    #+#             */
-/*   Updated: 2025/11/22 06:23:46 by basile           ###   ########.fr       */
+/*   Updated: 2025/11/24 00:03:22 by baecoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ int	ft_exit(char **argv, t_minishell *mini)
 
 	if (nbr_exit(argv, mini, argv[1]) == 1)
 		return (1);
+	free_alloc(mini->alloc);
 	nb_error = mini->status;
 	exit(nb_error);
 	return (0);

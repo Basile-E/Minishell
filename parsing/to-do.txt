@@ -23,9 +23,10 @@ Final To-Do :
 [x] fix field spliting 
     [x] fix l'export
 [x] ajout des signaux
-[] fix les leak dans les child 
+[x] fix les leak dans les child 
 [] check des leak "final"
 [] check les retours d'erreur
+	[redirect l'output de la derniere cmd dans stdout]
 [] gerer les erreur d'affichage de multiples msg d'erreur
 [] creation animation
 
