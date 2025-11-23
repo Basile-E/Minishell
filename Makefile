@@ -12,6 +12,7 @@ EXECUTIVE_PATH = exec/executive/
 ENV_PATH = exec/builtins/env/
 GARB_PATH = parsing/garb_col/
 SIG_PATH = exec/signals/
+HIT_PATH = exec/hitman/
 
 OBJ_PATH = build/
 LIBFT_PATH = libft/
@@ -36,8 +37,6 @@ UTILS = \
 		f_split.c
 LEXER = \
 		lexer.c
-EXEC = \
-	hitman.c
 BUILTIN = \
 	built_ins_utils.c \
 	cd.c \
@@ -57,6 +56,12 @@ SIG = \
 	signal.c \
 	signals_utils.c
 
+HITMAN = \
+	execution.c \
+	handling.c \
+	hitman_error.c \
+	hitman.c
+
 GARB_COL = \
 	ft_malloc.c
 
@@ -73,7 +78,8 @@ ALL_SRC = $(addprefix $(SRC_PATH), $(SRC)) \
 		  $(addprefix $(ENV_PATH), $(ENV)) \
 		  $(addprefix $(EXECUTIVE_PATH), $(EXECUTIVE)) \
 		$(addprefix $(GARB_PATH), $(GARB_COL)) \
-		$(addprefix $(SIG_PATH), $(SIG)) 
+		$(addprefix $(SIG_PATH), $(SIG)) \
+		$(addprefix $(HIT_PATH), $(HITMAN))
 
 #SRCS = $(addprefix $(SRC_PATH), $(SRC))
 OBJ = $(addprefix $(OBJ_PATH), $(ALL_SRC:.c=.o))

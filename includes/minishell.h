@@ -17,6 +17,7 @@
 # include <sys/stat.h>
 # include <sys/wait.h> // same shit, sert aux pipes
 # include <unistd.h>
+#include <signal.h>
 
 ///////////////////
 /*  Define		*/ //<- un peut cheum avec du recul
@@ -80,6 +81,15 @@ typedef struct s_minishell
 	t_alloc						*alloc;
 }								t_minishell;
 
+// struct de l'execution
+typedef struct s_exec
+{
+	int							fd[2];
+	int							prev_fd;
+	int							pid;
+	char						*path;
+}								t_exec;
+
 // la linked list des token (args -> token)
 typedef struct s_args
 {
@@ -95,6 +105,28 @@ typedef enum e_quote
 	SINGLE,
 	DOUBLE
 }								t_quote;
+
+//struct expand
+typedef struct s_expandinette
+{
+	int		end;
+	char	*var_name;
+	char	*var_value;
+	char	char_str[2];
+	char	*result;
+	char	*temp;
+	int		i;
+}			t_expandinette;
+
+typedef struct s_r_quote
+{
+	char	*result;
+	int		i;
+	int		j;
+	int		len;
+	t_quote	status;
+	char	quote_char;
+}			t_r_quote;
 
 typedef enum e_token_type
 {
@@ -188,7 +220,7 @@ void							ft_add_env(t_minishell *mini, char *new);
 void							ft_update_env(t_minishell *mini, char *new);
 int								ft_env(t_minishell *mini);
 
-//built-ins utils
+// built-ins utils
 void							ft_error(const char *str, const char *error);
 int								ft_strcmp_equal(char *s1, char *s2);
 int								does_it_exist(t_minishell *mini, char *src);
@@ -202,7 +234,6 @@ void							ft_export(t_minishell *mini, char **cmd);
 int								execute(t_cmd *cmd, t_minishell *mini);
 int								ft_strlen_y(char **tab);
 
-
 int								ft_exit(char **argv, t_minishell *mini);
 int								ft_unset(t_minishell *mini, char **args);
 int								ft_pwd(void);
@@ -212,7 +243,7 @@ int								cd_error(char *msg);
 void							perror_cd(char *path);
 int								ft_cd(char **argv, t_minishell *mini);
 
-//fT_malloc
+// fT_malloc
 void							*ft_malloc(int size, t_alloc **head);
 void							free_alloc(t_alloc *head);
 
@@ -226,5 +257,36 @@ void							handle_exec_sigint(int sig);
 void							handle_heredoc_sigint(int sig);
 void							handle_sigquit(int sig);
 void							handle_sigchld(int sig);
+
+// hitman
+int								check_for_builtin(char **cmd);
+int								is_a_builtin(char **cmd, t_minishell *mini);
+char							*find_path(char *cmd, char **envp);
+void							error(void);
+char							*get_current_path(void);
+void							put_err_msg(char *str);
+
+// execution
+void							exec_mult(t_cmd *cmd, t_minishell *mini);
+int								check_exec(t_cmd *cmd, t_minishell *mini,
+									char **path);
+void							do_pid_one(t_cmd *cmd, t_minishell *mini,
+									char *path);
+void							exec_single(t_cmd *cmd, t_minishell *mini);
+int								execute(t_cmd *cmd, t_minishell *mini);
+
+// hitman errors
+void							error(void);
+char							*get_current_path(void);
+void							put_err_msg(char *str);
+
+// handling
+void							handle_heredoc(t_cmd *current);
+void							dup_close(int fd_dup, int std, int fd_close);
+void							handle_pid_one_bis(t_cmd *current,
+									t_minishell *mini, char *path);
+void							handle_pid_one(t_cmd *current, t_exec exec,
+									t_minishell *mini, char *path);
+void							handle_parent(t_cmd *current, t_exec *exec);
 
 #endif

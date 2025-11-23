@@ -1,25 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: emle-vou <emle-vou@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/23 22:14:10 by emle-vou          #+#    #+#             */
+/*   Updated: 2025/11/23 22:14:11 by emle-vou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
-
-typedef struct s_expandinette
-{
-	int		end;
-	char	*var_name;
-	char	*var_value;
-	char	char_str[2];
-	char	*result;
-	char	*temp;
-	int		i;
-}			t_expandinette;
-
-typedef struct s_r_quote
-{
-	char	*result;
-	int		i;
-	int		j;
-	int		len;
-	t_quote	status;
-	char	quote_char;
-}			t_r_quote;
 
 int	check_for_expand(char *str)
 {
@@ -99,51 +90,6 @@ void	set_quote_status(char c, t_quote *status)
 			&& c == '"'))
 		*status = NONE;
 }
-
-// char *do_expandV2(t_minishell *minishell, char *str)
-// {
-// 	char *ret;
-// 	char ret_buf[BUFF_SIZE];
-// 	int buf_pos = 0;
-// 	int str_pos = 0;
-// 	char *token;
-// 	char *exp_ret;
-// 	int i;
-// 	int exp_len;
-// 	t_quote status = NONE;
-
-// 	while(str[str_pos])
-// 	{
-// 		set_quote_status(str[str_pos], &status);
-
-// 		if(str[str_pos] == '$' &&  (status == NONE || status == DOUBLE))
-// 		{
-// 			token = get_expand_token(str, str_pos);
-// 			exp_ret = do_expand(minishell, token);
-// 			exp_len = ft_strlen(exp_ret);
-// 			i = 0;
-// 			while(i < exp_len)
-// 			{
-// 				ret_buf[buf_pos] = exp_ret[i];
-// 				buf_pos++;
-// 				i++;
-// 			}
-// 			str_pos += ft_strlen(token);
-// 		}
-// 		else
-// 		{
-// 			ret_buf[buf_pos] = str[str_pos];
-// 			buf_pos++;
-// 			str_pos++;
-// 		}
-// 	}
-// 	ret = malloc(sizeof(char) * buf_pos + 1);
-// 	if (!ret)
-// 		return (NULL);
-// 	ft_memmove(ret, ret_buf, buf_pos);
-// 	ret[buf_pos] = '\0';
-// 	return (ret);
-// }
 
 void	set_quote(t_r_quote *r_quote, char *str)
 {

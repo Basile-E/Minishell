@@ -6,14 +6,13 @@
 /*   By: emle-vou <emle-vou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 19:57:50 by emle-vou          #+#    #+#             */
-/*   Updated: 2025/11/23 19:18:56 by emle-vou         ###   ########.fr       */
+/*   Updated: 2025/11/23 22:27:11 by emle-vou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <signal.h>
 
-volatile sig_atomic_t g_signal = 0;
+volatile sig_atomic_t	g_signal = 0;
 
 void	handle_normal_sigint(int sig)
 {

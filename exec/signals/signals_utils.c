@@ -6,14 +6,12 @@
 /*   By: emle-vou <emle-vou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 19:57:59 by emle-vou          #+#    #+#             */
-/*   Updated: 2025/11/23 19:10:39 by emle-vou         ###   ########.fr       */
+/*   Updated: 2025/11/23 22:27:30 by emle-vou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <signal.h>
-
-extern volatile sig_atomic_t g_signal;
 
 void	normal_signal(void)
 {
