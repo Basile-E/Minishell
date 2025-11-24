@@ -209,7 +209,7 @@ void				ft_sort_export(char **exp);
 void				ft_export(t_minishell *mini, char **cmd);
 int					execute(t_cmd *cmd, t_minishell *mini);
 int					ft_strlen_y(char **tab);
-int					ft_exit(char **argv, t_minishell *mini);
+int					ft_exit(t_cmd *cmd, t_minishell *mini);
 int					ft_unset(char **argv, t_minishell *mini);
 int					ft_pwd(void);
 
@@ -252,6 +252,9 @@ int					do_type_pipe(t_token **current, t_cmd **new_node,
 						t_lexer *lexer, t_cmd **cmd);
 int					do_type_word(t_lexer *lexer, t_token **current);
 int 				do_type_redirout(t_lexer *lexer, t_token **current);
+void 				free_cmd(t_cmd *cmd);
+void				free_string_array(char **arr);
+
 
 
 #endif

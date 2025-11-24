@@ -27,24 +27,24 @@ int	check_for_builtin(char **cmd)
 	return (0);
 }
 
-int	is_a_builtin(char **cmd, t_minishell *mini)
+int	is_a_builtin(t_cmd *cmd, t_minishell *mini)
 {
-	if (check_for_builtin(cmd))
+	if (check_for_builtin(cmd->args))
 	{
-		if (!ft_strncmp("cd", *cmd, ft_strlen(*cmd) + 1))
-			ft_cd(cmd, mini);
-		if (!ft_strncmp("echo", cmd[0], 4) && ft_strlen(cmd[0]) == 4)
-			ft_echo(*mini, cmd);
-		if (!ft_strncmp("exit", *cmd, ft_strlen(*cmd) + 1))
+		if (!ft_strncmp("cd", *cmd->args, ft_strlen(*cmd->args) + 1))
+			ft_cd(cmd->args, mini);
+		if (!ft_strncmp("echo", cmd->args[0], 4) && ft_strlen(cmd->args[0]) == 4)
+			ft_echo(*mini, cmd->args);
+		if (!ft_strncmp("exit", *cmd->args, ft_strlen(*cmd->args) + 1))
 			ft_exit(cmd, mini);
-		if (!ft_strncmp("export", *cmd, ft_strlen(*cmd) + 1))
-			ft_export(mini, cmd);
-		if (!ft_strncmp("pwd", *cmd, ft_strlen(*cmd) + 1))
+		if (!ft_strncmp("export", *cmd->args, ft_strlen(*cmd->args) + 1))
+			ft_export(mini, cmd->args);
+		if (!ft_strncmp("pwd", *cmd->args, ft_strlen(*cmd->args) + 1))
 			ft_pwd();
-		if (!ft_strncmp("env", *cmd, ft_strlen(*cmd) + 1))
+		if (!ft_strncmp("env", *cmd->args, ft_strlen(*cmd->args) + 1))
 			ft_env(mini);
-		if (!ft_strncmp("unset", *cmd, ft_strlen(*cmd) + 1))
-			ft_unset(cmd, mini);
+		if (!ft_strncmp("unset", *cmd->args, ft_strlen(*cmd->args) + 1))
+			ft_unset(cmd->args, mini);
 		return (1);
 	}
 	return (0);
@@ -135,7 +135,7 @@ void	handle_pid_one_bis(t_cmd *current, t_minishell *mini, char *path)
 {
 	if (current->heredoc)
 		handle_heredoc(current);
-	if (is_a_builtin(current->args, mini))
+	if (is_a_builtin(current, mini))
 		exit(0);
 	if (mini->env)
 		path = find_path(current->args[0], mini->env);
@@ -286,17 +286,19 @@ void	exec_single(t_cmd *cmd, t_minishell *mini)
 	free(path);
 }
 
-void free_cmd(t_cmd *cmd)
+void	free_cmd(t_cmd *cmd)
 {
-	t_cmd *next;
+    t_cmd	*next;
 
-	while(cmd)
-	{
-		next = cmd->next;
-		free(cmd);
-		cmd = next;
-		//printf("i was here\n");
-	}
+    while (cmd)
+    {
+        next = cmd->next;
+        free_string_array(cmd->args);
+        if (cmd->heredoc)
+            free(cmd->heredoc);
+        free(cmd);
+        cmd = next;
+    }
 }
 
 int	execute(t_cmd *cmd, t_minishell *mini)
@@ -307,7 +309,7 @@ int	execute(t_cmd *cmd, t_minishell *mini)
 		exec_mult(cmd, mini);
 	else
 	{
-		if (!is_a_builtin(cmd->args, mini))
+		if (!is_a_builtin(cmd, mini))
 			exec_single(cmd, mini);
 	}
 	free_cmd(cmd);

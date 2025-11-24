@@ -26,6 +26,7 @@ Final To-Do :
 [x] fix les leak dans les child 
 [] check des leak "final"
     [] heredoc
+    [] leak dans les cmd invalides 
 [] check les retours d'erreur
 	[]redirect l'output de la derniere cmd dans stdout
 [] bad adress quand cmd non trouver
@@ -43,3 +44,4 @@ Final To-Do :
 [] verifier que j'ai rien casser en envoyant l'adr de mini
 [] probleme dans les redirection out
 [] probleme dans les redirection append
+[] si j'ai des leak avant d'exit est-ce que c'est un probleme ?

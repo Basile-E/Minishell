@@ -6,7 +6,7 @@
 /*   By: basile <basile@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 19:27:51 by emle-vou          #+#    #+#             */
-/*   Updated: 2025/11/24 04:28:23 by basile           ###   ########.fr       */
+/*   Updated: 2025/11/24 08:42:21 by basile           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,14 +110,15 @@ static int	nbr_exit(char **argv, t_minishell *mini, char *nbr)
 	return (0);
 }
 
-int	ft_exit(char **argv, t_minishell *mini)
+int	ft_exit(t_cmd *cmd, t_minishell *mini)
 {
 	int	nb_error;
 
-	if (nbr_exit(argv, mini, argv[1]) == 1)
+	if (nbr_exit(cmd->args, mini, cmd->args[1]) == 1)
 		return (1);
 	free_alloc(mini->alloc);
 	nb_error = mini->status;
+	free(cmd);
 	free(mini);
 	exit(nb_error);
 	return (0);

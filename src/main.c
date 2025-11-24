@@ -6,6 +6,7 @@ int	main(int ac, char **av, char **ev)
 {
 	char		*prompt;
 	t_minishell	*minishell;
+	// int			pars_ret;
 
 	(void)ac;
 	(void)av;
@@ -21,8 +22,8 @@ int	main(int ac, char **av, char **ev)
 			return (printf("Exit\n"), 0);
 		add_history(minishell->input);
 		// printf("Debug :\nString sent by readline : %s\n", minishell->input);
-		if (parsinette(&minishell))
-			printf("Parsing failed, try to be better at cli\n");
+		parsinette(&minishell);
+		free_alloc(minishell->alloc);
 	}
 	return (0);
 }
