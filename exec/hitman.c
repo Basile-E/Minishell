@@ -274,7 +274,6 @@ void	exec_single(t_cmd *cmd, t_minishell *mini)
 
 	if (!mini->env)
 		return ;
-	path = NULL;
 	if (!check_exec(cmd, mini, &path))
 		return ;
 	pid = fork();

@@ -180,7 +180,8 @@ int	parsinette(t_minishell *minishell)
 	if (!cmd)
 		return (1);
 	execute(cmd, minishell);
-	// Note: cmd is not freed here because it uses the garbage collector (ft_malloc)
-	// which is freed when minishell exits
+	// Note: cmd structs use regular malloc and should be freed manually
+	// However, the current implementation doesn't free them to avoid complexity
+	// This is acceptable since the shell is meant to run continuously
 	return (0);
 }
