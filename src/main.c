@@ -16,7 +16,7 @@ int	main(int ac, char **av, char **ev)
 	while (42)
 	{
 		if (minishell->status == -1)
-			continue;
+			continue ;
 		minishell->input = readline(prompt);
 		if (!minishell->input)
 			return (printf("Exit\n"), 0);

@@ -6,7 +6,7 @@
 /*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 20:36:21 by baecoliv          #+#    #+#             */
-/*   Updated: 2025/11/24 20:37:40 by baecoliv         ###   ########.fr       */
+/*   Updated: 2025/11/24 20:53:52 by baecoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,6 @@ void	set_quote_status(char c, t_quote *status)
 	else if (*status == NONE && c == '"')
 		*status = DOUBLE;
 	else if ((*status == SINGLE && c == '\'') || (*status == DOUBLE
-		&& c == '"'))
+			&& c == '"'))
 		*status = NONE;
 }

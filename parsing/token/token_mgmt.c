@@ -6,7 +6,7 @@
 /*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 20:12:20 by baecoliv          #+#    #+#             */
-/*   Updated: 2025/11/24 20:12:21 by baecoliv         ###   ########.fr       */
+/*   Updated: 2025/11/24 20:59:36 by baecoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ t_token	*create_and_add_token(t_token **head, t_token **current, char *content)
 	}
 	return (new_node);
 }
+
 void	free_tokens(t_token *tokens)
 {
 	t_token	*current;
@@ -47,6 +48,7 @@ void	free_tokens(t_token *tokens)
 		current = next;
 	}
 }
+
 void	crea_tok_pipe(int *i, t_token **tokens)
 {
 	t_token	*token;

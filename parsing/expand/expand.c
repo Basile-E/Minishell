@@ -6,7 +6,7 @@
 /*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 20:40:21 by baecoliv          #+#    #+#             */
-/*   Updated: 2025/11/24 20:41:15 by baecoliv         ###   ########.fr       */
+/*   Updated: 2025/11/24 20:53:31 by baecoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ void	set_expand(t_expandinette *exp, t_quote *status, t_minishell *mini)
 
 char	*do_expand_simple(t_minishell *minishell, char *str)
 {
-	t_quote status;
-	t_expandinette exp;
+	t_quote			status;
+	t_expandinette	exp;
 
 	set_expand(&exp, &status, minishell);
 	if (!exp.result)

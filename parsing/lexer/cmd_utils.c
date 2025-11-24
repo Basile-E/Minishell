@@ -6,7 +6,7 @@
 /*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 21:45:45 by baecoliv          #+#    #+#             */
-/*   Updated: 2025/11/24 16:42:39 by baecoliv         ###   ########.fr       */
+/*   Updated: 2025/11/24 20:57:41 by baecoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,12 @@ void	free_string_array(char **arr)
 	free(arr);
 }
 
-t_cmd	*cmd_create(t_lexer *lexer, t_minishell *mini)
+t_cmd	*cmd_create(t_lexer *lexer)
 {
 	t_cmd	*new;
 	int		i;
 	int		count;
 
-	(void)mini;
 	if (!lexer->cmd_tab)
 		return (NULL);
 	count = 0;
@@ -62,8 +61,6 @@ t_cmd	*cmd_create(t_lexer *lexer, t_minishell *mini)
 	while (++i < count)
 		new->args[i] = ft_strdup(lexer->cmd_tab[i]);
 	cmd_set(new, lexer->fd_in, lexer->fd_out, lexer->app_mode);
-	printf("DEBUG CMD_CREATE: fd_in=%d, fd_out=%d\n", new->fd_in, new->fd_out);
-	new->args[i] = NULL;
 	free_string_array(lexer->cmd_tab);
 	return (new);
 }

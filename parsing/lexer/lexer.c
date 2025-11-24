@@ -6,7 +6,7 @@
 /*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 23:15:05 by baecoliv          #+#    #+#             */
-/*   Updated: 2025/11/24 20:30:37 by baecoliv         ###   ########.fr       */
+/*   Updated: 2025/11/24 21:18:50 by baecoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,6 @@ t_cmd	*lexer(t_token *token, t_cmd *cmd, t_minishell *mini)
 			return (NULL);
 	free_token(token);
 	if (lexer->cmd_tab)
-		do_lexing(lexer, &new_node, &cmd, mini);
+		do_lexing(lexer, &new_node, &cmd);
 	return (cmd);
 }

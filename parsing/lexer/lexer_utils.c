@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: basile <basile@student.42.fr>              +#+  +:+       +#+        */
+/*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 21:55:20 by baecoliv          #+#    #+#             */
-/*   Updated: 2025/11/24 05:29:16 by basile           ###   ########.fr       */
+/*   Updated: 2025/11/24 21:17:47 by baecoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ void	set_lexer(t_lexer **lexer, t_minishell *mini)
 	(*lexer)->heredoc = NULL;
 }
 
-int	do_lexing(t_lexer *lexer, t_cmd **new_node, t_cmd **cmd, t_minishell *mini)
+int	do_lexing(t_lexer *lexer, t_cmd **new_node, t_cmd **cmd)
 {
-	(*new_node) = cmd_create(lexer, mini);
+	(*new_node) = cmd_create(lexer);
 	if (!*new_node)
 		return (0);
 	(*new_node)->heredoc = lexer->heredoc;

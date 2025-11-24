@@ -6,7 +6,7 @@
 /*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 21:58:21 by baecoliv          #+#    #+#             */
-/*   Updated: 2025/11/24 20:33:06 by baecoliv         ###   ########.fr       */
+/*   Updated: 2025/11/24 20:58:46 by baecoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	do_type_word(t_lexer *lexer, t_token **current)
 int	do_type_pipe(t_token **current, t_cmd **new_node, t_lexer *lexer,
 		t_cmd **cmd)
 {
-	(*new_node) = cmd_create(lexer, *lexer->mini);
+	(*new_node) = cmd_create(lexer);
 	if (!(*new_node))
 		return (0);
 	(*new_node)->heredoc = lexer->heredoc;
@@ -62,7 +62,7 @@ int	do_type_redirout(t_lexer *lexer, t_token **current)
 int	do_type_redirapp(t_lexer *lexer, t_token **current)
 {
 	if (lexer->fd_out != -1)
-		close(lexer->fd_out); // ← Fermez l'ancien fd si déjà ouvert
+		close(lexer->fd_out);
 	lexer->fd_out = open((*current)->next->value, O_WRONLY | O_CREAT | O_APPEND,
 			0644);
 	if (lexer->fd_out == -1)

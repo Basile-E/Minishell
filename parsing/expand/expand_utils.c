@@ -6,7 +6,7 @@
 /*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 20:39:39 by baecoliv          #+#    #+#             */
-/*   Updated: 2025/11/24 20:41:11 by baecoliv         ###   ########.fr       */
+/*   Updated: 2025/11/24 20:56:57 by baecoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,19 +35,18 @@ char	*remove_quotes(char *str)
 				|| str[r_quote.i] == '"'))
 		{
 			r_quote.quote_char = str[r_quote.i];
-			r_quote.status = (str[r_quote.i] == '\'') ? SINGLE : DOUBLE;
+			if (str[r_quote.i] == '\'')
+				r_quote.status = SINGLE;
+			else
+				r_quote.status = DOUBLE;
 		}
 		else if (r_quote.status != NONE && str[r_quote.i] == r_quote.quote_char)
-		{
 			r_quote.status = NONE;
-			r_quote.quote_char = '\0';
-		}
 		else
 			r_quote.result[r_quote.j++] = str[r_quote.i];
 		r_quote.i++;
 	}
-	if (str)
-		free(str);
+	free(str);
 	r_quote.result[r_quote.j] = '\0';
 	return (r_quote.result);
 }
