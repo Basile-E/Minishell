@@ -23,28 +23,6 @@ typedef struct s_r_quote
 
 int	check_for_expand(char *str)
 {
-	int		end;
-	char	*var_name;
-	char	*var_value;
-	char	char_str[2];
-	char	*result;
-	char	*temp;
-	int		i;
-}
-t_expandinette;
-
-typedef struct s_r_quote
-{
-	char	*result;
-	int		i;
-	int		j;
-	int		len;
-	t_quote	status;
-	char	quote_char;
-}			t_r_quote;
-
-int	check_for_expand(char *str)
-{
 	int	i;
 
 	i = 0;

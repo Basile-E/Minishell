@@ -13,8 +13,6 @@
 #include "minishell.h"
 #include <signal.h>
 
-g_signal = 0;
-
 void	normal_signal(void)
 {
 	struct sigaction	sa;
