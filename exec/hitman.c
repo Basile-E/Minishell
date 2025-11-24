@@ -305,7 +305,7 @@ int	execute(t_cmd *cmd, t_minishell *mini)
 		exec_mult(cmd, mini);
 	else
 	{
-		if (is_a_builtin(cmd->args, mini))
+		if (check_for_builtin(cmd->args))
 		{
 			saved_stdin = -1;
 			saved_stdout = -1;

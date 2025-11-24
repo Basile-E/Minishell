@@ -24,6 +24,7 @@ int	main(int ac, char **av, char **ev)
 		// printf("Debug :\nString sent by readline : %s\n", minishell->input);
 		if (parsinette(minishell))
 			printf("Parsing failed, try to be better at cli\n");
+		free(minishell->input);
 	}
 	return (0);
 }

@@ -153,19 +153,34 @@ int	parsinette(t_minishell *minishell)
 	if (!tokens)
 		return (1);
 	if (!list_expand(minishell, tokens))
+	{
+		free_tokens(tokens);
 		return (1);
+	}
 	// print_token(tokens);
 	if (!do_field_spliting(tokens))
+	{
+		free_tokens(tokens);
 		return (1);
+	}
 	// print_token(tokens);
 	if (!remove_all_quote(tokens))
+	{
+		free_tokens(tokens);
 		return (1);
+	}
 	// print_token(tokens);
 	if (!check_syntax_errors(tokens))
+	{
+		free_tokens(tokens);
 		return (1);
+	}
 	cmd = lexer(tokens, cmd);
+	free_tokens(tokens);
 	if (!cmd)
 		return (1);
 	execute(cmd, minishell);
+	// Note: cmd is not freed here because it uses the garbage collector (ft_malloc)
+	// which is freed when minishell exits
 	return (0);
 }
