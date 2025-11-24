@@ -296,13 +296,44 @@ void	exec_single(t_cmd *cmd, t_minishell *mini)
 
 int	execute(t_cmd *cmd, t_minishell *mini)
 {
+	int	saved_stdin;
+	int	saved_stdout;
+
 	if (!cmd)
 		return (0);
 	if (cmd->next)
 		exec_mult(cmd, mini);
 	else
 	{
-		if (!is_a_builtin(cmd->args, mini))
+		if (is_a_builtin(cmd->args, mini))
+		{
+			saved_stdin = -1;
+			saved_stdout = -1;
+			if (cmd->fd_in != -1)
+			{
+				saved_stdin = dup(STDIN_FILENO);
+				dup2(cmd->fd_in, STDIN_FILENO);
+				close(cmd->fd_in);
+			}
+			if (cmd->fd_out != -1)
+			{
+				saved_stdout = dup(STDOUT_FILENO);
+				dup2(cmd->fd_out, STDOUT_FILENO);
+				close(cmd->fd_out);
+			}
+			is_a_builtin(cmd->args, mini);
+			if (saved_stdin != -1)
+			{
+				dup2(saved_stdin, STDIN_FILENO);
+				close(saved_stdin);
+			}
+			if (saved_stdout != -1)
+			{
+				dup2(saved_stdout, STDOUT_FILENO);
+				close(saved_stdout);
+			}
+		}
+		else
 			exec_single(cmd, mini);
 	}
 	return (1);
