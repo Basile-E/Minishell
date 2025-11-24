@@ -6,7 +6,7 @@
 /*   By: basile <basile@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 23:15:05 by baecoliv          #+#    #+#             */
-/*   Updated: 2025/11/24 05:30:21 by basile           ###   ########.fr       */
+/*   Updated: 2025/11/24 06:30:52 by basile           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void free_token(t_token *token)
 	while (token)
 	{
 		next = token->next;
+		free(token->value);
 		free(token);
 		token = next;		
 	}

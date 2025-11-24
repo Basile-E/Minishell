@@ -145,7 +145,7 @@ t_token	*tokenize(char *input)
 				return (NULL);
 		}
 	}
-	return (tokens);
+	return (free(input), tokens);
 }
 
 void	free_tokens(t_token *tokens)

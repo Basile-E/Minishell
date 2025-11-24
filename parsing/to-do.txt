@@ -25,11 +25,13 @@ Final To-Do :
 [x] ajout des signaux
 [x] fix les leak dans les child 
 [] check des leak "final"
+    [] heredoc
 [] check les retours d'erreur
 	[]redirect l'output de la derniere cmd dans stdout
 [] bad adress quand cmd non trouver
 [] gerer les erreur d'affichage de multiples msg d'erreur
 [] gestion des signaux
+    [] ajouter les appels des fonctions de signaux
     [] quand ctrl + c dans main -> ne fait rien 
     [] quand ctrl + c dans heredoc -> 
     [] quand ctrl + d dans heredoc ->
@@ -39,3 +41,5 @@ Final To-Do :
 [] creation animation
 [] double free dans cd
 [] verifier que j'ai rien casser en envoyant l'adr de mini
+[] probleme dans les redirection out
+[] probleme dans les redirection append

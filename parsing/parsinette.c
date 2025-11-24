@@ -6,13 +6,13 @@ int process_word_token(t_minishell *minishell, t_token *token)
     char *cleaned;
 
     expanded = do_expand_simple(minishell, token->value);
-	(void)cleaned;
+    (void)cleaned;
 
 
     free(token->value);
     //token->value = cleaned;
     token->value = expanded;
-    free(expanded);
+    // free(expanded); // <-- ERROR: Do not free the string you just assigned.
 	return(1);
 }
 
@@ -55,33 +55,43 @@ void	tkn_append_after( t_token *current,  t_token *add)
 	current->next = add;
 }
 
-
-int do_field_spliting(t_token *token)
+static t_token	*split_and_insert(t_token *current)
 {
-	t_token *current;
-	char **fields;
-	int i;
+    char	**fields;
+    int		i;
 
-	current = token;
-	while (current)
-	{
-		i = 0;
-		if (ft_strlen(current->value) > 0)
-		{
-			fields = split_field(current->value, ' ');
-			free(current->value);
-			current->value = fields[0];
-			while(fields[++i])
-			{
-				tkn_append_after(current, tkn_new(fields[i]));
-				current->next->type = WORD;
-				current = current->next;
-			}
-			free(fields);
-		}
-		current = current->next;
-	}
-	return(1);
+    if (!current->value || !ft_strchr(current->value, ' '))
+        return (current);
+    fields = ft_split(current->value, ' ');
+    if (!fields)
+        return (NULL);
+    free(current->value);
+    current->value = fields[0];
+    i = 1;
+    while (fields[i])
+    {
+        tkn_append_after(current, tkn_new(fields[i]));
+        current->next->type = WORD;
+        current = current->next;
+        i++;
+    }
+    free(fields);
+    return (current);
+}
+
+int	do_field_spliting(t_token *token)
+{
+    t_token	*current;
+
+    current = token;
+    while (current)
+    {
+        current = split_and_insert(current);
+        if (!current)
+            return (0);
+        current = current->next;
+    }
+    return (1);
 }
 
 int	should_expand_wildcards(char *value)

@@ -155,7 +155,6 @@ void    set_quote(t_r_quote *r_quote, char *str)
     r_quote->status = NONE;
     r_quote->quote_char = '\0';
     r_quote->result = malloc(r_quote->len + 1);
- 
 }
 
 char *remove_quotes(char *str)
@@ -273,8 +272,8 @@ char *do_expand_simple(t_minishell *minishell, char *str)
             exp.char_str[0] = str[exp.i];
             exp.char_str[1] = '\0';
             exp.temp = ft_strjoin(exp.result, exp.char_str);
+            free(exp.result);
             exp.result = exp.temp;
-            free(exp.temp);
             exp.i++;
         }
     }
