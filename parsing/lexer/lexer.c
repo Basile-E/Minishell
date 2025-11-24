@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: basile <basile@student.42.fr>              +#+  +:+       +#+        */
+/*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 23:15:05 by baecoliv          #+#    #+#             */
-/*   Updated: 2025/11/24 06:30:52 by basile           ###   ########.fr       */
+/*   Updated: 2025/11/24 16:40:09 by baecoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,26 +28,28 @@ int	count_words_until_pipe(t_token *start)
 	return (count);
 }
 
-int	do_type_redirout(t_lexer *lexer, t_token **current)
-{
-	lexer->fd_out = open((*current)->next->value, O_WRONLY | O_CREAT | O_TRUNC,
-			0644);
-	if (lexer->fd_out == -1)
-		return (0);
-	*current = (*current)->next->next;
-	return (1);
-}
+// int	do_type_redirout(t_lexer *lexer, t_token **current)
+// {
+// 	printf("DEBUG: Opening file '%s' for output\n", (*current)->next->value);
+// 	lexer->fd_out = open((*current)->next->value, O_WRONLY | O_CREAT | O_TRUNC,
+// 			0644);
+// 	printf("DEBUG: fd_out = %d\n", lexer->fd_out);
+// 	if (lexer->fd_out == -1)
+// 		return (perror("open"), 0);
+// 	*current = (*current)->next->next;
+// 	return (1);
+// }
 
-void free_token(t_token *token)
+void	free_token(t_token *token)
 {
-	t_token *next;
-	
+	t_token	*next;
+
 	while (token)
 	{
 		next = token->next;
 		free(token->value);
 		free(token);
-		token = next;		
+		token = next;
 	}
 }
 

@@ -203,7 +203,7 @@ int					ft_env(t_minishell *mini);
 void				ft_error(const char *str, const char *error);
 int					ft_strcmp_equal(char *s1, char *s2);
 int					does_it_exist(t_minishell *mini, char *src);
-int					ft_echo(t_minishell mini, char **argv);
+int					ft_echo(t_minishell mini, t_cmd *cmd);
 char				**ft_create_export(t_minishell *mini);
 void				ft_sort_export(char **exp);
 void				ft_export(t_minishell *mini, char **cmd);

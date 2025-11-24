@@ -36,7 +36,7 @@ void	*ft_malloc(int size, t_alloc **head)
     if (!adr)
         return (NULL);
     node = create_alloc(adr);
-	printf("debug: %p\n", (void *)adr);
+	//printf("debug: %p\n", (void *)adr);
     if (!node)
     {
         free(adr); // Clean up the successfully allocated memory if we can't track it
@@ -55,7 +55,7 @@ void	free_alloc(t_alloc *head)
 	while (current)
 	{
 		next = current->next;
-		printf("debug: %p\n is gonna be freed\n", (void *)current->adr);
+		//printf("debug: %p\n is gonna be freed\n", (void *)current->adr);
 		free(current->adr);
 		free(current);
 		current = next;

@@ -27,35 +27,38 @@ int	check_for_builtin(char **cmd)
 	return (0);
 }
 
-int	is_a_builtin(char **cmd, t_minishell *mini)
+int	is_a_builtin(t_cmd *cmd, t_minishell *mini)
 {
-	if (check_for_builtin(cmd))
+	if (check_for_builtin(cmd->args))
 	{
-		if (!ft_strncmp("cd", *cmd, ft_strlen(*cmd) + 1))
-			ft_cd(cmd, mini);
-		if (!ft_strncmp("echo", cmd[0], 4) && ft_strlen(cmd[0]) == 4)
+		if (!ft_strncmp("cd", cmd->args[0], ft_strlen(cmd->args[0]) + 1))
+			ft_cd(cmd->args, mini);
+		if (!ft_strncmp("echo", cmd->args[0], 4) && ft_strlen(cmd->args[0]) == 4)
+		{
+			ft_printf(RED "echo test" RESET);
 			ft_echo(*mini, cmd);
-		if (!ft_strncmp("exit", *cmd, ft_strlen(*cmd) + 1))
-			ft_exit(cmd, mini);
-		if (!ft_strncmp("export", *cmd, ft_strlen(*cmd) + 1))
-			ft_export(mini, cmd);
-		if (!ft_strncmp("pwd", *cmd, ft_strlen(*cmd) + 1))
+		}
+		if (!ft_strncmp("exit", cmd->args[0], ft_strlen(cmd->args[0]) + 1))
+			ft_exit(cmd->args, mini);
+		if (!ft_strncmp("export", cmd->args[0], ft_strlen(cmd->args[0]) + 1))
+			ft_export(mini, cmd->args);
+		if (!ft_strncmp("pwd", cmd->args[0], ft_strlen(cmd->args[0]) + 1))
 			ft_pwd();
-		if (!ft_strncmp("env", *cmd, ft_strlen(*cmd) + 1))
+		if (!ft_strncmp("env", cmd->args[0], ft_strlen(cmd->args[0]) + 1))
 			ft_env(mini);
-		if (!ft_strncmp("unset", *cmd, ft_strlen(*cmd) + 1))
-			ft_unset(cmd, mini);
+		if (!ft_strncmp("unset", cmd->args[0], ft_strlen(cmd->args[0]) + 1))
+			ft_unset(cmd->args, mini);
 		return (1);
 	}
 	return (0);
 }
 
-void    free_paths(char **paths)
+void	free_paths(char **paths)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while (paths[i])
+	i = 0;
+	while (paths[i])
 	{
 		free(paths[i]);
 		i++;
@@ -86,7 +89,7 @@ char	*find_path(char *cmd, char **envp)
 		i++;
 	}
 	i = -1;
-    free_paths(paths);
+	free_paths(paths);
 	return (0);
 }
 
@@ -135,7 +138,7 @@ void	handle_pid_one_bis(t_cmd *current, t_minishell *mini, char *path)
 {
 	if (current->heredoc)
 		handle_heredoc(current);
-	if (is_a_builtin(current->args, mini))
+	if (is_a_builtin(current, mini))
 		exit(0);
 	if (mini->env)
 		path = find_path(current->args[0], mini->env);
@@ -185,30 +188,33 @@ void	handle_parent(t_cmd *current, t_exec *exec)
 	}
 }
 
-void	exec_mult(t_cmd *cmd, t_minishell *mini)
+void	exec_mult(t_cmd *current, t_minishell *mini)
 {
 	t_exec	exec;
-	t_cmd	*current;
+	t_cmd	*cmd;
 
 	exec.prev_fd = -1;
-	current = cmd;
-	while (current)
+	cmd = current;
+	while (cmd)
 	{
-		if (current->next && pipe(exec.fd) == -1)
+		if (cmd->next && pipe(exec.fd) == -1)
 			error();
 		exec.pid = fork();
 		if (exec.pid == 0)
-			handle_pid_one(current, exec, mini, exec.path);
+			handle_pid_one(cmd, exec, mini, exec.path);
 		else if (exec.pid > 0)
-			handle_parent(current, &exec);
+			handle_parent(cmd, &exec);
 		else
 			error();
-		current = current->next;
+		cmd = cmd->next;
 	}
 	if (exec.prev_fd != -1)
 		close(exec.prev_fd);
-	while (wait(NULL) > 0)
-		;
+	while (waitpid(-1, &mini->status, 0) > 0)
+	{
+		if (WIFEXITED(mini->status))
+			mini->status = WEXITSTATUS(mini->status);
+	}
 }
 
 int	check_exec(t_cmd *cmd, t_minishell *mini, char **path)
@@ -237,8 +243,7 @@ int	check_exec(t_cmd *cmd, t_minishell *mini, char **path)
 
 void	do_pid_one(t_cmd *cmd, t_minishell *mini, char *path)
 {
-	int	pipe_heredoc[2];
-
+	printf("DEBUG DO_PID_ONE: fd_in=%d, fd_out=%d\n", cmd->fd_in, cmd->fd_out);
 	if (cmd->fd_in != -1)
 	{
 		dup2(cmd->fd_in, STDIN_FILENO);
@@ -246,70 +251,99 @@ void	do_pid_one(t_cmd *cmd, t_minishell *mini, char *path)
 	}
 	if (cmd->fd_out != -1)
 	{
+		printf("DEBUG: About to dup2 fd_out=%d to STDOUT\n", cmd->fd_out);
 		dup2(cmd->fd_out, STDOUT_FILENO);
 		close(cmd->fd_out);
 	}
-	if (cmd->heredoc)
-	{
-		if (pipe(pipe_heredoc) == -1)
-			error();
-		write(pipe_heredoc[1], cmd->heredoc, ft_strlen(cmd->heredoc));
-		close(pipe_heredoc[1]);
-		dup2(pipe_heredoc[0], STDIN_FILENO);
-		close(pipe_heredoc[0]);
-	}
-	if (execve(path, cmd->args, mini->env) == -1)
-		error();
+	execve(path, cmd->args, mini->env);
+	perror("execve");
+	exit(127);
 }
+
+// void do_pid_one(t_cmd *cmd, t_minishell *mini, char *path)
+// {
+//     printf("DEBUG: fd_out=%d\n", cmd->fd_out);
+    
+//     if (cmd->fd_out != -1) {
+//         // Écris directement dans le fd avant execve
+//         write(cmd->fd_out, "TEST DIRECT\n", 12);
+//         lseek(cmd->fd_out, 0, SEEK_SET); // Retour au début
+        
+//         dup2(cmd->fd_out, STDOUT_FILENO);
+//         close(cmd->fd_out);
+//     }
+    
+//     // Écris sur stdout après dup2
+//     write(STDOUT_FILENO, "TEST APRES DUP2\n", 16);
+    
+//     execve(path, cmd->args, mini->env);
+//     perror("execve");
+//     exit(127);
+// }
+
 
 void	exec_single(t_cmd *cmd, t_minishell *mini)
 {
 	char	*path;
 	int		pid;
+	int		status;
 
 	if (!mini->env)
 		return ;
-	check_exec(cmd, mini, &path);
+	if (!check_exec(cmd, mini, &path))
+	{
+		mini->status = 127;
+		return ;
+	}
 	pid = fork();
 	if (pid == 0)
+	{
+		printf("\n-------------------------------\n");
+		print_lexer(cmd);
+		printf("\n-------------------------------\n");
+		ft_printf(RED "caca\n" RESET);
 		do_pid_one(cmd, mini, path);
+	}
 	else if (pid > 0)
 	{
 		if (cmd->fd_in != -1)
 			close(cmd->fd_in);
 		if (cmd->fd_out != -1)
 			close(cmd->fd_out);
-		wait(NULL);
+		waitpid(pid, &status, 0);
+		if (WIFEXITED(status))
+			mini->status = WEXITSTATUS(status);
 	}
 	else
 		error();
 	free(path);
 }
 
-void free_cmd(t_cmd *cmd)
+void	free_cmd(t_cmd *cmd)
 {
-	t_cmd *next;
+	t_cmd	*next;
 
-	while(cmd)
+	while (cmd)
 	{
 		next = cmd->next;
 		free(cmd);
 		cmd = next;
-		//printf("i was here\n");
+		// printf("i was here\n");
 	}
 }
 
-int	execute(t_cmd *cmd, t_minishell *mini)
+int execute(t_cmd *cmd, t_minishell *mini)
 {
-	if (!cmd)
-		return (0);
-	if (cmd->next)
-		exec_mult(cmd, mini);
-	else
-	{
-		if (!is_a_builtin(cmd->args, mini))
-			exec_single(cmd, mini);
-	}
-	free_cmd(cmd);
-	return (1);
+    if (!cmd)
+        return (0);
+    
+    if (cmd->next)
+        exec_mult(cmd, mini);
+    else
+    {
+        if (!is_a_builtin(cmd, mini))
+            exec_single(cmd, mini); // ← PAS DE FORK ICI, exec_single s'en charge
+    }
+    free_cmd(cmd);
+    return (mini->status);
 }

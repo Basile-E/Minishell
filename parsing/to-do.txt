@@ -24,10 +24,11 @@ Final To-Do :
     [x] fix l'export
 [x] ajout des signaux
 [x] fix les leak dans les child 
-[] check des leak "final"
+[] check des leak 
     [] heredoc
-[] check les retours d'erreur
-	[]redirect l'output de la derniere cmd dans stdout
+	[] ls leak fort apres quelques cd manifestement
+[] check les retours d'erreur (casse les couilles j'y arrive pas)
+	[]redirect l'output de la derniere cmd dans stdout 
 [] bad adress quand cmd non trouver
 [] gerer les erreur d'affichage de multiples msg d'erreur
 [] gestion des signaux
@@ -37,9 +38,10 @@ Final To-Do :
     [] quand ctrl + d dans heredoc ->
     [] quand ctrl + c dans un exec ->
     [] quand ctrl + d dans un exec -> 
-[] finir la norme
-[] creation animation
-[] double free dans cd
-[] verifier que j'ai rien casser en envoyant l'adr de mini
+[] finir la norme 
+[] creation animation (for the shit and gigles)
+[x] double free dans cd
+[x] verifier que j'ai rien casser en envoyant l'adr de mini
 [] probleme dans les redirection out
 [] probleme dans les redirection append
+[] probleme avec heredoc qui s'arrete a la premier lettre (wtf)

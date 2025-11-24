@@ -157,16 +157,15 @@ int parsinette(t_minishell **minishell)
 	if (!tokens)
         return (1);
     if(!list_expand(*minishell, tokens))
-		return (1);
+		return (-1);
 	if (!do_field_spliting(tokens))
-		return (1);
+		return (-1);
 	if (!remove_all_quote(tokens))
-		return (1);
+		return (-1);
 	if (!check_syntax_errors(tokens))
-		return (1);
+		return (-1);
 	cmd = lexer(tokens, cmd, *minishell);
 	if (!cmd)
 		return (1);
-	execute(cmd, *minishell);
-    return (0);
+    return (execute(cmd, *minishell));
 }
