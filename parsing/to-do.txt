@@ -42,6 +42,6 @@ Final To-Do :
 [] creation animation (for the shit and gigles)
 [x] double free dans cd
 [x] verifier que j'ai rien casser en envoyant l'adr de mini
-[] probleme dans les redirection out
-[] probleme dans les redirection append
+[x] probleme dans les redirection out
+[x] probleme dans les redirection append
 [] probleme avec heredoc qui s'arrete a la premier lettre (wtf)
