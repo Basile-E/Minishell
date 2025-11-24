@@ -144,6 +144,28 @@ typedef struct s_heredoc
 	int				here_ret;
 }					t_heredoc;
 
+
+typedef struct s_expandinette
+{
+    int end;
+    char *var_name;
+    char *var_value;
+    char char_str[2];
+    char *result;
+    char *temp;
+    int i;    
+}               t_expandinette;
+
+typedef struct s_r_quote
+{
+    char *result;
+    int i;
+    int j;
+    int len;
+    t_quote status;
+    char quote_char;
+}               t_r_quote;
+
 ///////////////////
 /*  Fonctions   */
 /////////////////
@@ -252,6 +274,41 @@ int					do_type_pipe(t_token **current, t_cmd **new_node,
 						t_lexer *lexer, t_cmd **cmd);
 int					do_type_word(t_lexer *lexer, t_token **current);
 int 				do_type_redirout(t_lexer *lexer, t_token **current);
+
+
+// Parsing after norm
+int					process_word_token(t_minishell *minishell, t_token *token);
+void	print_list_type_debug(t_token *head);
+t_token	*tkn_new(char *str);
+void	tkn_append_after(t_token *current, t_token *add);
+t_token	*split_and_insert(t_token *current);
+int	do_field_spliting(t_token *token);
+int	list_expand(t_minishell *minishell, t_token *token);
+int	remove_all_quote(t_token *tokens);
+int	check_first_arg_is_flag(char *input);
+int	get_list_len(t_token *head);
+int	check_last_pipe(t_token *head);
+int	check_first_pipe(t_token *head);
+int	check_pipes_first_or_last(t_token *head);
+int is_operator(char c);
+int is_sep(char c);
+int is_space(char c);
+int is_lowercase(char suspect);
+int is_uppercase(char suspect);
+void	free_tokens(t_token *tokens); 
+void	crea_tok_pipe(int *i, t_token **tokens);
+void	crea_tok_app(char *input, int *i, t_token **tokens);
+void	crea_tok_her(char *input, int *i, t_token **tokens);
+t_token	*create_token(t_token_type type, char *value);
+void	add_token(t_token **head, t_token *new_token);
+int	parse_redirect_operator(char *input, int *i, t_token **tokens);
+int	parse_word(char *input, int *i, t_token **tokens, t_quote *status);
+int	do_type_redirin(t_lexer *lexer, t_token **current);
+int	check_for_expand(char *str);
+int	get_word_len(char *str);
+char	*get_expand_token(char *str, int beg_token);
+void	set_quote_status(char c, t_quote *status);
+char	*do_expand(t_minishell *minishell, char *token);
 
 
 #endif

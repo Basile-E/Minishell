@@ -1,11 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   len.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/24 19:55:29 by baecoliv          #+#    #+#             */
+/*   Updated: 2025/11/24 19:55:30 by baecoliv         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
-int tab_len(char **tab)
+int	tab_len(char **tab)
 {
-    int i;
-    i = 0;
+	int	i;
 
-    while(tab[i] != NULL)
-        i++;
-    return (i);
+	i = 0;
+	while (tab[i] != NULL)
+		i++;
+	return (i);
 }

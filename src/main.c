@@ -15,8 +15,8 @@ int	main(int ac, char **av, char **ev)
 	set_struct_minishell(minishell, ev);
 	while (42)
 	{
-		if (minishell->status == KILL_SIM)
-			break ;
+		if (minishell->status == -1)
+			continue;
 		minishell->input = readline(prompt);
 		if (!minishell->input)
 			return (printf("Exit\n"), 0);

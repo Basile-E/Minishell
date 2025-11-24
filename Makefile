@@ -22,17 +22,27 @@ TOKEN = \
 		char_check.c \
 		token_mgmt.c \
 		tokenizer.c \
-		tokenizerv2.c
+		tokenizerv2.c \
+		char_check_next.c \
+		create_token.c
 PARSING = \
 		parsinette.c 
 EXPAND = \
-		expand.c 
+		expand.c \
+		expandinette.c \
+		expand_utils.c
 UTILS = \
 		len.c \
 		print.c \
 		struct.c \
 		syntax_check.c \
-		f_split.c
+		f_split.c \
+		expand_utils.c \
+		field_split_utils.c \
+		print_utils.c \
+		syntax_utils.c \
+		tkn_utils.c \
+		word_utils.c
 LEXER = \
 		lexer.c \
 		cmd_utils.c \

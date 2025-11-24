@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   f_split.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/24 19:55:22 by baecoliv          #+#    #+#             */
+/*   Updated: 2025/11/24 19:55:23 by baecoliv         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static size_t	count_words(char const *str, char c);
-static char	**alloc_word(char const *s, char c, char **split, size_t s_len);
+static char		**alloc_word(char const *s, char c, char **split, size_t s_len);
 
 char	**split_field(char const *s, char c)
 {
@@ -15,7 +27,7 @@ char	**split_field(char const *s, char c)
 	if (!s)
 		return (NULL);
 	words = count_words(s, c);
-	split = (char **) ft_calloc(sizeof(char *), words + 1);
+	split = (char **)ft_calloc(sizeof(char *), words + 1);
 	if (!split)
 		return (NULL);
 	split = alloc_word(s, c, split, s_len);
@@ -27,7 +39,7 @@ static size_t	count_words(char const *str, char c)
 {
 	size_t	words;
 	size_t	new_word;
-	t_quote status;
+	t_quote	status;
 
 	status = NONE;
 	words = 0;
@@ -47,7 +59,8 @@ static size_t	count_words(char const *str, char c)
 	return (words);
 }
 
-static void set_int( size_t *i, size_t *split_i, size_t *word_len, t_quote *status)
+static void	set_int(size_t *i, size_t *split_i, size_t *word_len,
+		t_quote *status)
 {
 	*i = 0;
 	*split_i = 0;
@@ -60,7 +73,7 @@ static char	**alloc_word(char const *s, char c, char **split, size_t s_len)
 	size_t	i;
 	size_t	split_i;
 	size_t	word_len;
-	t_quote status;
+	t_quote	status;
 
 	set_int(&i, &split_i, &word_len, &status);
 	while (i < s_len + 1 && s_len > 0)

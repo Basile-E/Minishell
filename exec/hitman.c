@@ -297,13 +297,7 @@ void	exec_single(t_cmd *cmd, t_minishell *mini)
 	}
 	pid = fork();
 	if (pid == 0)
-	{
-		printf("\n-------------------------------\n");
-		print_lexer(cmd);
-		printf("\n-------------------------------\n");
-		ft_printf(RED "caca\n" RESET);
 		do_pid_one(cmd, mini, path);
-	}
 	else if (pid > 0)
 	{
 		if (cmd->fd_in != -1)

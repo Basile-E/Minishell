@@ -6,7 +6,7 @@
 /*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 21:57:28 by baecoliv          #+#    #+#             */
-/*   Updated: 2025/11/23 23:21:15 by baecoliv         ###   ########.fr       */
+/*   Updated: 2025/11/24 20:31:57 by baecoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,13 @@ int	do_heredoc(char *limiter, char **out)
 	if (!*out)
 		*out = ft_strdup("");
 	return (0);
+}
+
+int	do_type_redirin(t_lexer *lexer, t_token **current)
+{
+	lexer->fd_in = open((*current)->next->value, O_RDONLY);
+	if (lexer->fd_in == -1)
+		return (0);
+	*current = (*current)->next->next;
+	return (1);
 }

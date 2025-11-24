@@ -27,8 +27,8 @@ Final To-Do :
 [] check des leak 
     [] heredoc
 	[] ls leak fort apres quelques cd manifestement
-[] check les retours d'erreur (casse les couilles j'y arrive pas)
-	[]redirect l'output de la derniere cmd dans stdout 
+[x] check les retours d'erreur
+	[x]redirect l'output de la derniere cmd dans stdout 
 [] bad adress quand cmd non trouver
 [] gerer les erreur d'affichage de multiples msg d'erreur
 [] gestion des signaux
@@ -39,7 +39,6 @@ Final To-Do :
     [] quand ctrl + c dans un exec ->
     [] quand ctrl + d dans un exec -> 
 [] finir la norme 
-[] creation animation (for the shit and gigles)
 [x] double free dans cd
 [x] verifier que j'ai rien casser en envoyant l'adr de mini
 [x] probleme dans les redirection out
