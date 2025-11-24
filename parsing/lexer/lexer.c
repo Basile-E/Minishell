@@ -61,7 +61,7 @@ char	*ft_strjoin_gc(const char *s1, const char *s2, t_minishell *mini)
 
 	if (!s1 || !s2)
 		return (NULL);
-	str = (char *)ft_calloc_gc((ft_strlen(s1) + ft_strlen(s2)) + 1, sizeof(char), &mini->alloc);
+	str = (char *)ft_calloc_gc((ft_strlen(s1) + ft_strlen(s2)) + 1, sizeof(char), mini);
 	if (!str)
 		return (NULL);
 	ft_strlcpy(str, s1, ft_strlen(s1) + 1);
@@ -245,9 +245,12 @@ int	do_type_pipe(t_token **current, t_cmd **new_node, t_lexer *lexer, t_cmd **cm
 
 int do_type_redirapp(t_lexer *lexer, t_token **current)
 {
+	if (lexer->fd_out != -1)
+		close(lexer->fd_out);
 	lexer->fd_out = open((*current)->next->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (lexer->fd_out == -1)
 		return (0);
+	lexer->app_mode = 1;
 	*current = (*current)->next->next;
 	return (1);
 }
@@ -269,6 +272,8 @@ int do_type_redirher(t_lexer *lexer, t_token **current)
 
 int do_type_redirin(t_lexer *lexer, t_token **current)
 {
+	if (lexer->fd_in != -1)
+		close(lexer->fd_in);
 	lexer->fd_in = open((*current)->next->value, O_RDONLY);
 	if (lexer->fd_in == -1)
 		return (0);
@@ -279,9 +284,12 @@ int do_type_redirin(t_lexer *lexer, t_token **current)
 
 int do_type_redirout(t_lexer *lexer, t_token **current)
 {
-	lexer->fd_out = open((*current)->next->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);  // est-ce qu'on create si il n'existe pas ?
+	if (lexer->fd_out != -1)
+		close(lexer->fd_out);
+	lexer->fd_out = open((*current)->next->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (lexer->fd_out == -1)
 		return (0);
+	lexer->app_mode = 0;
 	*current = (*current)->next->next;
 	return (1);
 }
@@ -289,6 +297,8 @@ int do_type_redirout(t_lexer *lexer, t_token **current)
 void set_lexer(t_lexer **lexer)
 {
 	*lexer = malloc(sizeof(t_lexer));
+	if (!*lexer)
+		return;
 	(*lexer)->cmd_tab = NULL;
 	(*lexer)->tab_idx = 0;
 	(*lexer)->app_mode = 0;
@@ -341,10 +351,20 @@ t_cmd *lexer(t_token *token, t_cmd *cmd)
 
 	current = token;
 	set_lexer(&lexer);
+	if (!lexer)
+		return (NULL);
 	while (current)
 		if (!lexinette(lexer, &current, &new_node, &cmd))
+		{
+			if (lexer->fd_in != -1)
+				close(lexer->fd_in);
+			if (lexer->fd_out != -1)
+				close(lexer->fd_out);
+			free(lexer);
 			return NULL;
+		}
 	if (lexer->cmd_tab)
 		do_lexing(lexer, &new_node, &cmd);
+	free(lexer);
 	return (cmd);
 }
