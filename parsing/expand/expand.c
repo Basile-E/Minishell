@@ -272,7 +272,6 @@ char *do_expand_simple(t_minishell *minishell, char *str)
             exp.char_str[0] = str[exp.i];
             exp.char_str[1] = '\0';
             exp.temp = ft_strjoin(exp.result, exp.char_str);
-            free(exp.result);
             exp.result = exp.temp;
             exp.i++;
         }
