@@ -1,0 +1,17 @@
+# Build artifacts
+build/
+*.o
+*.a
+*.d
+
+# Executables
+minishell
+
+# Valgrind suppression files
+ignore.supp
+
+# Editor files
+.vscode/
+*.swp
+*.swo
+*~

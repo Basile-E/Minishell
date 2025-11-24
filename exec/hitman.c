@@ -10,6 +10,8 @@ typedef struct s_exec
 
 int	check_for_builtin(char **cmd)
 {
+	if (!cmd || !*cmd)
+		return (0);
 	if (!ft_strncmp("echo", *cmd, ft_strlen(*cmd) + 1))
 		return (1);
 	if (!ft_strncmp("exit", *cmd, ft_strlen(*cmd) + 1))
@@ -58,9 +60,15 @@ char	*find_path(char *cmd, char **envp)
 	char	*part_path;
 
 	i = 0;
-	while (ft_strnstr(envp[i], "PATH", 4) == 0)
+	if (!cmd || !envp)
+		return (NULL);
+	while (envp[i] && ft_strnstr(envp[i], "PATH", 4) == 0)
 		i++;
+	if (!envp[i])
+		return (NULL);
 	paths = ft_split(envp[i] + 5, ':');
+	if (!paths)
+		return (NULL);
 	i = 0;
 	while (paths[i])
 	{
@@ -68,7 +76,13 @@ char	*find_path(char *cmd, char **envp)
 		path = ft_strjoin(part_path, cmd);
 		free(part_path);
 		if (access(path, F_OK) == 0)
+		{
+			i = -1;
+			while (paths[++i])
+				free(paths[i]);
+			free(paths);
 			return (path);
+		}
 		free(path);
 		i++;
 	}
@@ -76,7 +90,7 @@ char	*find_path(char *cmd, char **envp)
 	while (paths[++i])
 		free(paths[i]);
 	free(paths);
-	return (0);
+	return (NULL);
 }
 
 void	error(void)
@@ -202,6 +216,8 @@ void	exec_mult(t_cmd *cmd, t_minishell *mini)
 
 int	check_exec(t_cmd *cmd, t_minishell *mini, char **path)
 {
+	if (!cmd || !cmd->args || !cmd->args[0])
+		return (0);
 	if (cmd->args[0][0] == '.' && cmd->args[0][1] == '/')
 	{
 		if (access(cmd->args[0], F_OK | X_OK) == 0)
@@ -215,7 +231,7 @@ int	check_exec(t_cmd *cmd, t_minishell *mini, char **path)
 	else
 	{
 		*path = find_path(cmd->args[0], mini->env);
-		if (!path)
+		if (!*path)
 		{
 			put_err_msg(cmd->args[0]);
 			return (0);
@@ -258,7 +274,9 @@ void	exec_single(t_cmd *cmd, t_minishell *mini)
 
 	if (!mini->env)
 		return ;
-	check_exec(cmd, mini, &path);
+	path = NULL;
+	if (!check_exec(cmd, mini, &path))
+		return ;
 	pid = fork();
 	if (pid == 0)
 		do_pid_one(cmd, mini, path);
@@ -272,7 +290,8 @@ void	exec_single(t_cmd *cmd, t_minishell *mini)
 	}
 	else
 		error();
-	free(path);
+	if (path)
+		free(path);
 }
 
 int	execute(t_cmd *cmd, t_minishell *mini)
