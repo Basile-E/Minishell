@@ -6,7 +6,7 @@
 /*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 19:27:42 by emle-vou          #+#    #+#             */
-/*   Updated: 2025/11/24 18:08:35 by baecoliv         ###   ########.fr       */
+/*   Updated: 2025/11/24 22:52:44 by baecoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,30 +28,24 @@ static int	ft_n_flag(char *str)
 	return (0);
 }
 
-int	ft_echo(t_minishell mini, t_cmd *cmd)
+int	ft_echo(t_cmd *cmd)
 {
 	int	i;
 	int	n_flag;
-	int temp;
+	int	temp;
 
-	if(cmd->fd_out == -1)
+	if (cmd->fd_out == -1)
 		temp = cmd->fd_out + 2;
 	else
 		temp = cmd->fd_out;
-	(void)mini;
 	if (!cmd->args)
 		return (0);
-	i = 1;
+	i = 0;
 	n_flag = 1;
-	while (cmd->args[i] && ft_n_flag(cmd->args[i]))
-	{
+	while (cmd->args[++i] && ft_n_flag(cmd->args[i]))
 		n_flag = 0;
-		i++;
-	}
-	printf("line = %s", cmd->args[i]);
 	while (cmd->args[i])
 	{
-		printf(RED "fd out = %d" RESET, temp);
 		ft_putstr_fd(cmd->args[i], temp);
 		if (cmd->args[i + 1])
 			ft_putstr_fd(" ", temp);

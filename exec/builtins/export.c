@@ -6,7 +6,7 @@
 /*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 19:28:00 by emle-vou          #+#    #+#             */
-/*   Updated: 2025/11/22 16:08:04 by baecoliv         ###   ########.fr       */
+/*   Updated: 2025/11/24 22:46:42 by baecoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	ft_sort_export(char **exp)
 	j = 0;
 	i = 0;
 	if (!exp)
-		return;
+		return ;
 	while (exp[i])
 	{
 		j = 1;
@@ -80,27 +80,25 @@ void	ft_export(t_minishell *mini, char **cmd)
 	int		i;
 	char	**exp;
 
-	if (!mini->env[0])
-		return; 
-
-	if (cmd[1])
+	if (!mini || !mini->env)
+		return ;
+	if (cmd && cmd[1])
 	{
-		print_env(cmd);
-		ft_update_env(mini, cmd[1]);
+		i = 0;
+		while (cmd[++i])
+			ft_update_env(mini, cmd[i]);
 		return ;
 	}
 	exp = ft_create_export(mini);
 	if (!exp)
 		return ;
-	ft_update_env(mini, *exp);
 	ft_sort_export(exp);
-	i = 0;
-	while (exp[i])
+	i = -1;
+	while (exp[++i])
 	{
 		ft_putstr_fd("export ", 1);
 		ft_putstr_fd(exp[i], 1);
 		ft_putchar_fd('\n', 1);
-		i++;
 	}
 	return ;
 }

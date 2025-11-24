@@ -6,7 +6,7 @@
 /*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 21:28:07 by baecoliv          #+#    #+#             */
-/*   Updated: 2025/11/24 21:28:08 by baecoliv         ###   ########.fr       */
+/*   Updated: 2025/11/24 22:49:07 by baecoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,6 +177,14 @@ typedef struct s_r_quote
 	char			quote_char;
 }					t_r_quote;
 
+typedef struct s_exec
+{
+	int				fd[2];
+	int				prev_fd;
+	int				pid;
+	char			*path;
+}					t_exec;
+
 ///////////////////
 /*  Fonctions   */
 /////////////////
@@ -236,14 +244,14 @@ int					ft_env(t_minishell *mini);
 void				ft_error(const char *str, const char *error);
 int					ft_strcmp_equal(char *s1, char *s2);
 int					does_it_exist(t_minishell *mini, char *src);
-int					ft_echo(t_minishell mini, t_cmd *cmd);
+int					ft_echo(t_cmd *cmd);
 char				**ft_create_export(t_minishell *mini);
 void				ft_sort_export(char **exp);
 void				ft_export(t_minishell *mini, char **cmd);
 int					execute(t_cmd *cmd, t_minishell *mini);
 int					ft_strlen_y(char **tab);
 int					ft_exit(char **argv, t_minishell *mini);
-int					ft_unset(char **argv, t_minishell *mini);
+int					ft_unset(t_minishell *mini, char **argv);
 int					ft_pwd(void);
 
 // cd built-ins
@@ -321,5 +329,29 @@ int					get_word_len(char *str);
 char				*get_expand_token(char *str, int beg_token);
 void				set_quote_status(char c, t_quote *status);
 char				*do_expand(t_minishell *minishell, char *token);
+int					check_for_builtin(char **cmd);
+int					is_a_builtin(t_cmd *cmd, t_minishell *mini);
+void				free_paths(char **paths);
+char				*find_path(char *cmd, char **envp);
+void				error(void);
+char				*get_current_path(void);
+void				put_err_msg(char *str);
+void				handle_heredoc(t_cmd *current);
+void				dup_close(int fd_dup, int std, int fd_close);
+void				handle_pid_one_bis(t_cmd *current, t_minishell *mini,
+						char *path);
+void				handle_pid_one(t_cmd *current, t_exec exec,
+						t_minishell *mini, char *path);
+void				handle_parent(t_cmd *current, t_exec *exec);
+void				exec_mult(t_cmd *current, t_minishell *mini);
+int					check_exec(t_cmd *cmd, t_minishell *mini, char **path);
+void				do_pid_one(t_cmd *cmd, t_minishell *mini, char *path);
+void				do_exe_sin(t_cmd *cmd, int pid, t_minishell *mini);
+void				exec_single(t_cmd *cmd, t_minishell *mini);
+void				free_cmd(t_cmd *cmd);
+int					execute(t_cmd *cmd, t_minishell *mini);
+int					is_a_builtin(t_cmd *cmd, t_minishell *mini);
+void				exec_single(t_cmd *cmd, t_minishell *mini);
+void				free_cmd(t_cmd *cmd);
 
 #endif

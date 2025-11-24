@@ -11,6 +11,7 @@ BUILTIN_PATH = exec/builtins/
 EXECUTIVE_PATH = exec/executive/
 ENV_PATH = exec/builtins/env/
 GARB_PATH = parsing/garb_col/
+UTILS_EPATH = exec/utils_e/
 
 OBJ_PATH = build/
 LIBFT_PATH = libft/
@@ -67,12 +68,14 @@ ENV = \
 	ft_env.c \
 	update_ft_env.c
 
-# EXECUTIVE =
+UTILS_E = \
+	builtins_utils.c \
+	fork_utils.c \
+	pid_utils.c \
+	type_utils.c
 
 GARB_COL = \
 	ft_malloc.c
-
-
 
 ALL_SRC = $(addprefix $(SRC_PATH), $(SRC)) \
 		  $(addprefix $(TOKEN_PATH), $(TOKEN)) \
@@ -84,7 +87,8 @@ ALL_SRC = $(addprefix $(SRC_PATH), $(SRC)) \
 		  $(addprefix $(BUILTIN_PATH), $(BUILTIN)) \
 		  $(addprefix $(ENV_PATH), $(ENV)) \
 		  $(addprefix $(EXECUTIVE_PATH), $(EXECUTIVE)) \
-		  $(addprefix $(GARB_PATH), $(GARB_COL)) 
+		  $(addprefix $(UTILS_EPATH), $(UTILS_E)) \
+		  $(addprefix $(GARB_PATH), $(GARB_COL))
 
 #SRCS = $(addprefix $(SRC_PATH), $(SRC))
 OBJ = $(addprefix $(OBJ_PATH), $(ALL_SRC:.c=.o))
