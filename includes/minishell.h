@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/24 21:28:07 by baecoliv          #+#    #+#             */
+/*   Updated: 2025/11/24 21:28:08 by baecoliv         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -115,13 +126,13 @@ typedef struct s_token
 
 typedef struct s_cmd
 {
-	char **args;
-	int fd_in;
-	int fd_out;
-	int append_mode; 
+	char			**args;
+	int				fd_in;
+	int				fd_out;
+	int				append_mode;
 	char			*heredoc;
 	int				in_child;
-	struct s_cmd *next;
+	struct s_cmd	*next;
 }					t_cmd;
 
 typedef struct s_lexer
