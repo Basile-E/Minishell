@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: basile <basile@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 21:45:45 by baecoliv          #+#    #+#             */
-/*   Updated: 2025/11/23 23:14:50 by baecoliv         ###   ########.fr       */
+/*   Updated: 2025/11/24 05:49:41 by basile           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,21 @@ void	cmd_set(t_cmd *new, int fd_in, int fd_out, int app_mode)
 	new->in_child = 0;
 }
 
-t_cmd	*cmd_create(char **cmds, int fd_in, int fd_out, int app_mode)
+t_cmd	*cmd_create(t_lexer *lexer, t_minishell *mini)
 {
 	t_cmd	*new;
 	int		i;
 	int		count;
 
-	if (!cmds)
+	if (!lexer->cmd_tab)
 		return (NULL);
 	count = 0;
-	while (cmds[count])
+	while (lexer->cmd_tab[count])
 		count++;
-	new = malloc(sizeof(t_cmd));
+	new = ft_malloc(sizeof(t_cmd), &mini->alloc);
 	if (!new)
 		return (NULL);
-	new->args = ft_calloc(count + 1, sizeof(char *));
+	new->args = ft_calloc_gc(count + 1, sizeof(char *), mini);
 	if (!new->args)
 	{
 		free(new);
@@ -44,10 +44,10 @@ t_cmd	*cmd_create(char **cmds, int fd_in, int fd_out, int app_mode)
 	}
 	i = -1;
 	while (++i < count)
-		new->args[i] = ft_strdup(cmds[i]);
-	cmd_set(new, fd_in, fd_out, app_mode);
+		new->args[i] = ft_strdup_gc(lexer->cmd_tab[i], mini);
+	cmd_set(new, lexer->fd_in, lexer->fd_out, lexer->app_mode);
 	new->args[i] = NULL;
-	free(cmds);
+	free(lexer->cmd_tab);
 	return (new);
 }
 

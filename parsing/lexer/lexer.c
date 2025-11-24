@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: basile <basile@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 23:15:05 by baecoliv          #+#    #+#             */
-/*   Updated: 2025/11/23 23:15:21 by baecoliv         ###   ########.fr       */
+/*   Updated: 2025/11/24 05:30:21 by basile           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,18 +38,31 @@ int	do_type_redirout(t_lexer *lexer, t_token **current)
 	return (1);
 }
 
-t_cmd	*lexer(t_token *token, t_cmd *cmd)
+void free_token(t_token *token)
+{
+	t_token *next;
+	
+	while (token)
+	{
+		next = token->next;
+		free(token);
+		token = next;		
+	}
+}
+
+t_cmd	*lexer(t_token *token, t_cmd *cmd, t_minishell *mini)
 {
 	t_token	*current;
 	t_lexer	*lexer;
 	t_cmd	*new_node;
 
 	current = token;
-	set_lexer(&lexer);
+	set_lexer(&lexer, mini);
 	while (current)
 		if (!lexinette(lexer, &current, &new_node, &cmd))
 			return (NULL);
+	free_token(token);
 	if (lexer->cmd_tab)
-		do_lexing(lexer, &new_node, &cmd);
+		do_lexing(lexer, &new_node, &cmd, mini);
 	return (cmd);
 }

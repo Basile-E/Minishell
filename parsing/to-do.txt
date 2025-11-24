@@ -26,8 +26,16 @@ Final To-Do :
 [x] fix les leak dans les child 
 [] check des leak "final"
 [] check les retours d'erreur
-	[redirect l'output de la derniere cmd dans stdout]
+	[]redirect l'output de la derniere cmd dans stdout
+[] bad adress quand cmd non trouver
 [] gerer les erreur d'affichage de multiples msg d'erreur
+[] gestion des signaux
+    [] quand ctrl + c dans main -> ne fait rien 
+    [] quand ctrl + c dans heredoc -> 
+    [] quand ctrl + d dans heredoc ->
+    [] quand ctrl + c dans un exec ->
+    [] quand ctrl + d dans un exec -> 
+[] finir la norme
 [] creation animation
-
-
+[] double free dans cd
+[] verifier que j'ai rien casser en envoyant l'adr de mini

@@ -133,6 +133,7 @@ typedef struct s_lexer
 	int				app_mode;
 	int				words;
 	int				ret_val;
+	t_minishell		**mini;
 }					t_lexer;
 
 typedef struct s_heredoc
@@ -154,7 +155,7 @@ char				*find_path(char *cmd, char **envp);
 char				*do_expandV2(t_minishell *minishell, char *str);
 
 // Parsing
-int					parsinette(t_minishell *minishell);
+int					parsinette(t_minishell **minishell);
 
 // Token
 int					is_space(char c);
@@ -188,7 +189,7 @@ int					check_syntax_errors(t_token *head);
 int					check_parentheses_syntax(char *input);
 int					check_unclosed_quotes(char *str);
 char				**split_field(char const *s, char c);
-t_cmd				*lexer(t_token *token, t_cmd *cmd);
+t_cmd				*lexer(t_token *token, t_cmd *cmd, t_minishell *mini);
 
 // syntaxe
 int					check_syntax_errors(t_token *head);
@@ -223,14 +224,14 @@ char				*extract_var_name(char *str, int start, int *end,
 						t_minishell **mini);
 
 // Lexer
-char				*ft_strdup_gc(char *src, t_minishell **mini);
+char				*ft_strdup_gc(char *src, t_minishell *mini);
 char				*ft_strjoin_gc(const char *s1, const char *s2,
 						t_minishell *mini);
 void				*ft_calloc_gc(size_t nbr_elements, size_t element_size,
 						t_minishell *mini);
 
-void				set_lexer(t_lexer **lexer);
-int					do_lexing(t_lexer *lexer, t_cmd **new_node, t_cmd **cmd);
+void				set_lexer(t_lexer **lexer, t_minishell *mini);
+int					do_lexing(t_lexer *lexer, t_cmd **new_node, t_cmd **cmd, t_minishell *mini);
 int					lexinette(t_lexer *lexer, t_token **current,
 						t_cmd **new_node, t_cmd **cmd);
 void				print_lexer(t_cmd *cmd);
@@ -240,8 +241,7 @@ int					be_a_heredoc(char **line, char **ret_line, char **limiter,
 int					do_heredoc(char *limiter, char **out);
 
 void				cmd_set(t_cmd *new, int fd_in, int fd_out, int app_mode);
-t_cmd				*cmd_create(char **cmds, int fd_in, int fd_out,
-						int app_mode);
+t_cmd				*cmd_create(t_lexer *lexer, t_minishell *mini);
 void				cmd_append(t_cmd **cmd, t_cmd *new_node);
 int					count_words_until_pipe(t_token *start);
 

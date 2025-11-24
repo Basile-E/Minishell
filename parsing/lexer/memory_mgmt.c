@@ -3,32 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   memory_mgmt.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: basile <basile@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 21:54:28 by baecoliv          #+#    #+#             */
-/*   Updated: 2025/11/23 23:12:18 by baecoliv         ###   ########.fr       */
+/*   Updated: 2025/11/24 05:50:36 by basile           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*ft_strdup_gc(char *src, t_minishell **mini)
+char	*ft_strdup_gc(char *src, t_minishell *mini)
 {
-	int		i;
-	char	*dup;
+    size_t	len;
+    char	*dup;
 
-	i = 0;
-	dup = (char *)ft_malloc((ft_strlen(src) + 1) * sizeof(char),
-			&(*mini)->alloc);
-	if (!dup)
-		return (NULL);
-	while (src[i])
-	{
-		dup[i] = src[i];
-		++i;
-	}
-	dup[i] = '\0';
-	return (dup);
+    if (!src)
+        return (NULL);
+    len = ft_strlen(src);
+    dup = ft_malloc((int)(len + 1), &mini->alloc);
+    if (!dup)
+        return (NULL);
+    ft_memcpy(dup, src, len);
+    dup[len] = '\0';
+    return (dup);
 }
 
 void	*ft_calloc_gc(size_t nbr_elements, size_t element_size,

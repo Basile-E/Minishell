@@ -12,7 +12,7 @@ int process_word_token(t_minishell *minishell, t_token *token)
     free(token->value);
     //token->value = cleaned;
     token->value = expanded;
-    //free(expanded);
+    free(expanded);
 	return(1);
 }
 
@@ -132,21 +132,21 @@ int	remove_all_quote(t_token *tokens)
 }
 
 
-int parsinette(t_minishell *minishell)
+int parsinette(t_minishell **minishell)
 {
     t_token *tokens;
 	t_cmd 	*cmd;
 
-	if	(check_parentheses_syntax(minishell->input) || 
-		check_unclosed_quotes(minishell->input))
+	if	(check_parentheses_syntax((*minishell)->input) || 
+		check_unclosed_quotes((*minishell)->input))
 		return (1);
-	if (!minishell->input[0])
+	if (!(*minishell)->input[0])
 		return(0);
 	cmd = NULL;
-    tokens = tokenize(minishell->input);
+    tokens = tokenize((*minishell)->input);
 	if (!tokens)
         return (1);
-    if(!list_expand(minishell, tokens))
+    if(!list_expand(*minishell, tokens))
 		return (1);
 	if (!do_field_spliting(tokens))
 		return (1);
@@ -154,9 +154,9 @@ int parsinette(t_minishell *minishell)
 		return (1);
 	if (!check_syntax_errors(tokens))
 		return (1);
-	cmd = lexer(tokens, cmd);
+	cmd = lexer(tokens, cmd, *minishell);
 	if (!cmd)
 		return (1);
-	execute(cmd, minishell);
+	execute(cmd, *minishell);
     return (0);
 }

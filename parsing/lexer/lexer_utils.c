@@ -3,18 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: basile <basile@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 21:55:20 by baecoliv          #+#    #+#             */
-/*   Updated: 2025/11/23 23:15:51 by baecoliv         ###   ########.fr       */
+/*   Updated: 2025/11/24 05:29:16 by basile           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	set_lexer(t_lexer **lexer)
+void	set_lexer(t_lexer **lexer, t_minishell *mini)
 {
-	*lexer = malloc(sizeof(t_lexer));
+	*lexer = ft_malloc(sizeof(t_lexer), &mini->alloc);
+	(*lexer)->mini = &mini;
 	(*lexer)->cmd_tab = NULL;
 	(*lexer)->tab_idx = 0;
 	(*lexer)->app_mode = 0;
@@ -24,10 +25,9 @@ void	set_lexer(t_lexer **lexer)
 	(*lexer)->heredoc = NULL;
 }
 
-int	do_lexing(t_lexer *lexer, t_cmd **new_node, t_cmd **cmd)
+int	do_lexing(t_lexer *lexer, t_cmd **new_node, t_cmd **cmd, t_minishell *mini)
 {
-	(*new_node) = cmd_create(lexer->cmd_tab, lexer->fd_in, lexer->fd_out,
-			lexer->app_mode);
+	(*new_node) = cmd_create(lexer, mini);
 	if (!*new_node)
 		return (0);
 	(*new_node)->heredoc = lexer->heredoc;

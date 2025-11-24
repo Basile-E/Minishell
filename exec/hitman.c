@@ -50,6 +50,19 @@ int	is_a_builtin(char **cmd, t_minishell *mini)
 	return (0);
 }
 
+void    free_paths(char **paths)
+{
+    int i;
+
+    i = 0;
+    while (paths[i])
+	{
+		free(paths[i]);
+		i++;
+	}
+	free(paths);
+}
+
 char	*find_path(char *cmd, char **envp)
 {
 	char	**paths;
@@ -68,14 +81,12 @@ char	*find_path(char *cmd, char **envp)
 		path = ft_strjoin(part_path, cmd);
 		free(part_path);
 		if (access(path, F_OK) == 0)
-			return (path);
+			return (free_paths(paths), path);
 		free(path);
 		i++;
 	}
 	i = -1;
-	while (paths[++i])
-		free(paths[i]);
-	free(paths);
+    free_paths(paths);
 	return (0);
 }
 
@@ -205,7 +216,7 @@ int	check_exec(t_cmd *cmd, t_minishell *mini, char **path)
 	if (cmd->args[0][0] == '.' && cmd->args[0][1] == '/')
 	{
 		if (access(cmd->args[0], F_OK | X_OK) == 0)
-			*path = ft_strdup_gc(cmd->args[0], &mini);
+			*path = ft_strdup_gc(cmd->args[0], mini);
 		else
 		{
 			put_err_msg(cmd->args[0]);
@@ -275,6 +286,19 @@ void	exec_single(t_cmd *cmd, t_minishell *mini)
 	free(path);
 }
 
+void free_cmd(t_cmd *cmd)
+{
+	t_cmd *next;
+
+	while(cmd)
+	{
+		next = cmd->next;
+		free(cmd);
+		cmd = next;
+		//printf("i was here\n");
+	}
+}
+
 int	execute(t_cmd *cmd, t_minishell *mini)
 {
 	if (!cmd)
@@ -286,5 +310,6 @@ int	execute(t_cmd *cmd, t_minishell *mini)
 		if (!is_a_builtin(cmd->args, mini))
 			exec_single(cmd, mini);
 	}
+	free_cmd(cmd);
 	return (1);
 }

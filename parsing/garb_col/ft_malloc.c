@@ -29,12 +29,21 @@ t_alloc	*create_alloc(void *adr)
 
 void	*ft_malloc(int size, t_alloc **head)
 {
-	void	*adr;
+    void	*adr;
+    t_alloc	*node;
 
-	adr = malloc(size);
-	add_alloc(head, create_alloc(adr));
+    adr = malloc(size);
+    if (!adr)
+        return (NULL);
+    node = create_alloc(adr);
 	printf("debug: %p\n", (void *)adr);
-	return (adr);
+    if (!node)
+    {
+        free(adr); // Clean up the successfully allocated memory if we can't track it
+        return (NULL);
+    }
+    add_alloc(head, node);
+    return (adr);
 }
 
 void	free_alloc(t_alloc *head)

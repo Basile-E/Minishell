@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   do_type.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: basile <basile@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 21:58:21 by baecoliv          #+#    #+#             */
-/*   Updated: 2025/11/23 23:21:53 by baecoliv         ###   ########.fr       */
+/*   Updated: 2025/11/24 06:04:31 by basile           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,7 @@ int	do_type_word(t_lexer *lexer, t_token **current)
 int	do_type_pipe(t_token **current, t_cmd **new_node, t_lexer *lexer,
 		t_cmd **cmd)
 {
-	(*new_node) = cmd_create(lexer->cmd_tab, lexer->fd_in, lexer->fd_out,
-			lexer->app_mode);
+	(*new_node) = cmd_create(lexer, *lexer->mini);
 	if (!(*new_node))
 		return (0);
 	(*new_node)->heredoc = lexer->heredoc;

@@ -53,7 +53,7 @@ static void	remove_env_var(char ***env, const char *name, t_minishell *mini)
 	{
 		if (ft_strncmp((*env)[i], name, name_len + 1) == 0
 			|| (*env)[i][name_len] != '=')
-			new_env[j++] = ft_strdup_gc((*env)[i], &mini);
+			new_env[j++] = ft_strdup_gc((*env)[i], mini);
 		i++;
 	}
 	new_env[j] = NULL;

@@ -80,7 +80,7 @@ char *do_expand(t_minishell *minishell, char *token)
 			&& minishell->env[i][ft_strlen(token)] == '=')
 		{
 			y = ft_strlen(token) + 1;
-			env_value = ft_strdup_gc(minishell->env[i] + y, &minishell);
+			env_value = ft_strdup_gc(minishell->env[i] + y, minishell);
             free(token);
             return (env_value);
         }
@@ -203,11 +203,11 @@ char *get_env_value(t_minishell *minishell, char *var_name)
         if (ft_strncmp(var_name, minishell->env[i], len) == 0 
             && minishell->env[i][len] == '=')
         {
-            return (ft_strdup_gc(minishell->env[i] + len + 1, &minishell));
+            return (ft_strdup_gc(minishell->env[i] + len + 1, minishell));
         }
         i++;
     }
-    return (ft_strdup_gc("", &minishell));
+    return (ft_strdup_gc("", minishell));
 }
 
 char *extract_var_name(char *str, int start, int *end, t_minishell **mini)
@@ -224,7 +224,7 @@ char *extract_var_name(char *str, int start, int *end, t_minishell **mini)
         i++;
     *end = i;
     if (i == start)
-        return (ft_strdup_gc("", mini));
+        return (ft_strdup_gc("", *mini));
     return (ft_substr(str, start, i - start));
 }
 
@@ -251,7 +251,7 @@ void    set_expand(t_expandinette *exp, t_quote *status, t_minishell *mini)
 {
     exp->i = 0;
     *status = NONE;
-    exp->result = ft_strdup_gc("", &mini);
+    exp->result = ft_strdup_gc("", mini);
 }
 
 char *do_expand_simple(t_minishell *minishell, char *str)
@@ -274,6 +274,7 @@ char *do_expand_simple(t_minishell *minishell, char *str)
             exp.char_str[1] = '\0';
             exp.temp = ft_strjoin(exp.result, exp.char_str);
             exp.result = exp.temp;
+            free(exp.temp);
             exp.i++;
         }
     }
